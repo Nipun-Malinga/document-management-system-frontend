@@ -11,7 +11,7 @@ const SideBar = () => {
 
   return (
     <aside
-      className={`absolute bg-white shadow-[0_3px_10px_rgb(0,0,0,0.3)] md:shadow-none z-1 w-3xs md:w-full h-lvh p-2 md:py-0 transform ${
+      className={`absolute bg-white shadow-[0_3px_10px_rgb(0,0,0,0.3)] md:shadow-none z-1 w-3xs md:w-full h-lvh p-2 md:p-0 md:py-0 transform ${
         collapsed ? '-translate-x-full' : ''
       } transition-transform duration-250 ease-in-out md:relative md:translate-x-0`}
     >
@@ -53,9 +53,9 @@ const linkBody = (
   <Link
     children={
       <div className='w-full flex flex-row items-center'>
-        <Icon className='text-lg mr-2' />
-        <p className='text-sm'>{title}</p>
-        <p className='ml-auto'>{count}</p>
+        <Icon className='text-lg mr-4' />
+        <p className='text-sm text-gray-900'>{title}</p>
+        <p className='text-sm text-gray-900 ml-auto'>{count}</p>
       </div>
     }
     endpoint={endpoint}

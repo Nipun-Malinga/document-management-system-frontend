@@ -8,7 +8,7 @@ const TopBar = () => {
   const { toggle } = useAside();
 
   return (
-    <div className='w-full flex flex-row justify-between md:justify-center gap-2 mb-2'>
+    <div className='w-full mb-2 flex flex-row justify-between md:justify-center gap-2'>
       <div className='md:hidden'>
         <Button
           type='button'

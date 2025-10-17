@@ -30,7 +30,7 @@ const DocumentCard = ({ title, state, createdDate, updatedDate }: Props) => {
         </div>
       </div>
       <div className='flex flex-col justify-center'>
-        <p className='text-xl md:text-lg lg:text-sm capitalize font-medium'>
+        <p className='text-base md:text-lg lg:text-sm capitalize font-medium'>
           {title}
         </p>
         <div className='flex justify-between'>
