@@ -14,7 +14,12 @@ const DocumentCard = ({ title, state, createdDate, updatedDate }: Props) => {
     <div className='group w-full min-h-[16rem] p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition-all duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)]'>
       <div className='relative bg-blue-50 w-full min-h-[10rem] rounded-md cursor-pointer flex justify-center items-center'>
         <div className='absolute top-2 right-2 opacity-0 transition group-hover:opacity-100'>
-          <Button icon={HiDotsVertical} type='button' onClick={() => {}} />
+          <Button
+            icon={HiDotsVertical}
+            type='button'
+            theme='light'
+            onClick={() => {}}
+          />
         </div>
         <LuFileText className='text-8xl md:text-6xl text-blue-600' />
         <div className='absolute bottom-2 right-2'>
