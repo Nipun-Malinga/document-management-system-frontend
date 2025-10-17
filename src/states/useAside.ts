@@ -6,7 +6,7 @@ interface AsideState {
 }
 
 const useAside = create<AsideState>((set) => ({
-  collapsed: false,
+  collapsed: true,
   toggle: () => set((state) => ({ collapsed: !state.collapsed })),
 }));
 

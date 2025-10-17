@@ -9,7 +9,7 @@ interface Props {
 const Badge = ({ text, theme }: Props) => {
   return (
     <p
-      className={`${themeColors[theme].background} ${themeColors[theme].fontColor} text-center md:text-sm font-bold w-20 px-3 py-1 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.3)]`}
+      className={`${themeColors[theme].background} ${themeColors[theme].fontColor} text-center text-xs font-bold w-20 px-3 py-1 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.3)]`}
     >
       {text}
     </p>
