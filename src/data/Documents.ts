@@ -1,0 +1,86 @@
+import type { Document } from '../features/documents/types';
+
+const documents: Document[] = [
+  {
+    id: 'f9c1d65f-7e33-4a93-91b5-223b0b28e13e',
+    title: 'Project Proposal',
+    ownerId: 1,
+    status: 'PUBLIC',
+    createdAt: '2025-09-15 10:12:47',
+    updatedAt: '2025-09-16 14:22:13',
+  },
+  {
+    id: '0a2c6ad3-b6e0-4ac2-94db-dce26b7543a2',
+    title: 'Financial Report Q3',
+    ownerId: 2,
+    status: 'PRIVATE',
+    createdAt: '2025-09-20 09:05:21',
+    updatedAt: '2025-09-25 12:14:33',
+  },
+  {
+    id: 'a3f04c39-5b47-4f12-a7a4-2cf2b45f9f2b',
+    title: 'Team Meeting Notes',
+    ownerId: 3,
+    status: 'PUBLIC',
+    createdAt: '2025-09-22 08:45:10',
+    updatedAt: '2025-09-23 15:28:42',
+  },
+  {
+    id: 'd654ab19-f0d9-45d3-a2ac-5e10ac6b5b24',
+    title: 'Research Draft',
+    ownerId: 1,
+    status: 'PRIVATE',
+    createdAt: '2025-09-25 11:38:22',
+    updatedAt: '2025-09-27 09:12:47',
+  },
+  {
+    id: '8b3b63c8-4125-4ec5-a062-8ac6eb1e4ef7',
+    title: 'Client Contract',
+    ownerId: 4,
+    status: 'PRIVATE',
+    createdAt: '2025-09-18 13:22:11',
+    updatedAt: '2025-09-19 17:30:52',
+  },
+  {
+    id: '7f5a9310-216a-4696-9581-9b2ab22190a5',
+    title: 'Marketing Plan 2025',
+    ownerId: 5,
+    status: 'PUBLIC',
+    createdAt: '2025-09-28 10:09:09',
+    updatedAt: '2025-10-01 08:33:14',
+  },
+  {
+    id: '3c8f9012-9b35-4d29-98b8-0f7c983a4ef9',
+    title: 'Legal Document',
+    ownerId: 2,
+    status: 'PRIVATE',
+    createdAt: '2025-09-21 09:59:00',
+    updatedAt: '2025-09-22 16:48:37',
+  },
+  {
+    id: 'b62d1f2e-fd45-462d-b5af-9b6485e1e31b',
+    title: 'Product Design Spec',
+    ownerId: 3,
+    status: 'PUBLIC',
+    createdAt: '2025-09-29 12:48:19',
+    updatedAt: '2025-09-30 15:02:25',
+  },
+  {
+    id: 'e94352c4-97a1-41e7-b6cf-f8cf7c6e2e64',
+    title: 'Weekly Report',
+    ownerId: 4,
+    status: 'PUBLIC',
+    createdAt: '2025-09-27 14:33:47',
+    updatedAt: '2025-09-28 10:40:58',
+  },
+  {
+    id: '4dfab3b5-9678-46a5-9f31-7a772b3d6f17',
+    title: 'Employee Handbook',
+    ownerId: 5,
+    status: 'PUBLIC',
+    createdAt: '2025-09-19 08:22:35',
+    updatedAt: '2025-09-23 17:14:42',
+  },
+];
+
+export default documents;
