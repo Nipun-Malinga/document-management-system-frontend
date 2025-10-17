@@ -52,7 +52,7 @@ const linkBody = (
 ) => (
   <Link
     children={
-      <div className='w-full flex flex-row items-center'>
+      <div className='w-full md:px-4 md:py-2 flex flex-row items-center'>
         <Icon className='text-lg mr-4' />
         <p className='text-sm text-gray-900'>{title}</p>
         <p className='text-sm text-gray-900 ml-auto'>{count}</p>

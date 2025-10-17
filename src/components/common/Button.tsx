@@ -16,7 +16,7 @@ const Button = ({ title, type, icon: Icon, theme, onClick }: props) => {
     <button
       type={type}
       onClick={() => onClick()}
-      className={`${colors.background} ${colors.fontColor} text-xs md:text-lg h-full px-2 py-1 flex items-center justify-center gap-x-2 rounded-sm cursor-pointer transition duration-100 ease-in-out hover:bg-gray-200 active:bg-gray-300`}
+      className={`${colors.background} ${colors.fontColor} text-lg h-full px-2 py-1 flex items-center justify-center gap-x-2 rounded-sm cursor-pointer transition duration-100 ease-in-out ${colors.hover} active:bg-gray-300`}
     >
       {Icon && <Icon />}
       {title && title}
