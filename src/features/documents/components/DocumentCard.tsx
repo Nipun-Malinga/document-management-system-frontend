@@ -38,7 +38,7 @@ const DocumentCard = ({
           <div
             className={`${
               visible ? 'opacity-100' : 'opacity-0'
-            } absolute z-10 top-7 -right-0.5 pt-0.5 transition duration-300 ease-in-out`}
+            } absolute z-10 top-7 pt-0.5 transition duration-300 ease-in-out`}
           >
             <CardMenu />
           </div>
