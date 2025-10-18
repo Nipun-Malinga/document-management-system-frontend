@@ -5,7 +5,7 @@ import APIService from '../services/apiService';
 
 export const useDocuments = () => {
   const service = new APIService<DocumentRequest>('/documents');
-  var data = () => service.get();
+  const data = () => service.get();
 
   return useQuery({
     queryKey: ['documents-own'],

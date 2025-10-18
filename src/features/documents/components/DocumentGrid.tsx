@@ -10,6 +10,7 @@ const DocumentGrid = () => {
         data.data.map((item) => (
           <DocumentCard
             key={item.id}
+            documentId={item.id}
             title={item.title}
             state={item.status}
             createdDate={item.createdAt}

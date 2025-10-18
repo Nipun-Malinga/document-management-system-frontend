@@ -1,15 +1,23 @@
 import { LuFileText } from 'react-icons/lu';
 import { HiDotsVertical } from 'react-icons/hi';
 import { Badge, Button } from '../../../components';
+import SharedUserList from './SharedUserList';
 
 interface Props {
+  documentId: string;
   title: string;
   state: string;
   createdDate: string;
   updatedDate: string;
 }
 
-const DocumentCard = ({ title, state, createdDate, updatedDate }: Props) => {
+const DocumentCard = ({
+  documentId,
+  title,
+  state,
+  createdDate,
+  updatedDate,
+}: Props) => {
   return (
     <div className='group w-full min-h-[16rem] p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition-all duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)]'>
       <div className='relative bg-blue-50 w-full min-h-[10rem] rounded-md cursor-pointer flex justify-center items-center'>
@@ -22,6 +30,11 @@ const DocumentCard = ({ title, state, createdDate, updatedDate }: Props) => {
           />
         </div>
         <LuFileText className='text-8xl md:text-6xl text-blue-600' />
+
+        <div className='absolute top-2 left-2'>
+          <SharedUserList documentId={documentId} />
+        </div>
+
         <div className='absolute bottom-2 right-2'>
           <Badge
             text={state}
