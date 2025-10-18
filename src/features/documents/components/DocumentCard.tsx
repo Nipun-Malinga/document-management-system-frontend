@@ -1,7 +1,7 @@
 import { LuFileText } from 'react-icons/lu';
 import { HiDotsVertical } from 'react-icons/hi';
 import { Badge, Button } from '../../../components';
-import SharedUserList from './SharedUserList';
+import { OnlineUserList } from '..';
 
 interface Props {
   documentId: string;
@@ -32,7 +32,7 @@ const DocumentCard = ({
         <LuFileText className='text-8xl md:text-6xl text-blue-600' />
 
         <div className='absolute top-2 left-2'>
-          <SharedUserList documentId={documentId} />
+          <OnlineUserList documentId={documentId} />
         </div>
 
         <div className='absolute bottom-2 right-2'>
