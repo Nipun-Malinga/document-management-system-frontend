@@ -2,6 +2,8 @@ import { LuFileText } from 'react-icons/lu';
 import { HiDotsVertical } from 'react-icons/hi';
 import { Badge, Button } from '../../../components';
 import { OnlineUserList } from '..';
+import CardMenu from './CardMenu';
+import { useState } from 'react';
 
 interface Props {
   documentId: string;
@@ -18,16 +20,28 @@ const DocumentCard = ({
   createdDate,
   updatedDate,
 }: Props) => {
+  const [visible, setVisible] = useState<boolean>(false);
+
   return (
-    <div className='group w-full min-h-[16rem] p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition-all duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)]'>
+    <div className='w-full min-h-[16rem] p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)]'>
       <div className='relative bg-blue-50 w-full min-h-[10rem] rounded-md cursor-pointer flex justify-center items-center'>
-        <div className='absolute top-2 right-2 opacity-0 transition group-hover:opacity-100'>
-          <Button
-            icon={HiDotsVertical}
-            type='button'
-            theme='light'
-            onClick={() => {}}
-          />
+        <div className='absolute top-2 right-2 flex flex-col items-end transition duration-100'>
+          <div className='w-8'>
+            <Button
+              icon={HiDotsVertical}
+              type='button'
+              theme='common'
+              onClick={() => setVisible(!visible)}
+            />
+          </div>
+
+          <div
+            className={`${
+              visible ? 'opacity-100' : 'opacity-0'
+            } absolute z-10 top-7 -right-0.5 pt-0.5 transition duration-300 ease-in-out`}
+          >
+            <CardMenu />
+          </div>
         </div>
         <LuFileText className='text-8xl md:text-6xl text-blue-600' />
 
