@@ -40,7 +40,7 @@ const DocumentCard = ({
               visible ? 'opacity-100' : 'opacity-0'
             } absolute z-10 top-7 pt-0.5 transition duration-300 ease-in-out`}
           >
-            <CardMenu />
+            <CardMenu documentId={documentId} />
           </div>
         </div>
         <LuFileText className='text-8xl md:text-6xl text-blue-600' />

@@ -25,6 +25,14 @@ class APIService<T, K = T> {
     });
     return response.data;
   }
+
+  public async delete(config?: AxiosRequestConfig): Promise<K> {
+    const response = await axiosInstance.delete<K>(this.endpoint, {
+      ...config,
+    });
+
+    return response.data;
+  }
 }
 
 export default APIService;
