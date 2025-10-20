@@ -17,11 +17,11 @@ const InfoPopup = ({ documentId }: Props) => {
 
   return (
     <div
-      className={`fixed z-10 md:top-30 justify-self-center transition duration-100 ease-in-out ${
+      className={`fixed z-5 top-10 md:top-30 justify-self-center transition duration-100 ease-in-out ${
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      <div className='relative bg-white w-85 md:min-w-lg lg:min-w-3xl mt-3 md:mt-0 p-4 rounded-2xl shadow-lg flex flex-col gap-4'>
+      <div className='relative bg-white w-90 md:min-w-lg lg:min-w-3xl mt-3 md:mt-0 p-4 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] flex flex-col gap-4'>
         <div className='absolute right-3 top-3'>
           <Button icon={IoClose} type='button' theme='light' onClick={toggle} />
         </div>

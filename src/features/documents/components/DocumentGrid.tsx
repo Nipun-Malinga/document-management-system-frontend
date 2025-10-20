@@ -12,7 +12,7 @@ const DocumentGrid = () => {
       {documentId && <InfoPopUp documentId={documentId} />}
       <div
         onClick={() => !collapsed && toggle()}
-        className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2'
+        className='h-svh w-full pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2 overflow-y-auto'
       >
         {data?.data &&
           data.data.map((item) => (

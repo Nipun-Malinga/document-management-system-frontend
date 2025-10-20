@@ -23,7 +23,7 @@ const DocumentCard = ({
 
   return (
     <div
-      className={`group w-full min-h-[16rem] p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
+      className={`group w-full min-h-[16rem] max-h-[18rem] p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
         collapsed ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >

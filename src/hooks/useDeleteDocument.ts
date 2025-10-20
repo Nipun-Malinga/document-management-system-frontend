@@ -10,9 +10,7 @@ export const useDeleteDocument = (documentId: string) => {
     mutationFn: () => service.delete(),
     onSuccess: () => {
       const keys = [
-        ['documents-own'],
-        ['document', documentId],
-        ['collaborators', documentId],
+        ['documents-own']
       ];
 
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));

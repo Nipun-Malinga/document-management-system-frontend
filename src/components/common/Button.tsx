@@ -33,6 +33,7 @@ const Button = ({
         ${colors.hover}
         active:${colors.active}
         ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+        h-full
         text-sm font-medium
         px-3 py-1.5
         flex items-center justify-center gap-1.5

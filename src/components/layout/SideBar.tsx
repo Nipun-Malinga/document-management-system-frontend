@@ -11,11 +11,11 @@ const SideBar = () => {
 
   return (
     <aside
-      className={`absolute z-10 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.3)] md:shadow-none w-3xs md:w-full h-lvh p-2 md:p-0 md:py-0 transform ${
-        collapsed ? '-translate-x-full' : ''
-      } transition-transform duration-250 ease-in-out md:relative md:translate-x-0`}
+      className={`absolute z-20 bg-white w-3xs md:w-full h-lvh p-2 transform ${
+        collapsed ? '-translate-x-[20rem]' : ''
+      } transition-transform duration-250 ease-in-out md:relative md:translate-x-0 shadow-[0_3px_10px_rgb(0,0,0,0.3)] md:shadow-none`}
     >
-      <div className='relative text-xl md:text-2xl lg:text-3xl mb-6 flex flex-row items-center gap-2 '>
+      <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2 '>
         <FaRegHardDrive className='text-blue-600' />
         <h1 className='font-bold'>DocVault</h1>
         <div className='absolute right-0 md:hidden'>

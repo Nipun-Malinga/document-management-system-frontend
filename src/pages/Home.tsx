@@ -6,23 +6,22 @@ const Home = () => {
   const { collapsed } = useAside();
 
   return (
-    <main className='grid grid-cols-1 md:grid-cols-[18rem_1fr] md:gap-2'>
-      <div className='md:px-2 border-r border-gray-300'>
+    <main className='h-svh grid grid-cols-1 md:grid-cols-[18rem_1fr] overflow-hidden'>
+      <div className='border-r border-gray-300'>
         <SideBar />
       </div>
 
-      <div className={`relative ${!collapsed && 'pointer-events-none'}`}>
+      <div className='relative p-2 flex flex-col gap-2 items-center'>
         <div
-          className={`absolute -z-1 w-full h-dvh ${
-            !collapsed && 'z-9 inset-0 bg-black/80 transition-all duration-300'
+          className={`absolute z-10  w-full h-dvh ${
+            !collapsed
+              ? 'inset-0 bg-black/80 transition-all duration-300 pointer-events-auto'
+              : 'pointer-events-none'
           }`}
         />
-        <div className='p-2'>
-          <TopBar />
-        </div>
-        <div className='p-2'>
-          <Outlet />
-        </div>
+
+        <TopBar />
+        <Outlet />
       </div>
     </main>
   );
