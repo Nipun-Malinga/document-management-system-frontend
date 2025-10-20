@@ -5,29 +5,28 @@ import DocumentCard from './DocumentCard';
 
 const DocumentGrid = () => {
   const { data } = useDocuments();
-  const { documentId, collapsed } = useInfoPopUp();
+  const { documentId, collapsed, toggle } = useInfoPopUp();
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2'>
+    <>
+      {documentId && <InfoPopUp documentId={documentId} />}
       <div
-        className={`absolute z-10 md:top-30 w-fit justify-self-center md:self-center transition duration-100 ease-in-out ${
-          collapsed ? 'opacity-0 pointer-events-none' : 'fixed opacity-100'
-        }`}
+        onClick={() => !collapsed && toggle()}
+        className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2'
       >
-        {documentId && <InfoPopUp documentId={documentId} />}
+        {data?.data &&
+          data.data.map((item) => (
+            <DocumentCard
+              key={item.id}
+              documentId={item.id}
+              title={item.title}
+              state={item.status}
+              createdDate={item.createdAt}
+              updatedDate={item.updatedAt}
+            />
+          ))}
       </div>
-      {data?.data &&
-        data.data.map((item) => (
-          <DocumentCard
-            key={item.id}
-            documentId={item.id}
-            title={item.title}
-            state={item.status}
-            createdDate={item.createdAt}
-            updatedDate={item.updatedAt}
-          />
-        ))}
-    </div>
+    </>
   );
 };
 

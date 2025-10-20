@@ -7,7 +7,7 @@ const Home = () => {
 
   return (
     <main className='grid grid-cols-1 md:grid-cols-[18rem_1fr] md:gap-2'>
-      <div className='md:p-2 border-r border-gray-300'>
+      <div className='md:px-2 border-r border-gray-300'>
         <SideBar />
       </div>
 

@@ -9,10 +9,16 @@ export const useDeleteDocument = (documentId: string) => {
     mutationKey: ['documents', documentId],
     mutationFn: () => service.delete(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['documents-own'] });
+      const keys = [
+        ['documents-own'],
+        ['document', documentId],
+        ['collaborators', documentId],
+      ];
+
+      keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
     onError: () => {
-        console.log("Failed to delete document");
-    }
+      console.log('Failed to delete document');
+    },
   });
 };

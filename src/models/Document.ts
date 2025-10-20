@@ -3,6 +3,7 @@ export interface Document {
   title: string;
   ownerId: number;
   status: string;
+  shared: boolean;
   createdAt: string;
   updatedAt: string;
 }

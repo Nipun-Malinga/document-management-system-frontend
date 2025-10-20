@@ -1,25 +1,48 @@
 import type { IconType } from 'react-icons';
 import { themeColors, type ThemeVariant } from '../../themes/themes';
 
-interface props {
+interface Props {
   title?: string;
-  type: 'button' | 'reset' | 'submit';
+  type?: 'button' | 'reset' | 'submit';
   icon?: IconType;
   theme: ThemeVariant;
-  onClick: () => void;
+  onClick?: () => void;
+  className?: string;
+  disabled?: boolean;
 }
 
-const Button = ({ title, type, icon: Icon, theme, onClick }: props) => {
+const Button = ({
+  title,
+  type = 'button',
+  icon: Icon,
+  theme,
+  onClick,
+  className = '',
+  disabled = false,
+}: Props) => {
   const colors = themeColors[theme];
 
   return (
     <button
       type={type}
-      onClick={() => onClick()}
-      className={`${colors.background} ${colors.fontColor} text-sm md:text-base h-full px-2 py-1 flex items-center justify-center gap-x-2 rounded-sm cursor-pointer transition duration-100 ease-in-out ${colors.hover} active:${colors.active}`}
+      onClick={onClick}
+      disabled={disabled}
+      className={`
+        ${colors.background}
+        ${colors.fontColor}
+        ${colors.hover}
+        active:${colors.active}
+        ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+        text-sm font-medium
+        px-3 py-1.5
+        flex items-center justify-center gap-1.5
+        rounded-md
+        transition-all duration-150 ease-in-out
+        ${className}
+      `}
     >
-      {Icon && <Icon />}
-      {title && title}
+      {Icon && <Icon size={16} />}
+      {title}
     </button>
   );
 };

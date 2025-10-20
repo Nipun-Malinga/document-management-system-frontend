@@ -8,7 +8,7 @@ interface Props {
 
 const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
   return (
-    <div className='max-h-40 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-3'>
+    <div className='max-h-25 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-3'>
       {collaborators.data.map((collaborator) => (
         <div
           key={collaborator.userId}
@@ -31,17 +31,19 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
 const Collaborators = ({ documentId }: Props) => {
   const { data } = useCollaborators(documentId);
 
+  console.log(data?.data)
+
   return (
-    <div className='mt-3'>
+    <>
       {data?.data && data.data.length > 0 && (
-        <>
+        <div className='mt-3'>
           <p className='text-sm font-semibold text-gray-700 mb-2'>
             Collaborators
           </p>
           {collaboratorRenderer(data)}
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
