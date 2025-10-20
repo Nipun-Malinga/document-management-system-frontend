@@ -16,7 +16,7 @@ const Home = () => {
           className={`absolute -z-1 w-full h-dvh ${
             !collapsed && 'z-9 inset-0 bg-black/80 transition-all duration-300'
           }`}
-        ></div>
+        />
         <div className='p-2'>
           <TopBar />
         </div>

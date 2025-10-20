@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import ms from 'ms';
-import type { DocumentsResponse } from '../models/Document';
+import type { Document } from '../models/Document';
 import APIService from '../services/apiService';
 
-export const useDocuments = () => {
-  const service = new APIService<DocumentsResponse>('/documents');
+export const useDocument = (documentId: string) => {
+  const service = new APIService<Document>(`/documents/${documentId}`);
   const data = () => service.get();
 
   return useQuery({
-    queryKey: ['documents-own'],
+    queryKey: ['document', documentId],
     queryFn: data,
     staleTime: ms('1 Minutes'),
-    refetchInterval: ms('10 Minutes'),
   });
 };

@@ -5,7 +5,7 @@ import DocumentCard from './DocumentCard';
 
 const DocumentGrid = () => {
   const { data } = useDocuments();
-  const { collapsed } = useInfoPopUp();
+  const { documentId, collapsed } = useInfoPopUp();
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2'>
@@ -14,7 +14,7 @@ const DocumentGrid = () => {
           collapsed ? 'opacity-0 pointer-events-none' : 'fixed opacity-100'
         }`}
       >
-        <InfoPopUp />
+        {documentId && <InfoPopUp documentId={documentId} />}
       </div>
       {data?.data &&
         data.data.map((item) => (

@@ -1,4 +1,4 @@
-interface Document {
+export interface Document {
   id: string;
   title: string;
   ownerId: number;
@@ -7,7 +7,7 @@ interface Document {
   updatedAt: string;
 }
 
-export interface DocumentRequest {
+export interface DocumentsResponse {
   data: Document[];
   hasNext: boolean;
   hasPrevious: boolean;
