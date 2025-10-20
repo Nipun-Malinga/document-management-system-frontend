@@ -3,22 +3,14 @@ import { OnlineUserList } from '..';
 import { Badge, Button } from '../../../components';
 import useInfoPopUp from '../../../states/useInfoPopUp';
 import { FaCircleInfo } from 'react-icons/fa6';
+import type { Document } from '../../../models/Document';
+import BadgeList from './BadgeList';
 
 interface Props {
-  documentId: string;
-  title: string;
-  state: string;
-  createdDate: string;
-  updatedDate: string;
+  document: Document;
 }
 
-const DocumentCard = ({
-  documentId,
-  title,
-  state,
-  createdDate,
-  updatedDate,
-}: Props) => {
+const DocumentCard = ({ document }: Props) => {
   const { setDocumentId, collapsed, toggle } = useInfoPopUp();
 
   return (
@@ -36,34 +28,31 @@ const DocumentCard = ({
               theme='primary'
               onClick={() => {
                 toggle();
-                setDocumentId(documentId);
+                setDocumentId(document.id);
               }}
             />
           </div>
         </div>
-        <LuFileText className='text-8xl md:text-6xl text-blue-600' />
+        <LuFileText className='text-6xl md:text-8xl text-blue-600' />
 
         <div className='absolute top-2 left-2'>
-          <OnlineUserList documentId={documentId} />
+          <OnlineUserList documentId={document.id} />
         </div>
 
         <div className='absolute bottom-2 right-2'>
-          <Badge
-            text={state}
-            theme={state.toLowerCase() == 'public' ? 'primary' : 'secondary'}
-          />
+          <BadgeList document={document} />
         </div>
       </div>
       <div className='flex flex-col justify-center'>
         <p className='text-base md:text-lg lg:text-sm capitalize font-medium'>
-          {title}
+          {document.title}
         </p>
-        <div className='flex justify-between'>
+        <div className='flex flex-row justify-between'>
           <p className='text-sm md:text-xs text-gray-500'>
-            Created: {createdDate}
+            Created: {document.createdAt}
           </p>
           <p className='text-sm md:text-xs text-gray-500'>
-            Updated: {updatedDate}
+            Updated: {document.updatedAt}
           </p>
         </div>
       </div>
