@@ -4,6 +4,7 @@ export interface Document {
   ownerId: number;
   status: string;
   shared: boolean;
+  branchCount: number;
   createdAt: string;
   updatedAt: string;
 }

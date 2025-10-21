@@ -1,4 +1,5 @@
 import { IoClose } from 'react-icons/io5';
+import { FaCodeBranch } from 'react-icons/fa';
 import { Button } from '../../../components';
 import { useDocument } from '../../../hooks/useDocument';
 import useInfoPopUp from '../../../states/useInfoPopUp';
@@ -17,21 +18,30 @@ const InfoPopup = ({ documentId }: Props) => {
 
   return (
     <div
-      className={`fixed z-5 top-10 md:top-30 justify-self-center transition duration-100 ease-in-out ${
+      className={`rounded-lg overflow-hidden shadow-[0_3px_10px_rgb(0,0,0,0.2)] md:mt-20 fixed z-15 flex justify-center transition-opacity duration-200 linear ${
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      <div className='relative bg-white w-90 md:min-w-lg lg:min-w-3xl mt-3 md:mt-0 p-4 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] flex flex-col gap-4'>
-        <div className='absolute right-3 top-3'>
+      <div className='relative bg-white w-[95vw] md:w-[650px] lg:w-[850px] p-3 flex flex-col justify-between gap-2.5'>
+        <div className='flex flex-row-reverse justify-between'>
           <Button icon={IoClose} type='button' theme='light' onClick={toggle} />
+
+          {data?.branchCount !== undefined && (
+            <Button
+              icon={FaCodeBranch}
+              title={`Branches: ${data.branchCount}`}
+              type='button'
+              theme='dark'
+            />
+          )}
         </div>
 
-        <div className='space-y-4 mt-7.5'>
+        <div className='flex flex-col gap-2'>
           <ContentView />
 
           {data && <BadgeList document={data} />}
 
-          <p className='text-lg text-gray-900 font-semibold border-b pb-2 border-gray-200'>
+          <p className='text-lg font-semibold text-gray-900 border-b pb-2 border-gray-200'>
             {data?.title || 'Untitled Document'}
           </p>
 

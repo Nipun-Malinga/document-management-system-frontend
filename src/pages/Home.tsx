@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { SideBar, TopBar } from '../components';
+import { LayoutDarker, SideBar, TopBar } from '../components';
 import useAside from '../states/useAside';
 
 const Home = () => {
@@ -12,14 +12,7 @@ const Home = () => {
       </div>
 
       <div className='relative p-2 flex flex-col gap-2 items-center'>
-        <div
-          className={`absolute z-10  w-full h-dvh ${
-            !collapsed
-              ? 'inset-0 bg-black/80 transition-all duration-300 pointer-events-auto'
-              : 'pointer-events-none'
-          }`}
-        />
-
+        <LayoutDarker collapsed={collapsed} zIndex={10}  />
         <TopBar />
         <Outlet />
       </div>

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
+import DocumentContainer from '../features/documents/layouts/DocumentContainer';
 import Home from '../pages/Home';
-import DocumentGrid from '../features/documents/components/DocumentGrid';
 
 const router = createBrowserRouter([
   {
@@ -9,7 +9,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <DocumentGrid />,
+        element: <DocumentContainer />,
       },
     ],
   },
