@@ -10,7 +10,7 @@ interface Props {
 const Badge = ({ text, theme, onClick }: Props) => {
   return (
     <div
-      className={`${themeColors[theme].background} ${themeColors[theme].fontColor} w-[5rem] h-full py-1 rounded-md flex justify-center items-center`}
+      className={`${themeColors[theme].background} ${themeColors[theme].fontColor}  h-full py-1 px-2 rounded-md flex justify-center items-center`}
     >
       <p
         className='text-center text-xs font-bold shadow-[0_3px_10px_rgb(0,0,0,0.3)]'

@@ -5,6 +5,7 @@ import useInfoPopUp from '../../../states/useInfoPopUp';
 import { FaCircleInfo } from 'react-icons/fa6';
 import type { Document } from '../../../models/Document';
 import BadgeList from './BadgeList';
+import useBranch from '../../../states/useBranch';
 
 interface Props {
   document: Document;
@@ -12,6 +13,7 @@ interface Props {
 
 const DocumentCard = ({ document }: Props) => {
   const { setDocumentId, collapsed, toggle } = useInfoPopUp();
+  const { resetBranchName } = useBranch();
 
   return (
     <div
@@ -29,6 +31,7 @@ const DocumentCard = ({ document }: Props) => {
               onClick={() => {
                 toggle();
                 setDocumentId(document.id);
+                resetBranchName();
               }}
             />
           </div>

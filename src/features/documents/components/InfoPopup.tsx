@@ -22,40 +22,47 @@ const InfoPopup = ({ documentId }: Props) => {
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      <div className='relative bg-white w-[95vw] md:w-[650px] lg:w-[850px] p-3 flex flex-col justify-between gap-2.5'>
-        <div className='flex flex-row-reverse justify-between'>
-          <Button icon={IoClose} type='button' theme='light' onClick={toggle} />
+      {data && (
+        <div className='relative bg-white w-[95vw] md:w-[650px] lg:w-[850px] p-3 flex flex-col justify-between gap-2.5'>
+          <div className='flex flex-row-reverse justify-between'>
+            <Button
+              icon={IoClose}
+              type='button'
+              theme='light'
+              onClick={toggle}
+            />
 
-          {data && <BranchInfo documentId={data?.id} />}
-        </div>
-
-        <div className='flex flex-col gap-2'>
-          <ContentView />
-
-          {data && <BadgeList document={data} />}
-
-          <p className='text-lg font-semibold text-gray-900 border-b pb-2 border-gray-200'>
-            {data?.title || 'Untitled Document'}
-          </p>
-
-          <div className='text-sm text-gray-600 space-y-1'>
-            <p>
-              <span className='font-medium text-gray-700'>Created:</span>{' '}
-              <span className='text-gray-500'>{data?.createdAt}</span>
-            </p>
-            <p>
-              <span className='font-medium text-gray-700'>Updated:</span>{' '}
-              <span className='text-gray-500'>{data?.updatedAt}</span>
-            </p>
+            <BranchInfo documentId={data.id} />
           </div>
 
-          <Collaborators documentId={documentId} />
-        </div>
+          <div className='flex flex-col gap-2'>
+            <ContentView documentId={data.id} />
 
-        <div className='border-t border-gray-200 pt-3'>
-          <InfoButtons documentId={documentId} />
+            <BadgeList document={data} />
+
+            <p className='text-lg font-semibold text-gray-900 border-b pb-2 border-gray-200'>
+              {data.title}
+            </p>
+
+            <div className='text-sm text-gray-600 space-y-1'>
+              <p>
+                <span className='font-medium text-gray-700'>Created:</span>{' '}
+                <span className='text-gray-500'>{data.createdAt}</span>
+              </p>
+              <p>
+                <span className='font-medium text-gray-700'>Updated:</span>{' '}
+                <span className='text-gray-500'>{data.updatedAt}</span>
+              </p>
+            </div>
+
+            <Collaborators documentId={documentId} />
+          </div>
+
+          <div className='border-t border-gray-200 pt-3'>
+            <InfoButtons documentId={documentId} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

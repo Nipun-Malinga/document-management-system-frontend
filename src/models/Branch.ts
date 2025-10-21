@@ -1,4 +1,4 @@
-interface Branch {
+export interface Branch {
   id: string;
   documentId: string;
   branchName: string;
