@@ -9,12 +9,16 @@ interface Props {
 
 const Badge = ({ text, theme, onClick }: Props) => {
   return (
-    <p
-      className={`${themeColors[theme].background} ${themeColors[theme].fontColor} text-center text-xs font-bold w-20 px-3 py-1 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.3)]`}
-      onClick={onClick && onClick}
+    <div
+      className={`${themeColors[theme].background} ${themeColors[theme].fontColor} w-[5rem] h-full py-1 rounded-md flex justify-center items-center`}
     >
-      {text}
-    </p>
+      <p
+        className='text-center text-xs font-bold shadow-[0_3px_10px_rgb(0,0,0,0.3)]'
+        onClick={onClick && onClick}
+      >
+        {text}
+      </p>
+    </div>
   );
 };
 

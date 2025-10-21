@@ -1,5 +1,4 @@
 import { IoClose } from 'react-icons/io5';
-import { FaCodeBranch } from 'react-icons/fa';
 import { Button } from '../../../components';
 import { useDocument } from '../../../hooks/useDocument';
 import useInfoPopUp from '../../../states/useInfoPopUp';
@@ -7,6 +6,7 @@ import BadgeList from './BadgeList';
 import Collaborators from './Collaborators';
 import ContentView from './ContentView';
 import InfoButtons from './InfoButtons';
+import BranchInfo from './BranchInfo';
 
 interface Props {
   documentId: string;
@@ -26,14 +26,7 @@ const InfoPopup = ({ documentId }: Props) => {
         <div className='flex flex-row-reverse justify-between'>
           <Button icon={IoClose} type='button' theme='light' onClick={toggle} />
 
-          {data?.branchCount !== undefined && (
-            <Button
-              icon={FaCodeBranch}
-              title={`Branches: ${data.branchCount}`}
-              type='button'
-              theme='dark'
-            />
-          )}
+          {data && <BranchInfo documentId={data?.id} />}
         </div>
 
         <div className='flex flex-col gap-2'>
