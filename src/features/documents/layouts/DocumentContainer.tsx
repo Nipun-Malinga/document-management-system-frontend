@@ -7,7 +7,7 @@ const DocumentContainer = () => {
   return (
     <div className='w-full flex justify-center'>
       {documentId && <InfoPopUp documentId={documentId} />}
-      <LayoutDarker collapsed={collapsed} zIndex={10} onClick={toggle} />
+      <LayoutDarker collapsed={collapsed} zIndex={15} onClick={toggle} />
       <DocumentGrid />
     </div>
   );

@@ -12,7 +12,7 @@ const Home = () => {
       </div>
 
       <div className='relative p-2 flex flex-col gap-2 items-center'>
-        <LayoutDarker collapsed={collapsed} zIndex={10}  />
+        <LayoutDarker collapsed={collapsed} zIndex={15}  />
         <TopBar />
         <Outlet />
       </div>

@@ -17,11 +17,11 @@ const DocumentCard = ({ document }: Props) => {
 
   return (
     <div
-      className={`group w-full min-h-[16rem] max-h-[18rem] p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
+      className={`group w-full min-h-64 max-h-72 p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
         collapsed ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
-      <div className='relative bg-blue-50 w-full min-h-[10rem] rounded-md cursor-pointer flex justify-center items-center'>
+      <div className='relative bg-blue-50 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'>
         <div className='absolute top-2 right-2 flex flex-col items-end transition duration-200 ease-in-out opacity-100 md:opacity-0 md:group-hover:opacity-100'>
           <div className='bg-blue-300 p-1 rounded-md flex flex-col gap-1'>
             <Button

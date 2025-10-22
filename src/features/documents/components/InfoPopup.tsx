@@ -18,7 +18,7 @@ const InfoPopup = ({ documentId }: Props) => {
 
   return (
     <div
-      className={`rounded-lg overflow-hidden shadow-[0_3px_10px_rgb(0,0,0,0.2)] md:mt-20 fixed z-15 flex justify-center transition-opacity duration-200 linear ${
+      className={`rounded-lg overflow-hidden shadow-[0_3px_10px_rgb(0,0,0,0.2)] md:mt-20 fixed z-20 flex justify-center transition-opacity duration-200 linear ${
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
