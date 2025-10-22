@@ -1,8 +1,10 @@
 import type { IconType } from 'react-icons';
 import { themeColors, type ThemeVariant } from '../../themes/themes';
+import type { ReactNode } from 'react';
 
 interface Props {
   title?: string;
+  node?: ReactNode;
   type?: 'button' | 'reset' | 'submit';
   icon?: IconType;
   theme: ThemeVariant;
@@ -13,6 +15,7 @@ interface Props {
 
 const Button = ({
   title,
+  node,
   type = 'button',
   icon: Icon,
   theme,
@@ -44,6 +47,7 @@ const Button = ({
     >
       {Icon && <Icon size={16} />}
       {title}
+      {node}
     </button>
   );
 };

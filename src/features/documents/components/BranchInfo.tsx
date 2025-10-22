@@ -18,7 +18,7 @@ const BranchInfo = ({ documentId }: Props) => {
   const branches = data.data;
 
   return (
-    <div className='relative flex items-center gap-2 capitalize'>
+    <div className='relative flex items-center gap-2'>
       <Button
         icon={FaCodeBranch}
         title={`Branches: ${branches.length}`}
@@ -30,19 +30,28 @@ const BranchInfo = ({ documentId }: Props) => {
       <Badge text={branchName} theme='dark' />
 
       <div
-        className={`absolute top-full left-0 mt-2 py-2 px-1 bg-white border border-gray-200 rounded-md shadow-lg min-w-[14rem] overflow-hidden z-50 transition duration-300 ease-in-out ${
+        className={`absolute top-full left-0 bg-gray-900 mt-2 py-2 px-1 border border-gray-200 rounded-md shadow-lg min-w-56 overflow-hidden z-50 transition duration-300 ease-in-out ${
           open
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 pointer-events-none'
         }`}
       >
         {branches.map((branch) => (
-          <div onClick={() => {setOpen(false); setBranchName(branch.branchName)}} className='my-1 p-1 hover:bg-gray-900 hover:font-semibold text-gray-900 hover:text-white text-xs rounded-md transition duration-150 flex flex-row justify-between items-center cursor-pointer'>
-            <span>{branch.branchName}</span>
-            {branch.branchName === 'main' && (
-              <span>default</span>
-            )}
-          </div>
+          <Button
+            theme='dark'
+            onClick={() => {
+              setOpen(false);
+              setBranchName(branch.branchName);
+            }}
+            disabled={branch.branchName === branchName}
+            className='w-full'
+            node={
+              <div className='w-full flex justify-between'>
+                <span>{branch.branchName}</span>
+                {branch.branchName === 'main' && <span>default</span>}
+              </div>
+            }
+          />
         ))}
       </div>
     </div>
