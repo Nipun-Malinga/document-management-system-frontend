@@ -45,7 +45,7 @@ const DocumentCard = ({ document }: Props) => {
 
         <div
           onClick={() =>
-            navigate(`/editor/document/${document.id}/branch/main`)
+            navigate(`/edit/document/${document.id}/branch/main`)
           }
           className='relative bg-blue-50 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'
         >
