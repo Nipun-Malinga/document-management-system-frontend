@@ -12,7 +12,7 @@ const DocumentGrid = () => {
       className='h-svh w-full pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2 overflow-y-auto'
     >
       {data?.data &&
-        data.data.map((document) => <DocumentCard document={document} />)}
+        data.data.map((document, index) => <DocumentCard document={document} key={index} />)}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { useCollaborators } from '../../../hooks/useCollaborators';
 import type { CollaboratorsResponse } from '../../../models/Collaborator';
-import User from '../../users/components/User';
+import { User } from '../../users';
 
 interface Props {
   documentId: string;
@@ -31,7 +31,7 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
 const Collaborators = ({ documentId }: Props) => {
   const { data } = useCollaborators(documentId);
 
-  console.log(data?.data)
+  console.log(data?.data);
 
   return (
     <>

@@ -2,7 +2,7 @@ import { FaCircleInfo } from 'react-icons/fa6';
 import { LuFileText } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { OnlineUserList } from '..';
-import { Button } from '../../../components';
+import { Button, ItemWrapper } from '../../../components';
 import type { Document } from '../../../models/Document';
 import useBranch from '../../../states/useBranch';
 import useInfoPopUp from '../../../states/useInfoPopUp';
@@ -25,7 +25,7 @@ const DocumentCard = ({ document }: Props) => {
     >
       <div className='relative'>
         <div className='absolute z-1 top-2 right-2 flex flex-col items-end transition duration-200 ease-in-out opacity-100 md:opacity-0 md:group-hover:opacity-100'>
-          <div className='bg-blue-300 p-1 rounded-md flex flex-col gap-1'>
+          <ItemWrapper>
             <Button
               icon={FaCircleInfo}
               type='button'
@@ -36,7 +36,7 @@ const DocumentCard = ({ document }: Props) => {
                 resetBranchName();
               }}
             />
-          </div>
+          </ItemWrapper>
         </div>
 
         <div className='absolute z-1 bottom-2 right-2'>
