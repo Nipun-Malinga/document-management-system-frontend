@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { createEditor } from 'slate';
+import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
-import type { customEditor, customElement, customText } from '../types';
 import Editor from '../components/Editor';
 import Toolbar from '../components/Toolbar';
-import { withHistory } from 'slate-history';
+import type { customEditor, customElement, customText } from '../types';
 
 interface Props {
   data: customElement[];

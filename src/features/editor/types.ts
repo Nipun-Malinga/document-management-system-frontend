@@ -12,6 +12,15 @@ export type markKeys =
   | 'strikethrough'
   | 'superscript';
 
+export type alignKeys = 'left' | 'center' | 'right' | 'justify';
+
+export type elementKeys =
+  | alignKeys
+  | 'block-quote'
+  | 'numbered-list'
+  | 'bulleted-list'
+  | 'list-item';
+
 type CustomText = {
   text: string;
   bold?: boolean;
@@ -24,6 +33,7 @@ type CustomText = {
 type BaseElement = {
   type: string;
   children: CustomText[];
+  align: alignKeys;
 };
 
 export type customEditor = BaseEditor & ReactEditor & HistoryEditor;
@@ -32,7 +42,12 @@ export type customText = CustomText;
 
 /* Toolbar Types */
 
-export type ToolBarButton = {
+export type MarkButton = {
   icon: IconType;
   action: markKeys;
+};
+
+export type ElementButton = {
+  icon: IconType;
+  action: elementKeys;
 };

@@ -1,24 +1,35 @@
 import React from 'react';
-import type { RenderLeafProps } from 'slate-react';
+import type { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { Editable } from 'slate-react';
 import type { customEditor } from '../types';
 import { toggleMark } from '../utils';
-
 interface Props {
   editor?: customEditor;
   readonly?: boolean;
 }
 
 const Editor = ({ editor, readonly = false }: Props) => {
+  const renderElement = ({
+    attributes,
+    element,
+    children,
+  }: RenderElementProps) => {
+    return (
+      <p {...attributes} style={{ textAlign: element.align }}>
+        {children}
+      </p>
+    );
+  };
+
   const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => (
     <span
       {...attributes}
       className={`${leaf.bold ? 'font-bold' : ''} 
-                ${leaf.italic ? 'italic' : ''} 
-                ${leaf.underline ? 'underline' : ''} 
-                ${leaf.strikethrough ? 'line-through' : ''}
-                ${leaf.superscript ? 'text-xs relative -top-1' : ''}
-              `}
+                  ${leaf.italic ? 'italic' : ''} 
+                  ${leaf.underline ? 'underline' : ''} 
+                  ${leaf.strikethrough ? 'line-through' : ''}
+                  ${leaf.superscript ? 'text-xs relative -top-1' : ''}
+                `}
     >
       {children}
     </span>
@@ -41,9 +52,12 @@ const Editor = ({ editor, readonly = false }: Props) => {
     <Editable
       className='h-lvh p-2.5 outline-none'
       readOnly={readonly}
+      renderElement={renderElement}
       renderLeaf={renderLeaf}
       onKeyDown={(event) => {
-        editor && toggleKeyboardEvents(editor, event);
+        if (editor) {
+          toggleKeyboardEvents(editor, event);
+        }
       }}
     />
   );

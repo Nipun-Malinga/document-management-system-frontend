@@ -1,23 +1,15 @@
-import { useSlate } from 'slate-react';
+import type { IconType } from 'react-icons';
 import { Button } from '../../../components';
-import type { ToolBarButton } from '../types';
-import { isMarkActive } from '../utils';
+import type { ThemeVariant } from '../../../themes/themes';
 
 interface Props {
-  props: ToolBarButton;
+  icon: IconType;
+  theme: ThemeVariant;
   onClick: () => void;
 }
 
-const ToolButton = ({ props, onClick }: Props) => {
-  const editor = useSlate();
-
-  return (
-    <Button
-      icon={props.icon}
-      theme={isMarkActive(editor, props.action) ? 'dark' : 'common'}
-      onClick={onClick}
-    />
-  );
+const ToolButton = ({ icon, theme, onClick }: Props) => {
+  return <Button icon={icon} theme={theme} onClick={onClick} />;
 };
 
 export default ToolButton;
