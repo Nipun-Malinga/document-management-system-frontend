@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createEditor } from 'slate';
+import { createEditor, type Descendant } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
 import Editor from '../components/Editor';
@@ -8,6 +8,7 @@ import type { customEditor, customElement, customText } from '../types';
 
 interface Props {
   data: customElement[];
+  onChange: (value: Descendant[]) => void
 }
 
 declare module 'slate' {
@@ -18,22 +19,14 @@ declare module 'slate' {
   }
 }
 
-const MainEditor = ({ data }: Props) => {
+const MainEditor = ({ data, onChange }: Props) => {
   const [editor] = useState(() => withReact(withHistory(createEditor())));
   return (
     <div className='space-y-1 py-2.5'>
       <Slate
         editor={editor}
         initialValue={data}
-        onChange={(value) => {
-          const isAstChange = editor.operations.some(
-            (op) => 'set_selection' !== op.type
-          );
-          if (isAstChange) {
-            const content = JSON.stringify(value);
-            localStorage.setItem('content', content);
-          }
-        }}
+        onChange={(value) => onChange(value)}
       >
         <Toolbar />
         <hr className='text-gray-300' />

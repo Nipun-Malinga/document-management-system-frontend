@@ -9,7 +9,7 @@ import {
   FaUnderline,
   FaSuperscript,
 } from 'react-icons/fa';
-import type { ElementButton, MarkButton } from '../types';
+import type { ElementButton, MarkButton,  } from '../types';
 
 export const markButtons: MarkButton[] = [
   {

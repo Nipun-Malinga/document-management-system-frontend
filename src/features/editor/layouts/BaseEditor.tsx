@@ -9,7 +9,18 @@ export const BaseEditor = () => {
 
   if (!data || !(documentId && branchName)) return null;
 
-  return <>{data && <MainEditor data={parseData(data.content)} />}</>;
+  return (
+    <>
+      {data && (
+        <MainEditor
+          data={parseData(data.content)}
+          onChange={(value) => {
+            console.log(value);
+          }}
+        />
+      )}
+    </>
+  );
 };
 
 export default BaseEditor;
