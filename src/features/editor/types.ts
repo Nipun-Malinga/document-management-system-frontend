@@ -1,6 +1,7 @@
 import type { IconType } from 'react-icons';
 import type { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { HistoryEditor } from 'slate-history';
 
 /* Slate Custom Types */
 
@@ -9,7 +10,7 @@ export type markKeys =
   | 'italic'
   | 'underline'
   | 'strikethrough'
-  | 'superscript'
+  | 'superscript';
 
 type CustomText = {
   text: string;
@@ -25,7 +26,7 @@ type BaseElement = {
   children: CustomText[];
 };
 
-export type customEditor = BaseEditor & ReactEditor;
+export type customEditor = BaseEditor & ReactEditor & HistoryEditor;
 export type customElement = BaseElement;
 export type customText = CustomText;
 

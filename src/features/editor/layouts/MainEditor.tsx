@@ -4,6 +4,7 @@ import { Slate, withReact } from 'slate-react';
 import type { customEditor, customElement, customText } from '../types';
 import Editor from '../components/Editor';
 import Toolbar from '../components/Toolbar';
+import { withHistory } from 'slate-history';
 
 interface Props {
   data: customElement[];
@@ -18,7 +19,7 @@ declare module 'slate' {
 }
 
 const MainEditor = ({ data }: Props) => {
-  const [editor] = useState(() => withReact(createEditor()));
+  const [editor] = useState(() => withReact(withHistory(createEditor())));
   return (
     <div className='space-y-1 py-2.5'>
       <Slate

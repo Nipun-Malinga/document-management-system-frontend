@@ -33,6 +33,8 @@ const Editor = ({ editor, readonly = false }: Props) => {
     if (key === 'b' && event.ctrlKey) toggleMark(editor, 'bold');
     if (key === 'i' && event.ctrlKey) toggleMark(editor, 'italic');
     if (key === 'u' && event.ctrlKey) toggleMark(editor, 'underline');
+    if (key === 'z' && event.ctrlKey) editor.undo();
+    if (key === 'y' && event.ctrlKey) editor.redo();
   };
 
   return (
