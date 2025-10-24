@@ -1,17 +1,19 @@
-import { FaCodeBranch } from 'react-icons/fa6';
-import { Badge, Button } from '../../../components';
-import { useBranches } from '../../../hooks/useBranches';
-import useBranch from '../../../states/useBranch';
 import { useState } from 'react';
+import { FaCodeBranch } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../../../components';
+import { useBranches } from '../../../hooks/useBranches';
+import useDocumentBranch from '../../../states/useDocumentBranch';
 
 interface Props {
   documentId: string;
 }
 
 const BranchInfo = ({ documentId }: Props) => {
-  const { data } = useBranches(documentId);
-  const { branchName, setBranchName } = useBranch();
   const [open, setOpen] = useState(false);
+  const { branchName, setBranchName } = useDocumentBranch();
+  const navigate = useNavigate();
+  const { data } = useBranches(documentId);
 
   if (!data) return null;
 
@@ -27,10 +29,8 @@ const BranchInfo = ({ documentId }: Props) => {
         onClick={() => setOpen(!open)}
       />
 
-      <Badge text={branchName} theme='dark' />
-
       <div
-        className={`absolute top-full left-0 bg-gray-900 mt-2 py-2 px-1 border border-gray-200 rounded-md shadow-lg min-w-56 overflow-hidden z-50 transition duration-300 ease-in-out ${
+        className={`absolute top-full left-0 bg-gray-900 w-60 mt-1.5 p-2 space-y-1 border border-gray-200 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] overflow-hidden z-10 transition duration-300 ease-in-out ${
           open
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 pointer-events-none'
@@ -42,15 +42,15 @@ const BranchInfo = ({ documentId }: Props) => {
             onClick={() => {
               setOpen(false);
               setBranchName(branch.branchName);
+              navigate(`/view/document/${documentId}/branch/${branchName}`);
             }}
-            disabled={branch.branchName === branchName}
-            className='w-full'
             node={
-              <div className='w-full flex justify-between'>
-                <span>{branch.branchName}</span>
-                {branch.branchName === 'main' && <span>default</span>}
-              </div>
+              <p className='w-full flex flex-row justify-between items-start'>
+                {branch.branchName}
+              </p>
             }
+            className='w-full'
+            key={branch.id}
           />
         ))}
       </div>

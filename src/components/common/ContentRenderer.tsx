@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { createEditor } from 'slate';
 import { Slate, withReact } from 'slate-react';
-import type { customEditor, customElement } from '../../features/editor/types';
 import Editor from '../../features/editor/components/Editor';
+import type { customEditor, customElement } from '../../features/editor/types';
 
 interface Props {
   content: customElement[];

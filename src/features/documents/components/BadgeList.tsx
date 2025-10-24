@@ -7,7 +7,7 @@ interface Props {
 
 const BadgeList = ({ document }: Props) => {
   return (
-    <div className='flex flex-row justify-end gap-2'>
+    <div className='flex flex-row justify-end gap-0.5'>
       {document.shared && <Badge text='SHARED' theme='dark' />}
       <Badge
         text={document.status ?? 'UNKNOWN'}

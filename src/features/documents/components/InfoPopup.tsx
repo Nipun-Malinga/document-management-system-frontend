@@ -3,10 +3,9 @@ import { Button } from '../../../components';
 import { useDocument } from '../../../hooks/useDocument';
 import useInfoPopUp from '../../../states/useInfoPopUp';
 import BadgeList from './BadgeList';
-import Collaborators from './Collaborators';
-import ContentView from './ContentView';
-import InfoButtons from './InfoButtons';
 import BranchInfo from './BranchInfo';
+import Collaborators from './Collaborators';
+import InfoButtons from './InfoButtons';
 
 interface Props {
   documentId: string;
@@ -31,16 +30,14 @@ const InfoPopup = ({ documentId }: Props) => {
               theme='light'
               onClick={toggle}
             />
-
-            <BranchInfo documentId={data.id} />
+            <div className='flex flex-row gap-1'>
+              <BranchInfo documentId={documentId} />
+              <BadgeList document={data} />
+            </div>
           </div>
 
           <div className='flex flex-col gap-2'>
-            <ContentView documentId={data.id} />
-
-            <BadgeList document={data} />
-
-            <p className='text-lg font-semibold text-gray-900 border-b pb-2 border-gray-200'>
+            <p className='text-lg font-semibold text-gray-900 border-b border-gray-200'>
               {data.title}
             </p>
 
@@ -54,7 +51,6 @@ const InfoPopup = ({ documentId }: Props) => {
                 <span className='text-gray-500'>{data.updatedAt}</span>
               </p>
             </div>
-
             <Collaborators documentId={documentId} />
           </div>
 
