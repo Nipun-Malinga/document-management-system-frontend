@@ -1,20 +1,15 @@
-import { ReactEditor } from 'slate-react';
-import type { BaseEditor } from 'slate';
 import type { IconType } from 'react-icons';
+import type { BaseEditor } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 /* Slate Custom Types */
 
-export type customActions =
+export type markKeys =
   | 'bold'
   | 'italic'
   | 'underline'
   | 'strikethrough'
   | 'superscript'
-  | 'subscript'
-  | 'leftAlign'
-  | 'centerAlign'
-  | 'rightAlign'
-  | 'alignJustify';
 
 type CustomText = {
   text: string;
@@ -23,11 +18,6 @@ type CustomText = {
   underline?: boolean;
   strikethrough?: boolean;
   superscript?: boolean;
-  subscript?: boolean;
-  leftAlign?: boolean;
-  centerAlign?: boolean;
-  rightAlign?: boolean;
-  alignJustify?: boolean;
 };
 
 type BaseElement = {
@@ -43,5 +33,5 @@ export type customText = CustomText;
 
 export type ToolBarButton = {
   icon: IconType;
-  action: customActions;
+  action: markKeys;
 };

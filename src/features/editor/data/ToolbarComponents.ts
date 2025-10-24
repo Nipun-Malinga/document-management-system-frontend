@@ -7,8 +7,7 @@ import {
   FaItalic,
   FaStrikethrough,
   FaUnderline,
-  FaSuperscript,
-  FaSubscript,
+  FaSuperscript
 } from 'react-icons/fa';
 import type { ToolBarButton } from '../types';
 
@@ -32,28 +31,5 @@ export const textStyleButtons: ToolBarButton[] = [
   {
     icon: FaSuperscript,
     action: 'superscript',
-  },
-  {
-    icon: FaSubscript,
-    action: 'subscript',
-  },
-];
-
-export const alignmentButtons: ToolBarButton[] = [
-  {
-    icon: FaAlignLeft,
-    action: 'leftAlign',
-  },
-  {
-    icon: FaAlignCenter,
-    action: 'centerAlign',
-  },
-  {
-    icon: FaAlignRight,
-    action: 'rightAlign',
-  },
-  {
-    icon: FaAlignJustify,
-    action: 'alignJustify',
-  },
+  }
 ];

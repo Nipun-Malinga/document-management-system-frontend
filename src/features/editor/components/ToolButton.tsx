@@ -1,22 +1,21 @@
 import { useSlate } from 'slate-react';
 import { Button } from '../../../components';
 import type { ToolBarButton } from '../types';
-import { isMarkActive, toggleMark } from '../utils';
+import { isMarkActive } from '../utils';
 
 interface Props {
   props: ToolBarButton;
+  onClick: () => void;
 }
 
-const ToolButton = ({ props }: Props) => {
+const ToolButton = ({ props, onClick }: Props) => {
   const editor = useSlate();
 
   return (
     <Button
       icon={props.icon}
       theme={isMarkActive(editor, props.action) ? 'dark' : 'common'}
-      onClick={() => {
-        toggleMark(editor, props.action);
-      }}
+      onClick={onClick}
     />
   );
 };

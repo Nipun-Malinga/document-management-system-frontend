@@ -1,20 +1,21 @@
 import React from 'react';
-import { alignmentButtons, textStyleButtons } from '../data/ToolbarComponents';
+import { textStyleButtons } from '../data/ToolbarComponents';
 import ToolButton from './ToolButton';
+import { toggleMark } from '../utils';
+import { useSlate } from 'slate-react';
 
 const Toolbar = () => {
+  const editor = useSlate();
+
   return (
-    <div className='w-full flex flex-col justify-center items-center gap-0.5'>
-      <div className='w-full flex flex-row justify-center gap-5'>
-        <div className='flex flex-row gap-0.5'>
-          {textStyleButtons.map((item, index) => (
-            <ToolButton props={item} key={index} />
-          ))}
-        </div>
-      </div>
+    <div className='w-full border-gray-300 flex flex-col justify-center items-center gap-1'>
       <div className='flex flex-row gap-0.5'>
-        {alignmentButtons.map((item, index) => (
-          <ToolButton props={item} key={index} />
+        {textStyleButtons.map((item, index) => (
+          <ToolButton
+            props={item}
+            onClick={() => toggleMark(editor, item.action)}
+            key={index}
+          />
         ))}
       </div>
     </div>
