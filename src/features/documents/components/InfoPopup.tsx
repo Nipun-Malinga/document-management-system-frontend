@@ -22,7 +22,7 @@ const InfoPopup = ({ documentId }: Props) => {
       }`}
     >
       {data && documentId && (
-        <div className='relative bg-white w-[95vw] md:w-[650px] lg:w-[850px] p-3 flex flex-col justify-between gap-2.5'>
+        <div className='relative bg-white w-[95vw] md:w-[500px] lg:w-[850px] p-3 flex flex-col justify-between gap-2.5'>
           <div className='flex flex-row-reverse justify-between'>
             <Button
               icon={IoClose}

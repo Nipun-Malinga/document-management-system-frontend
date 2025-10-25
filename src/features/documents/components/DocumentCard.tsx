@@ -47,7 +47,7 @@ const DocumentCard = ({ document }: Props) => {
           onClick={() => navigate(`/document/${document.id}/branch/main/edit`)}
           className='relative bg-blue-50 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'
         >
-          <LuFileText className='text-6xl md:text-8xl text-blue-600' />
+          <LuFileText className='text-6xl md:text-7xl text-blue-600' />
 
           <div className='absolute top-2 left-2'>
             <OnlineUserList documentId={document.id} />
@@ -55,17 +55,12 @@ const DocumentCard = ({ document }: Props) => {
         </div>
       </div>
 
-      <div className='flex flex-col justify-center'>
-        <p className='text-base md:text-lg lg:text-sm capitalize font-medium'>
-          {document.title}
-        </p>
-        <div className='flex flex-row justify-between'>
-          <p className='text-sm md:text-xs text-gray-500'>
-            Created: {document.createdAt}
+      <div className='flex justify-center'>
+        <div className='flex flex-col justify-between items-center'>
+          <p className='text-base md:text-lg lg:text-sm capitalize font-medium'>
+            {document.title}
           </p>
-          <p className='text-sm md:text-xs text-gray-500'>
-            Updated: {document.updatedAt}
-          </p>
+          <p className='text-xs text-gray-500'>Created: {document.createdAt}</p>
         </div>
       </div>
     </div>

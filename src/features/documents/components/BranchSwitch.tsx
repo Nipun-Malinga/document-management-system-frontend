@@ -30,7 +30,7 @@ const BranchSwitch = ({ documentId }: Props) => {
       />
 
       <div
-        className={`absolute top-full left-0 bg-gray-900 w-60 mt-1.5 p-2 space-y-1 border border-gray-200 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] overflow-hidden z-10 transition duration-300 ease-in-out ${
+        className={`absolute top-full left-0 bg-gray-900 w-60 mt-1.5 p-2 space-y-1 border border-gray-200 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] overflow-hidden z-10 transition duration-300 ease-in-out ${
           open
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 pointer-events-none'

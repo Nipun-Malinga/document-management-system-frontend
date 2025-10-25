@@ -12,13 +12,13 @@ const SideBar = () => {
   return (
     <aside
       className={`absolute z-20 bg-white w-3xs md:w-full h-lvh p-2 transform ${
-        collapsed ? '-translate-x-[20rem]' : ''
+        collapsed && '-translate-x-80'
       } transition-transform duration-250 ease-in-out md:relative md:translate-x-0 shadow-[0_3px_10px_rgb(0,0,0,0.3)] md:shadow-none`}
     >
       <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2 '>
         <FaRegHardDrive className='text-blue-600' />
         <h1 className='font-bold'>DocVault</h1>
-        <div className='absolute right-0 md:hidden'>
+        <div className='absolute right-0  md:hidden'>
           <Button
             type='button'
             icon={IoClose}
