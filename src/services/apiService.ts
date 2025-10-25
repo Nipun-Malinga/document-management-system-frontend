@@ -26,6 +26,13 @@ class APIService<T, K = T> {
     return response.data;
   }
 
+  public async put(data?: T, config?: AxiosRequestConfig): Promise<K> {
+    const response = await axiosInstance.put<K>(this.endpoint, data, {
+      ...config,
+    });
+    return response.data;
+  }
+
   public async delete(config?: AxiosRequestConfig): Promise<K> {
     const response = await axiosInstance.delete<K>(this.endpoint, {
       ...config,

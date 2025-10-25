@@ -50,7 +50,7 @@ const Editor = ({ editor, readonly = false }: Props) => {
 
   return (
     <Editable
-      className='h-lvh p-2.5 outline-none'
+      className='min-h-full p-2.5 outline-none'
       readOnly={readonly}
       renderElement={renderElement}
       renderLeaf={renderLeaf}

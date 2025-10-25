@@ -42,7 +42,7 @@ const BranchInfo = ({ documentId }: Props) => {
             onClick={() => {
               setOpen(false);
               setBranchName(branch.branchName);
-              navigate(`/view/document/${documentId}/branch/${branchName}`);
+              navigate(`/edit/document/${documentId}/branch/${branchName}`);
             }}
             node={
               <p className='w-full flex flex-row justify-between items-start'>

@@ -61,6 +61,12 @@ export const parseData = (data: string): customElement[] => {
   try {
     return JSON.parse(data);
   } catch (err) {
-    return [];
+    return [
+      {
+        type: 'paragraph',
+        children: [{ text: '' }],
+        align: 'left',
+      },
+    ];
   }
 };

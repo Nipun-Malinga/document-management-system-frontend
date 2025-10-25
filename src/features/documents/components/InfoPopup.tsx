@@ -8,11 +8,11 @@ import Collaborators from './Collaborators';
 import InfoButtons from './InfoButtons';
 
 interface Props {
-  documentId: string;
+  documentId?: string | null;
 }
 
 const InfoPopup = ({ documentId }: Props) => {
-  const { data } = useDocument(documentId);
+  const { data } = useDocument(documentId ?? '');
   const { collapsed, toggle } = useInfoPopUp();
 
   return (
@@ -21,7 +21,7 @@ const InfoPopup = ({ documentId }: Props) => {
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      {data && (
+      {data && documentId && (
         <div className='relative bg-white w-[95vw] md:w-[650px] lg:w-[850px] p-3 flex flex-col justify-between gap-2.5'>
           <div className='flex flex-row-reverse justify-between'>
             <Button

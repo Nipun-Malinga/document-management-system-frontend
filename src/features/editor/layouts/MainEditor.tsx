@@ -8,7 +8,7 @@ import type { customEditor, customElement, customText } from '../types';
 
 interface Props {
   data: customElement[];
-  onChange: (value: Descendant[]) => void
+  onChange: (value: Descendant[]) => void;
 }
 
 declare module 'slate' {
@@ -22,7 +22,7 @@ declare module 'slate' {
 const MainEditor = ({ data, onChange }: Props) => {
   const [editor] = useState(() => withReact(withHistory(createEditor())));
   return (
-    <div className='space-y-1 py-2.5'>
+    <div className='h-full py-1 space-y-1'>
       <Slate
         editor={editor}
         initialValue={data}

@@ -6,7 +6,7 @@ const DocumentContainer = () => {
   const { documentId, collapsed, toggle } = useInfoPopUp();
   return (
     <div className='w-full flex justify-center'>
-      {documentId && <InfoPopUp documentId={documentId} />}
+      <InfoPopUp documentId={documentId} />
       <LayoutDarker collapsed={collapsed} onClick={toggle} />
       <DocumentGrid />
     </div>
