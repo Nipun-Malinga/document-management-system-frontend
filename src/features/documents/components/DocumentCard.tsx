@@ -44,9 +44,7 @@ const DocumentCard = ({ document }: Props) => {
         </div>
 
         <div
-          onClick={() =>
-            navigate(`/edit/document/${document.id}/branch/main`)
-          }
+          onClick={() => navigate(`/document/${document.id}/branch/main/edit`)}
           className='relative bg-blue-50 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'
         >
           <LuFileText className='text-6xl md:text-8xl text-blue-600' />

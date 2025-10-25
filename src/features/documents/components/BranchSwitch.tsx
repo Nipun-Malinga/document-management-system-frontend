@@ -9,7 +9,7 @@ interface Props {
   documentId: string;
 }
 
-const BranchInfo = ({ documentId }: Props) => {
+const BranchSwitch = ({ documentId }: Props) => {
   const [open, setOpen] = useState(false);
   const { branchName, setBranchName } = useDocumentBranch();
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const BranchInfo = ({ documentId }: Props) => {
             onClick={() => {
               setOpen(false);
               setBranchName(branch.branchName);
-              navigate(`/edit/document/${documentId}/branch/${branchName}`);
+              navigate(`/document/${documentId}/branch/${branchName}/edit`);
             }}
             node={
               <p className='w-full flex flex-row justify-between items-start'>
@@ -58,4 +58,4 @@ const BranchInfo = ({ documentId }: Props) => {
   );
 };
 
-export default BranchInfo;
+export default BranchSwitch;

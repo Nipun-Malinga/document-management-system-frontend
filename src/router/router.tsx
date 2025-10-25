@@ -1,8 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
-import DocumentContainer from '../features/documents/layouts/DocumentContainer';
-import Home from '../pages/Home';
-import { BaseEditor } from '../features/editor';
 import ContentView from '../features/documents/components/ContentView';
+import DocumentContainer from '../features/documents/layouts/DocumentContainer';
+import { BaseEditor, CollaborativeEditor } from '../features/editor';
+import Editor from '../pages/Editor';
+import Home from '../pages/Home';
 
 const router = createBrowserRouter([
   {
@@ -16,12 +17,22 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/view/document/:documentId/branch/:branchName',
-    element: <ContentView />,
-  },
-  {
-    path: '/edit/document/:documentId/branch/:branchName',
-    element: <BaseEditor />,
+    path: '/document',
+    element: <Editor />,
+    children: [
+      {
+        path: ':documentId/branch/:branchName/view',
+        element: <ContentView />,
+      },
+      {
+        path: ':documentId/branch/:branchName/edit',
+        element: <BaseEditor />,
+      },
+      {
+        path: ':documentId/branch/:branchName/edit/collaborative',
+        element: <CollaborativeEditor />,
+      },
+    ],
   },
 ]);
 

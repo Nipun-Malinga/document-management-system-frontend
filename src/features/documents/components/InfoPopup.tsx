@@ -3,9 +3,9 @@ import { Button } from '../../../components';
 import { useDocument } from '../../../hooks/useDocument';
 import useInfoPopUp from '../../../states/useInfoPopUp';
 import BadgeList from './BadgeList';
-import BranchInfo from './BranchInfo';
 import Collaborators from './Collaborators';
 import InfoButtons from './InfoButtons';
+import BranchSwitch from './BranchSwitch';
 
 interface Props {
   documentId?: string | null;
@@ -31,7 +31,7 @@ const InfoPopup = ({ documentId }: Props) => {
               onClick={toggle}
             />
             <div className='flex flex-row gap-1'>
-              <BranchInfo documentId={documentId} />
+              <BranchSwitch documentId={documentId} />
               <BadgeList document={data} />
             </div>
           </div>
