@@ -21,15 +21,15 @@ const router = createBrowserRouter([
     element: <Editor />,
     children: [
       {
-        path: ':documentId/branch/:branchName/view',
+        path: ':documentId/branch/:branchId/view',
         element: <ContentView />,
       },
       {
-        path: ':documentId/branch/:branchName/edit',
+        path: ':documentId/branch/:branchId/edit',
         element: <BaseEditor />,
       },
       {
-        path: ':documentId/branch/:branchName/edit/collaborative',
+        path: ':documentId/branch/:branchId/edit/collaborative',
         element: <CollaborativeEditor />,
       },
     ],

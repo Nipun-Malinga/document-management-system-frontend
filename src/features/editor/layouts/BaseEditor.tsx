@@ -8,11 +8,11 @@ import MainEditor from './MainEditor';
 let timeout: number;
 
 export const BaseEditor = () => {
-  const { documentId, branchName } = useParams();
-  const { data } = useDocumentContent(documentId ?? '', branchName ?? '');
-  const { mutate } = useSaveDocumentContent(documentId ?? '', branchName ?? '');
+  const { documentId, branchId } = useParams();
+  const { data } = useDocumentContent(documentId ?? '', branchId ?? '');
+  const { mutate } = useSaveDocumentContent(documentId ?? '', branchId ?? '');
 
-  if (!data || !(documentId && branchName)) return null;
+  if (!data || !(documentId && branchId)) return null;
 
   const saveChanges = (content: Descendant[]) => {
     try {

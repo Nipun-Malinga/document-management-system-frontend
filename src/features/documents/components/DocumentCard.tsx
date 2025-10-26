@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { OnlineUserList } from '..';
 import { Button, ItemWrapper } from '../../../components';
 import type { Document } from '../../../models/Document';
-import useBranch from '../../../states/useBranch';
 import useInfoPopUp from '../../../states/useInfoPopUp';
 import BadgeList from './BadgeList';
+import { getEditorURI } from '../services';
+import useDocumentBranch from '../../../states/useDocumentBranch';
 
 interface Props {
   document: Document;
@@ -14,7 +15,7 @@ interface Props {
 
 const DocumentCard = ({ document }: Props) => {
   const { setDocumentId, collapsed, toggle } = useInfoPopUp();
-  const { resetBranchName } = useBranch();
+  const { resetBranchName } = useDocumentBranch();
   const navigate = useNavigate();
 
   return (
@@ -44,7 +45,11 @@ const DocumentCard = ({ document }: Props) => {
         </div>
 
         <div
-          onClick={() => navigate(`/document/${document.id}/branch/main/edit`)}
+          onClick={() =>
+            navigate(
+              getEditorURI(document.id, document.mainBranchId, document.shared)
+            )
+          }
           className='relative bg-blue-50 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'
         >
           <LuFileText className='text-6xl md:text-7xl text-blue-600' />

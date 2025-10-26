@@ -4,14 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components';
 import { useBranches } from '../../../hooks/useBranches';
 import useDocumentBranch from '../../../states/useDocumentBranch';
+import { getEditorURI } from '../services';
 
 interface Props {
   documentId: string;
+  shared: boolean;
 }
 
-const BranchSwitch = ({ documentId }: Props) => {
+const BranchSwitch = ({ documentId, shared }: Props) => {
   const [open, setOpen] = useState(false);
-  const { branchName, setBranchName } = useDocumentBranch();
+  const { setBranchName } = useDocumentBranch();
   const navigate = useNavigate();
   const { data } = useBranches(documentId);
 
@@ -42,7 +44,7 @@ const BranchSwitch = ({ documentId }: Props) => {
             onClick={() => {
               setOpen(false);
               setBranchName(branch.branchName);
-              navigate(`/document/${documentId}/branch/${branchName}/edit`);
+              navigate(getEditorURI(documentId, branch.id, shared));
             }}
             node={
               <p className='w-full flex flex-row justify-between items-start'>
