@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import type { Descendant } from 'slate';
 import { useSaveDocumentContent } from '../../../hooks/useDeleteDocumentContent';
 import { useDocumentContent } from '../../../hooks/useDocumentContent';
-import { parseData } from '../utils';
+import { convertToSlateElement } from '../utils';
 import MainEditor from './MainEditor';
 
 let timeout: number;
@@ -29,7 +29,10 @@ export const BaseEditor = () => {
   return (
     <>
       {data && (
-        <MainEditor data={parseData(data.content)} onChange={saveChanges} />
+        <MainEditor
+          data={convertToSlateElement(data.content)}
+          onChange={saveChanges}
+        />
       )}
     </>
   );

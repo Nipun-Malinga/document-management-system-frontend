@@ -57,7 +57,7 @@ export const toggleElement = (editor: customEditor, format: elementKeys) => {
   Transforms.setNodes<Editor>(editor, newProperties);
 };
 
-export const parseData = (data: string): customElement[] => {
+export const convertToSlateElement = (data: string): customElement[] => {
   try {
     return JSON.parse(data);
   } catch (err) {

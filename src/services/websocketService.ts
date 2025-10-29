@@ -1,4 +1,5 @@
 import { Client, type IMessage, type StompSubscription } from '@stomp/stompjs';
+import { data } from 'react-router-dom';
 
 class WebSocketService {
   private client: Client;
@@ -51,8 +52,10 @@ class WebSocketService {
   }
 
   public send(destination: string, body: any): void {
+
+    console.log(data)
     if (this.client.connected) {
-      this.client.publish({ destination, body: JSON.stringify(body) });
+      this.client.publish({ destination, body: body });
     } else {
       console.warn('Cannot send message — STOMP not connected');
     }
