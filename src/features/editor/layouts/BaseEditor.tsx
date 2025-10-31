@@ -1,11 +1,6 @@
 import { useParams } from 'react-router-dom';
-import type { Descendant } from 'slate';
 import { useSaveDocumentContent } from '../../../hooks/useDeleteDocumentContent';
 import { useDocumentContent } from '../../../hooks/useDocumentContent';
-import { convertToSlateElement } from '../utils';
-import MainEditor from './MainEditor';
-
-let timeout: number;
 
 export const BaseEditor = () => {
   const { documentId, branchId } = useParams();
@@ -14,28 +9,11 @@ export const BaseEditor = () => {
 
   if (!data || !(documentId && branchId)) return null;
 
-  const saveChanges = (content: Descendant[]) => {
-    try {
-      clearTimeout(timeout);
-
-      timeout = setTimeout(() => {
-        mutate(JSON.stringify(content));
-      }, 5000);
-    } catch (err) {
-      console.error('Failed to pase document content data to json');
-    }
+  const saveChanges = (content: string) => {
+    mutate(JSON.stringify(content));
   };
 
-  return (
-    <>
-      {data && (
-        <MainEditor
-          data={convertToSlateElement(data.content)}
-          onChange={saveChanges}
-        />
-      )}
-    </>
-  );
+  return <></>;
 };
 
 export default BaseEditor;
