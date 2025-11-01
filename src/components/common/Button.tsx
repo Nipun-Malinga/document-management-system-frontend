@@ -45,7 +45,7 @@ const Button = ({
         ${className}
       `}
     >
-      {Icon && <Icon size={16} />}
+      {Icon && <Icon className='text-xs md:text-lg' />}
       {title}
       {node}
     </button>

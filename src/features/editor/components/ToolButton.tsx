@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ToolButton = ({ icon, theme, onClick }: Props) => {
-  return <Button icon={icon} theme={theme} onClick={onClick} />;
+  return <Button icon={icon} theme={theme} onClick={onClick} className='text-gray-600!' />;
 };
 
 export default ToolButton;

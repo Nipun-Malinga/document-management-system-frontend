@@ -2,6 +2,8 @@ import type { IMessage } from '@stomp/stompjs';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import WebSocketService from '../../../services/websocketService';
+import EditorContainer from '../components/EditorContainer';
+import MainEditor from '../components/MainEditor';
 
 const CollaborativeEditor = () => {
   const { documentId, branchId } = useParams();
@@ -51,7 +53,11 @@ const CollaborativeEditor = () => {
     );
   };
 
-  return <></>;
+  return (
+    <EditorContainer>
+      <MainEditor />
+    </EditorContainer>
+  );
 };
 
 export default CollaborativeEditor;

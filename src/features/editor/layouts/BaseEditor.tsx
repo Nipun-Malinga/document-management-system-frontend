@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useSaveDocumentContent } from '../../../hooks/useDeleteDocumentContent';
+import { useSaveDocumentContent } from '../../../hooks/useSaveDocumentContent';
 import { useDocumentContent } from '../../../hooks/useDocumentContent';
+import MainEditor from '../components/MainEditor';
+import EditorContainer from '../components/EditorContainer';
 
 export const BaseEditor = () => {
   const { documentId, branchId } = useParams();
@@ -13,7 +15,11 @@ export const BaseEditor = () => {
     mutate(JSON.stringify(content));
   };
 
-  return <></>;
+  return (
+    <EditorContainer>
+      <MainEditor />
+    </EditorContainer>
+  );
 };
 
 export default BaseEditor;
