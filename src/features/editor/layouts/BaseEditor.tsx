@@ -3,6 +3,7 @@ import { useSaveDocumentContent } from '../../../hooks/useSaveDocumentContent';
 import { useDocumentContent } from '../../../hooks/useDocumentContent';
 import MainEditor from '../components/MainEditor';
 import EditorContainer from '../components/EditorContainer';
+import { convertToTiptapContent } from '../utils';
 
 export const BaseEditor = () => {
   const { documentId, branchId } = useParams();
@@ -17,7 +18,7 @@ export const BaseEditor = () => {
 
   return (
     <EditorContainer>
-      <MainEditor />
+      <MainEditor content={convertToTiptapContent(data.content)} />
     </EditorContainer>
   );
 };

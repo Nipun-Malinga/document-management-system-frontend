@@ -1,15 +1,24 @@
 import type { IconType } from 'react-icons';
 import { Button } from '../../../components';
-import type { ThemeVariant } from '../../../themes/themes';
 
 interface Props {
   icon: IconType;
-  theme: ThemeVariant;
+
+  active?: boolean;
+  disabled?: boolean;
   onClick: () => void;
 }
 
-const ToolButton = ({ icon, theme, onClick }: Props) => {
-  return <Button icon={icon} theme={theme} onClick={onClick} className='text-gray-600!' />;
+const ToolButton = ({ icon, active, disabled, onClick }: Props) => {
+  return (
+    <Button
+      icon={icon}
+      theme={active ? 'dark' : 'neutral'}
+      disabled={disabled}
+      onClick={onClick}
+      className={`${active} ? 'text-gray-600!' : 'text-gray-200'`}
+    />
+  );
 };
 
 export default ToolButton;
