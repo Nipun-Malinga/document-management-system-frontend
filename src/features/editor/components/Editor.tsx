@@ -1,11 +1,10 @@
-import TextAlign from '@tiptap/extension-text-align';
 import {
   EditorContent,
   EditorContext,
   useEditor,
   type Content,
+  type UseEditorOptions,
 } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 import { useMemo } from 'react';
 import Toolbar from './Toolbar';
 import TopToolBar from './TopToolBar';
@@ -15,6 +14,7 @@ interface Props {
   content: Content;
   documentId: string;
   branchId: string;
+  configs: UseEditorOptions;
 }
 
 const MainEditor = ({
@@ -22,15 +22,10 @@ const MainEditor = ({
   content,
   documentId,
   branchId,
+  configs,
 }: Props) => {
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-        defaultAlignment: 'left',
-      }),
-    ],
+    ...configs,
     content: content,
     editorProps: {
       attributes: {

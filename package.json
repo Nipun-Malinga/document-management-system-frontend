@@ -14,10 +14,12 @@
     "@tailwindcss/vite": "^4.1.14",
     "@tanstack/react-query": "^5.90.3",
     "@tanstack/react-query-devtools": "^5.90.2",
+    "@tiptap/extension-collaboration": "^3.10.1",
     "@tiptap/extension-text-align": "^3.10.1",
     "@tiptap/pm": "^3.10.1",
     "@tiptap/react": "^3.10.1",
     "@tiptap/starter-kit": "^3.10.1",
+    "@tiptap/y-tiptap": "^3.0.0",
     "@types/ms": "^2.1.0",
     "axios": "^1.12.2",
     "dompurify": "^3.3.0",
@@ -29,6 +31,8 @@
     "react-router-dom": "^7.9.4",
     "sockjs-client": "^1.6.1",
     "tailwindcss": "^4.1.14",
+    "y-protocols": "^1.0.6",
+    "yjs": "^13.6.27",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

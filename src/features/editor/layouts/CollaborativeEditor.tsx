@@ -3,7 +3,9 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import WebSocketService from '../../../services/websocketService';
 import EditorContainer from '../components/EditorContainer';
-import MainEditor from '../components/MainEditor';
+
+import Editor from '../components/Editor';
+import { collaborativeEditorConfigs } from '../configs/EditorConfigs';
 
 const CollaborativeEditor = () => {
   const { documentId, branchId } = useParams();
@@ -57,11 +59,12 @@ const CollaborativeEditor = () => {
 
   return (
     <EditorContainer>
-      <MainEditor
+      <Editor
         enableAutoSaver={false}
         documentId={documentId}
         branchId={branchId}
-        content={''}
+        configs={collaborativeEditorConfigs}
+        content={'<p>Loading</p>'}
       />
     </EditorContainer>
   );
