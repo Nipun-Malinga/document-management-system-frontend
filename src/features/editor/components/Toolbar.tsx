@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
 import { Editor, useEditorState } from '@tiptap/react';
+import React, { useState } from 'react';
 import {
-  FaBold,
-  FaItalic,
-  FaUnderline,
-  FaStrikethrough,
-  FaListUl,
-  FaListOl,
-  FaQuoteLeft,
-  FaCode,
-  FaImage,
-  FaLink,
-  FaUnlink,
-  FaAlignLeft,
   FaAlignCenter,
-  FaAlignRight,
   FaAlignJustify,
-  FaUndo,
-  FaRedo,
+  FaAlignLeft,
+  FaAlignRight,
+  FaBold,
+  FaCode,
   FaHighlighter,
+  FaImage,
+  FaItalic,
+  FaLink,
+  FaListOl,
+  FaListUl,
   FaPalette,
+  FaRedo,
+  FaStrikethrough,
+  FaUnderline,
+  FaUndo,
+  FaUnlink
 } from 'react-icons/fa';
 import { MdFormatClear } from 'react-icons/md';
 import ToolButton from './ToolButton';
@@ -97,7 +96,7 @@ const Toolbar = ({ editor }: Props) => {
       </div>
 
       {/* Headings */}
-      <div className='flex items-center gap-1 pr-2 border-r border-gray-300'>
+      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300'>
         <select
           onChange={(e) => {
             const value = e.target.value;
@@ -156,7 +155,7 @@ const Toolbar = ({ editor }: Props) => {
       </div>
 
       {/* Colors */}
-      <div className='flex items-center gap-1 pr-2 border-r border-gray-300 relative'>
+      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300 relative'>
         <div className='relative'>
           <ToolButton
             icon={FaPalette}
@@ -217,15 +216,10 @@ const Toolbar = ({ editor }: Props) => {
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           active={editorState.isOrderedList}
         />
-        <ToolButton
-          icon={FaQuoteLeft}
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          active={editorState.isBlockquote}
-        />
       </div>
 
       {/* Links & Images */}
-      <div className='flex items-center gap-1 pr-2 border-r border-gray-300'>
+      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300'>
         <ToolButton icon={FaLink} onClick={setLink} />
         <ToolButton
           icon={FaUnlink}

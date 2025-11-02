@@ -1,3 +1,4 @@
+import TextAlign from '@tiptap/extension-text-align';
 import {
   EditorContent,
   EditorContext,
@@ -7,13 +8,21 @@ import {
 import StarterKit from '@tiptap/starter-kit';
 import { useMemo } from 'react';
 import Toolbar from './Toolbar';
-import TextAlign from '@tiptap/extension-text-align';
+import TopToolBar from './TopToolBar';
 
 interface Props {
+  enableAutoSaver: boolean;
   content: Content;
+  documentId: string;
+  branchId: string;
 }
 
-const MainEditor = ({ content }: Props) => {
+const MainEditor = ({
+  enableAutoSaver,
+  content,
+  documentId,
+  branchId,
+}: Props) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -34,6 +43,12 @@ const MainEditor = ({ content }: Props) => {
 
   return (
     <EditorContext.Provider value={providerValue}>
+      <TopToolBar
+        enableAutoSaver={enableAutoSaver}
+        editor={editor}
+        documentId={documentId}
+        branchId={branchId}
+      />
       <Toolbar editor={editor} />
       <EditorContent editor={editor} />
     </EditorContext.Provider>

@@ -53,9 +53,16 @@ const CollaborativeEditor = () => {
     );
   };
 
+  if (!(documentId && branchId)) return null;
+
   return (
     <EditorContainer>
-      <MainEditor />
+      <MainEditor
+        enableAutoSaver={false}
+        documentId={documentId}
+        branchId={branchId}
+        content={''}
+      />
     </EditorContainer>
   );
 };

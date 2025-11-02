@@ -1,21 +1,27 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import type { ContentRequest } from "../models/Content";
-import APIService from "../services/apiService";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { ContentRequest } from '../models/Content';
+import APIService from '../services/apiService';
+import useAutoSave from '../states/useAutoSave';
 
 export const useSaveDocumentContent = (
   documentId: string,
-  branchName: string
+  branchId: string
 ) => {
-  const service = new APIService<ContentRequest>(
-    `/documents/${documentId}/branches/${branchName}/content`
-  );
-
   const queryClient = useQueryClient();
 
-  const queryKey = ['branches', documentId, 'branch', branchName];
+  const service = new APIService<ContentRequest>(
+    `/documents/${documentId}/branches/${branchId}/content`
+  );
+
+  const queryKey = ['branches', documentId, 'branch', branchId];
+  const mutationFn = (content: string) => {
+    return service.put({ content: content });
+  };
+
   return useMutation({
     mutationKey: queryKey,
-    mutationFn: (content: string) => service.put({ content: content }),
+    mutationFn: (content: string) => mutationFn(content),
+
     onSuccess: () => {
       queryClient.setQueryData(queryKey, (content: string) => {
         return { content, completed: true };

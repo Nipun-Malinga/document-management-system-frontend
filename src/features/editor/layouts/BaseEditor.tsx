@@ -1,24 +1,24 @@
 import { useParams } from 'react-router-dom';
-import { useSaveDocumentContent } from '../../../hooks/useSaveDocumentContent';
 import { useDocumentContent } from '../../../hooks/useDocumentContent';
-import MainEditor from '../components/MainEditor';
 import EditorContainer from '../components/EditorContainer';
+import MainEditor from '../components/MainEditor';
 import { convertToTiptapContent } from '../utils';
+
 
 export const BaseEditor = () => {
   const { documentId, branchId } = useParams();
   const { data } = useDocumentContent(documentId ?? '', branchId ?? '');
-  const { mutate } = useSaveDocumentContent(documentId ?? '', branchId ?? '');
 
   if (!data || !(documentId && branchId)) return null;
 
-  const saveChanges = (content: string) => {
-    mutate(JSON.stringify(content));
-  };
-
   return (
     <EditorContainer>
-      <MainEditor content={convertToTiptapContent(data.content)} />
+      <MainEditor
+        enableAutoSaver={true}
+        documentId={documentId}
+        branchId={branchId}
+        content={convertToTiptapContent(data.content)}
+      />
     </EditorContainer>
   );
 };

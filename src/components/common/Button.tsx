@@ -45,7 +45,7 @@ const Button = ({
         ${className}
       `}
     >
-      {Icon && <Icon className='text-xs md:text-lg' />}
+      {Icon && <Icon className='text-sm md:text-lg' />}
       {title}
       {node}
     </button>

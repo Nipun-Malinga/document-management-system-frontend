@@ -13,10 +13,10 @@ const ToolButton = ({ icon, active, disabled, onClick }: Props) => {
   return (
     <Button
       icon={icon}
-      theme={active ? 'dark' : 'neutral'}
+      theme={active ? 'neutral' : 'common'}
       disabled={disabled}
       onClick={onClick}
-      className={`${active} ? 'text-gray-600!' : 'text-gray-200'`}
+      className={`${active ? 'text-gray-900!' : 'text-gray-700!'}`}
     />
   );
 };
