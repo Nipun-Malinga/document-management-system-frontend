@@ -1,9 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useDocumentContent } from '../../../hooks/useDocumentContent';
 import EditorContainer from '../components/EditorContainer';
+import SoloEditorCore from '../components/SoloEditorCore';
 import { convertToTiptapContent } from '../utils';
-import { baseEditorConfigs } from '../configs/EditorConfigs';
-import Editor from '../components/Editor';
 
 export const BaseEditor = () => {
   const { documentId, branchId } = useParams();
@@ -13,11 +12,9 @@ export const BaseEditor = () => {
 
   return (
     <EditorContainer>
-      <Editor
-        enableAutoSaver={true}
+      <SoloEditorCore
         documentId={documentId}
         branchId={branchId}
-        configs={baseEditorConfigs}
         content={convertToTiptapContent(data.content)}
       />
     </EditorContainer>

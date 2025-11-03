@@ -1,39 +1,21 @@
-import {
-  EditorContent,
-  EditorContext,
-  useEditor,
-  type Content,
-  type UseEditorOptions,
-} from '@tiptap/react';
+import { Editor, EditorContent, EditorContext } from '@tiptap/react';
 import { useMemo } from 'react';
 import Toolbar from './Toolbar';
 import TopToolBar from './TopToolBar';
 
 interface Props {
   enableAutoSaver: boolean;
-  content: Content;
+  editor: Editor;
   documentId: string;
   branchId: string;
-  configs: UseEditorOptions;
 }
 
-const MainEditor = ({
+const CoreEditor = ({
   enableAutoSaver,
-  content,
+  editor,
   documentId,
   branchId,
-  configs,
 }: Props) => {
-  const editor = useEditor({
-    ...configs,
-    content: content,
-    editorProps: {
-      attributes: {
-        class: 'outline-none',
-      },
-    },
-  });
-
   const providerValue = useMemo(() => ({ editor }), [editor]);
 
   return (
@@ -50,4 +32,4 @@ const MainEditor = ({
   );
 };
 
-export default MainEditor;
+export default CoreEditor;

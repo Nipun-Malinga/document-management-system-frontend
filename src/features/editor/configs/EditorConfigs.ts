@@ -1,23 +1,23 @@
 import TextAlign from '@tiptap/extension-text-align';
-import type { UseEditorOptions } from '@tiptap/react';
+import type { AnyExtension, UseEditorOptions } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
-export const baseEditorConfigs: UseEditorOptions = {
-  extensions: [
-    StarterKit,
-    TextAlign.configure({
-      types: ['heading', 'paragraph'],
-      defaultAlignment: 'left',
-    }),
-  ],
-};
+export const editorExtensions: AnyExtension[] = [
+  StarterKit.configure({
+    heading: {
+      levels: [1, 2, 3, 4, 5, 6],
+    },
+  }),
+  TextAlign.configure({
+    types: ['heading', 'paragraph'],
+    defaultAlignment: 'left',
+  }),
+];
 
-export const collaborativeEditorConfigs: UseEditorOptions = {
-  extensions: [
-    StarterKit.configure({ undoRedo: false }),
-    TextAlign.configure({
-      types: ['heading', 'paragraph'],
-      defaultAlignment: 'left',
-    }),
-  ],
+export const commonEditorConfigs: UseEditorOptions = {
+  editorProps: {
+    attributes: {
+      class: 'outline-none',
+    },
+  },
 };

@@ -18,7 +18,7 @@ import {
   FaStrikethrough,
   FaUnderline,
   FaUndo,
-  FaUnlink
+  FaUnlink,
 } from 'react-icons/fa';
 import { MdFormatClear } from 'react-icons/md';
 import ToolButton from './ToolButton';
@@ -104,7 +104,7 @@ const Toolbar = ({ editor }: Props) => {
               editor.chain().focus().setParagraph().run();
             } else {
               const level = parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6;
-              editor.chain().focus().toggleHeading({ level }).run();
+              editor.chain().focus().toggleHeading({ level: level }).run();
             }
           }}
           className='px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
