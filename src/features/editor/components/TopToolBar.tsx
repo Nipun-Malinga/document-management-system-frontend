@@ -1,6 +1,7 @@
 import type { Editor } from '@tiptap/react';
 import { Button } from '../../../components';
 import AutoSaver from './AutoSaver';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   enableAutoSaver: boolean;
@@ -15,6 +16,8 @@ const TopToolBar = ({
   documentId,
   branchId,
 }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <div className='flex items-center gap-2'>
       {enableAutoSaver && (
@@ -25,7 +28,14 @@ const TopToolBar = ({
         />
       )}
       <div className='ml-auto'>
-        <Button title='Preview' theme='primary' className='rounded-2xl' />
+        <Button
+          title='Preview'
+          theme='primary'
+          className='rounded-2xl'
+          onClick={() =>
+            navigate(`/document/${documentId}/branch/${branchId}/view`)
+          }
+        />
       </div>
     </div>
   );

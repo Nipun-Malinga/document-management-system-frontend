@@ -1,14 +1,17 @@
 import { useParams } from 'react-router-dom';
-import { ContentRenderer } from '../../../components';
 import { useDocumentContent } from '../../../hooks/useDocumentContent';
+import { ContentRenderer } from '../../editor';
+import { convertToTiptapContent } from '../../editor/utils';
 
 const ContentView = () => {
-  const { documentId, branchName } = useParams();
-  const { data } = useDocumentContent(documentId ?? '', branchName ?? '');
+  const { documentId, branchId} = useParams();
+  const { data } = useDocumentContent(documentId ?? '', branchId ?? '');
+
+  if (!(documentId && branchId && data)) return null;
 
   return (
     <div className='bw-full h-dvh rounded-md overflow-y-auto'>
-      {data && <ContentRenderer />}
+      <ContentRenderer content={convertToTiptapContent(data.content)} />
     </div>
   );
 };
