@@ -1,5 +1,7 @@
-import { Editor, useEditorState } from '@tiptap/react';
-import React, { useState } from 'react';
+import type { Editor } from '@tiptap/core';
+import { useEditorState } from '@tiptap/react';
+import { useState } from 'react';
+import { FaRedo, FaUndo, FaUnlink } from 'react-icons/fa';
 import {
   FaAlignCenter,
   FaAlignJustify,
@@ -14,45 +16,46 @@ import {
   FaListOl,
   FaListUl,
   FaPalette,
-  FaRedo,
   FaStrikethrough,
   FaUnderline,
-  FaUndo,
-  FaUnlink,
-} from 'react-icons/fa';
+} from 'react-icons/fa6';
 import { MdFormatClear } from 'react-icons/md';
 import ToolButton from './ToolButton';
 
 interface Props {
   editor: Editor;
+  canUndo?: boolean;
+  canRedo?: boolean;
+  onUndo?: () => void;
+  onRedo?: () => void;
 }
 
-const Toolbar = ({ editor }: Props) => {
+const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showHighlightPicker, setShowHighlightPicker] = useState(false);
 
   const editorState = useEditorState({
-    editor,
-    selector: (ctx) => ({
-      isBold: ctx.editor.isActive('bold'),
-      isItalic: ctx.editor.isActive('italic'),
-      isUnderline: ctx.editor.isActive('underline'),
-      isStrike: ctx.editor.isActive('strike'),
-      isCode: ctx.editor.isActive('code'),
-      isBulletList: ctx.editor.isActive('bulletList'),
-      isOrderedList: ctx.editor.isActive('orderedList'),
-      isBlockquote: ctx.editor.isActive('blockquote'),
-      isCodeBlock: ctx.editor.isActive('codeBlock'),
-      isH1: ctx.editor.isActive('heading', { level: 1 }),
-      isH2: ctx.editor.isActive('heading', { level: 2 }),
-      isH3: ctx.editor.isActive('heading', { level: 3 }),
-      isAlignLeft: ctx.editor.isActive({ textAlign: 'left' }),
-      isAlignCenter: ctx.editor.isActive({ textAlign: 'center' }),
-      isAlignRight: ctx.editor.isActive({ textAlign: 'right' }),
-      isAlignJustify: ctx.editor.isActive({ textAlign: 'justify' }),
-      canUndo: ctx.editor.can().undo(),
-      canRedo: ctx.editor.can().redo(),
-    }),
+    editor: editor,
+    selector(ctx) {
+      return {
+        isBold: ctx.editor.isActive('bold'),
+        isItalic: ctx.editor.isActive('italic'),
+        isUnderline: ctx.editor.isActive('underline'),
+        isStrike: ctx.editor.isActive('strike'),
+        isCode: ctx.editor.isActive('code'),
+        isBulletList: ctx.editor.isActive('bulletList'),
+        isOrderedList: ctx.editor.isActive('orderedList'),
+        isBlockquote: ctx.editor.isActive('blockquote'),
+        isCodeBlock: ctx.editor.isActive('codeBlock'),
+        isH1: ctx.editor.isActive('heading', { level: 1 }),
+        isH2: ctx.editor.isActive('heading', { level: 2 }),
+        isH3: ctx.editor.isActive('heading', { level: 3 }),
+        isAlignLeft: ctx.editor.isActive({ textAlign: 'left' }),
+        isAlignCenter: ctx.editor.isActive({ textAlign: 'center' }),
+        isAlignRight: ctx.editor.isActive({ textAlign: 'right' }),
+        isAlignJustify: ctx.editor.isActive({ textAlign: 'justify' }),
+      };
+    },
   });
 
   const colors = [
@@ -68,32 +71,25 @@ const Toolbar = ({ editor }: Props) => {
 
   const setLink = () => {
     const url = window.prompt('Enter URL:');
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
-    }
+    if (url) editor.chain().focus().setLink({ href: url }).run();
   };
 
   const addImage = () => {
     const url = window.prompt('Enter image URL:');
     if (url) {
+      // TODO: add image logic
     }
   };
 
   return (
     <div className='flex flex-wrap justify-center items-center gap-1 p-2 border-b border-gray-200'>
-      {/* History */}
-      <div className='flex items-center gap-1 pr-2 border-r border-gray-300'>
-        <ToolButton
-          icon={FaUndo}
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editorState.canUndo}
-        />
-        <ToolButton
-          icon={FaRedo}
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editorState.canRedo}
-        />
-      </div>
+      {/* History (only render if solo editor) */}
+      {onUndo && onRedo && (
+        <div className='flex items-center gap-1 pr-2 border-r border-gray-300'>
+          <ToolButton icon={FaUndo} onClick={onUndo} disabled={!canUndo} />
+          <ToolButton icon={FaRedo} onClick={onRedo} disabled={!canRedo} />
+        </div>
+      )}
 
       {/* Headings */}
       <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300'>
@@ -109,11 +105,11 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className='px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
           value={
-            editorState.isH1
+            editor.isActive('heading', { level: 1 })
               ? '1'
-              : editorState.isH2
+              : editor.isActive('heading', { level: 2 })
               ? '2'
-              : editorState.isH3
+              : editor.isActive('heading', { level: 3 })
               ? '3'
               : 'p'
           }
@@ -263,4 +259,4 @@ const Toolbar = ({ editor }: Props) => {
   );
 };
 
-export default React.memo(Toolbar);
+export default Toolbar;

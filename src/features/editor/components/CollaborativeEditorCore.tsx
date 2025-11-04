@@ -1,13 +1,15 @@
+import Collaboration from '@tiptap/extension-collaboration';
 import { useEditor } from '@tiptap/react';
 import { useEffect, useMemo } from 'react';
+import { IndexeddbPersistence } from 'y-indexeddb';
+import * as Y from 'yjs';
+import { useProvider } from '../../../hooks/collaboration/useProvider';
 import {
   commonEditorConfigs,
   editorExtensions,
 } from '../configs/EditorConfigs';
 import CoreEditor from './CoreEditor';
-import Collaboration from '@tiptap/extension-collaboration';
-import { WebsocketProvider } from 'y-websocket';
-import * as Y from 'yjs';
+import Toolbar from './Toolbar';
 
 interface Props {
   documentId: string;
@@ -15,33 +17,32 @@ interface Props {
 }
 
 const CollaborativeEditor = ({ documentId, branchId }: Props) => {
-  const doc = useMemo(() => new Y.Doc(), []);
+  const ydoc = useMemo(() => new Y.Doc(), []);
 
-  const provider = useMemo(() => {
-    const p = new WebsocketProvider(
-      'ws://localhost:1234',
-      `${documentId}:${branchId}`,
-      doc
-    );
-    return p;
-  }, [documentId, doc]);
+  // Unique key to identify the document
+  const documentKey: string = `${documentId}:${branchId}`;
 
-  useEffect(() => {
-    return () => {
-      provider.destroy();
-      doc.destroy();
-    };
-  }, [provider, doc]);
+  // For offline support
+  new IndexeddbPersistence(documentKey, ydoc);
+
+  const provider = useProvider(documentKey, ydoc);
 
   const editor = useEditor({
     extensions: [
-      ...editorExtensions,
+      ...editorExtensions(true),
       Collaboration.configure({
-        document: doc,
+        document: ydoc,
       }),
     ],
     ...commonEditorConfigs,
   });
+
+  useEffect(() => {
+    return () => {
+      provider.destroy();
+      editor?.destroy();
+    };
+  }, [editor]);
 
   return (
     <CoreEditor
@@ -49,6 +50,7 @@ const CollaborativeEditor = ({ documentId, branchId }: Props) => {
       editor={editor}
       documentId={documentId}
       branchId={branchId}
+      toolbar={<Toolbar editor={editor} canRedo={false} canUndo={false} />}
     />
   );
 };
