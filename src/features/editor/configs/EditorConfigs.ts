@@ -1,8 +1,9 @@
+import Image from '@tiptap/extension-image';
+import { TaskItem, TaskList } from '@tiptap/extension-list';
 import TextAlign from '@tiptap/extension-text-align';
+import { TextStyleKit } from '@tiptap/extension-text-style';
 import type { AnyExtension, UseEditorOptions } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
-import { Dropcursor } from '@tiptap/extensions';
 
 export const editorExtensions = (collaborative = false): AnyExtension[] => {
   const baseExtensions: AnyExtension[] = [
@@ -12,9 +13,14 @@ export const editorExtensions = (collaborative = false): AnyExtension[] => {
       },
       undoRedo: collaborative ? false : undefined,
     }),
+    TextStyleKit,
     TextAlign.configure({
       types: ['heading', 'paragraph'],
       defaultAlignment: 'left',
+    }),
+    TaskList,
+    TaskItem.configure({
+      nested: true,
     }),
     Image.configure({
       resize: {
@@ -22,7 +28,6 @@ export const editorExtensions = (collaborative = false): AnyExtension[] => {
         alwaysPreserveAspectRatio: true,
       },
     }),
-    Dropcursor,
   ];
 
   return baseExtensions;

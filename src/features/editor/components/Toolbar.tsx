@@ -59,6 +59,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
   });
 
   const colors = [
+    '#FFFFFF',
     '#000000',
     '#FF0000',
     '#00FF00',
@@ -155,19 +156,22 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
       <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300 relative'>
         <div className='relative'>
           <ToolButton
-            icon={FaPalette}
+            icon={FaHighlighter}
             onClick={() => {
-              setShowColorPicker(!showColorPicker);
-              setShowHighlightPicker(false);
+              setShowHighlightPicker(!showHighlightPicker);
+              setShowColorPicker(false);
             }}
           />
-          {showColorPicker && (
-            <div className='absolute top-full mt-1 p-2 bg-white border border-gray-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
+          {showHighlightPicker && (
+            <div className='absolute w-30 top-full mt-1 p-2 bg-white border border-gray-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
               {colors.map((color) => (
                 <button
                   key={color}
-                  onClick={() => {}}
-                  className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform'
+                  onClick={() => {
+                    editor.chain().focus().setColor(color).run();
+                    setShowHighlightPicker(false);
+                  }}
+                  className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform cursor-pointer'
                   style={{ backgroundColor: color }}
                 />
               ))}
@@ -176,19 +180,22 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
         </div>
         <div className='relative'>
           <ToolButton
-            icon={FaHighlighter}
+            icon={FaPalette}
             onClick={() => {
-              setShowHighlightPicker(!showHighlightPicker);
-              setShowColorPicker(false);
+              setShowColorPicker(!showColorPicker);
+              setShowHighlightPicker(false);
             }}
           />
-          {showHighlightPicker && (
-            <div className='absolute top-full mt-1 p-2 bg-white border border-gray-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
+          {showColorPicker && (
+            <div className='absolute w-30 top-full mt-1 p-2 bg-white border border-gray-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
               {colors.map((color) => (
                 <button
                   key={color}
-                  onClick={() => {}}
-                  className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform'
+                  onClick={() => {
+                    editor.chain().focus().setBackgroundColor(color).run();
+                    setShowColorPicker(false);
+                  }}
+                  className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform cursor-pointer'
                   style={{ backgroundColor: color }}
                 />
               ))}
