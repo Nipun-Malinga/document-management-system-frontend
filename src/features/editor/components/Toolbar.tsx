@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core';
 import { useEditorState } from '@tiptap/react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FaRedo, FaUndo, FaUnlink } from 'react-icons/fa';
 import {
   FaAlignCenter,
@@ -74,12 +74,13 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
     if (url) editor.chain().focus().setLink({ href: url }).run();
   };
 
-  const addImage = () => {
-    const url = window.prompt('Enter image URL:');
+  const addImage = useCallback(() => {
+    const url = window.prompt('URL');
+
     if (url) {
-      // TODO: add image logic
+      editor.chain().focus().setImage({ src: url }).run();
     }
-  };
+  }, [editor]);
 
   return (
     <div className='flex flex-wrap justify-center items-center gap-1 p-2 border-b border-gray-200'>

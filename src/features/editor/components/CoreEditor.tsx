@@ -1,3 +1,5 @@
+import '../styles/styles.scss'
+
 import { Editor, EditorContent, EditorContext } from '@tiptap/react';
 import { useMemo, type ReactNode } from 'react';
 import TopToolBar from './TopToolBar';
