@@ -15,7 +15,7 @@ const InfoPopup = ({ documentId }: Props) => {
   const { data } = useDocument(documentId ?? '');
   const { collapsed, toggle } = useInfoPopUp();
 
-  if (!(data && documentId)) return null;
+  if (!(data && documentId)) return <></>;
 
   return (
     <div
@@ -23,7 +23,7 @@ const InfoPopup = ({ documentId }: Props) => {
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      <div className='relative bg-white w-[95vw] md:w-[500px] lg:w-[850px] p-3 flex flex-col justify-between gap-2.5'>
+      <div className='relative bg-white w-[95vw] md:w-[70vw] lg:w-[80vw] p-3 flex flex-col justify-between gap-2.5'>
         <div className='flex flex-row-reverse justify-between'>
           <Button icon={IoClose} type='button' theme='light' onClick={toggle} />
           <div className='flex flex-row gap-1'>
