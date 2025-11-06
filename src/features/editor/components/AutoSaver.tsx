@@ -39,8 +39,8 @@ const AutoSaver = ({ editor, documentId, branchId }: Props) => {
       {/* Pending (saving) indicator */}
       {status === 'idle' && (
         <span className='relative flex size-3'>
-          <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-gray-400 opacity-75'></span>
-          <span className='relative inline-flex size-3 rounded-full bg-gray-500'></span>
+          <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-75'></span>
+          <span className='relative inline-flex size-3 rounded-full bg-slate-500'></span>
         </span>
       )}
 

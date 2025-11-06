@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
-import { useDocumentContent } from '../../../hooks/useDocumentContent';
-import { ContentRenderer } from '../../editor';
-import { convertToTiptapContent } from '../../editor/utils';
+import { useDocumentContent } from '../hooks/useDocumentContent';
+import { ContentRenderer } from '../features/editor';
+import { convertToTiptapContent } from '../features/editor/utils';
 
 const ContentView = () => {
-  const { documentId, branchId} = useParams();
+  const { documentId, branchId } = useParams();
   const { data } = useDocumentContent(documentId ?? '', branchId ?? '');
 
   if (!(documentId && branchId && data)) return null;

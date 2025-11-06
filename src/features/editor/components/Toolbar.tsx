@@ -84,17 +84,17 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
   }, [editor]);
 
   return (
-    <div className='flex flex-wrap justify-center items-center gap-1 p-2 border-b border-gray-200'>
+    <div className='flex flex-wrap justify-center items-center gap-1 p-2 border-b border-slate-200'>
       {/* History (only render if solo editor) */}
       {onUndo && onRedo && (
-        <div className='flex items-center gap-1 pr-2 border-r border-gray-300'>
+        <div className='flex items-center gap-1 pr-2 border-r border-slate-300'>
           <ToolButton icon={FaUndo} onClick={onUndo} disabled={!canUndo} />
           <ToolButton icon={FaRedo} onClick={onRedo} disabled={!canRedo} />
         </div>
       )}
 
       {/* Headings */}
-      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300'>
+      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-slate-300'>
         <select
           onChange={(e) => {
             const value = e.target.value;
@@ -105,7 +105,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
               editor.chain().focus().toggleHeading({ level: level }).run();
             }
           }}
-          className='px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+          className='px-2 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
           value={
             editor.isActive('heading', { level: 1 })
               ? '1'
@@ -124,7 +124,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
       </div>
 
       {/* Text Formatting */}
-      <div className='flex items-center gap-1 pr-2 border-r border-gray-300'>
+      <div className='flex items-center gap-1 pr-2 border-r border-slate-300'>
         <ToolButton
           icon={FaBold}
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -153,7 +153,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
       </div>
 
       {/* Colors */}
-      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300 relative'>
+      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-slate-300 relative'>
         <div className='relative'>
           <ToolButton
             icon={FaHighlighter}
@@ -163,7 +163,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
             }}
           />
           {showHighlightPicker && (
-            <div className='absolute w-30 top-full mt-1 p-2 bg-white border border-gray-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
+            <div className='absolute w-30 top-full mt-1 p-2 bg-white border border-slate-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
               {colors.map((color) => (
                 <button
                   key={color}
@@ -171,7 +171,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
                     editor.chain().focus().setColor(color).run();
                     setShowHighlightPicker(false);
                   }}
-                  className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform cursor-pointer'
+                  className='w-6 h-6 rounded border border-slate-300 hover:scale-110 transition-transform cursor-pointer'
                   style={{ backgroundColor: color }}
                 />
               ))}
@@ -187,7 +187,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
             }}
           />
           {showColorPicker && (
-            <div className='absolute w-30 top-full mt-1 p-2 bg-white border border-gray-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
+            <div className='absolute w-30 top-full mt-1 p-2 bg-white border border-slate-300 rounded shadow-lg z-10 grid grid-cols-4 gap-1'>
               {colors.map((color) => (
                 <button
                   key={color}
@@ -195,7 +195,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
                     editor.chain().focus().setBackgroundColor(color).run();
                     setShowColorPicker(false);
                   }}
-                  className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform cursor-pointer'
+                  className='w-6 h-6 rounded border border-slate-300 hover:scale-110 transition-transform cursor-pointer'
                   style={{ backgroundColor: color }}
                 />
               ))}
@@ -209,7 +209,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
       </div>
 
       {/* Lists & Quotes */}
-      <div className='flex items-center gap-1 pr-2 border-r border-gray-300'>
+      <div className='flex items-center gap-1 pr-2 border-r border-slate-300'>
         <ToolButton
           icon={FaListUl}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -223,7 +223,7 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
       </div>
 
       {/* Links & Images */}
-      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300'>
+      <div className='hidden md:flex items-center gap-1 pr-2 border-r border-slate-300'>
         <ToolButton icon={FaLink} onClick={setLink} />
         <ToolButton
           icon={FaUnlink}

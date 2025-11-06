@@ -19,38 +19,42 @@ const InfoPopup = ({ documentId }: Props) => {
 
   return (
     <div
-      className={`rounded-lg overflow-hidden shadow-[0_3px_10px_rgb(0,0,0,0.2)] md:mt-20 fixed z-20 flex justify-center transition-opacity duration-200 linear ${
+      className={`fixed top-20 z-20 md:top-0 flex justify-center mt-4 md:mt-20 transition-opacity duration-200 ${
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      <div className='relative bg-white w-[95vw] md:w-[70vw] lg:w-[80vw] p-3 flex flex-col justify-between gap-2.5'>
-        <div className='flex flex-row-reverse justify-between'>
-          <Button icon={IoClose} type='button' theme='light' onClick={toggle} />
-          <div className='flex flex-row gap-1'>
+      <div className='relative w-[90vw] md:w-[70vw] lg:w-[60vw] bg-white dark:bg-slate-900 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 md:p-6 flex flex-col gap-4'>
+        <div className='flex flex-row justify-between items-start gap-2'>
+          <div className='flex flex-row gap-1 flex-wrap'>
             <BranchSwitch documentId={documentId} shared={data.shared} />
             <BadgeList document={data} />
           </div>
+          <Button icon={IoClose} type='button' onClick={toggle} />
         </div>
 
-        <div className='flex flex-col gap-2'>
-          <p className='text-lg font-semibold text-gray-900 border-b border-gray-200'>
+        <div className='flex flex-col gap-3'>
+          <p className='text-lg font-semibold text-slate-900 pb-2 border-b border-slate-200 dark:border-slate-600'>
             {data.title}
           </p>
 
-          <div className='text-sm text-gray-600 space-y-1'>
+          <div className='text-sm text-slate-600 dark:text-slate-300 space-y-1'>
             <p>
-              <span className='font-medium text-gray-700'>Created:</span>{' '}
-              <span className='text-gray-500'>{data.createdAt}</span>
+              <span className='font-bold'>Created:</span>{' '}
+              <span className='text-slate-500 dark:text-slate-300'>
+                {data.createdAt}
+              </span>
             </p>
             <p>
-              <span className='font-medium text-gray-700'>Updated:</span>{' '}
-              <span className='text-gray-500'>{data.updatedAt}</span>
+              <span className='font-bold'>Updated:</span>{' '}
+              <span className='text-slate-500 dark:text-slate-300'>
+                {data.updatedAt}
+              </span>
             </p>
           </div>
           <Collaborators documentId={documentId} />
         </div>
 
-        <div className='border-t border-gray-200 pt-3'>
+        <div className='border-t border-slate-200 dark:border-slate-600 pt-3'>
           <InfoButtons documentId={documentId} />
         </div>
       </div>

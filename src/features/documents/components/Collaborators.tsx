@@ -12,15 +12,15 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
       {collaborators.data.map((collaborator) => (
         <div
           key={collaborator.userId}
-          className='flex items-center gap-2 bg-gray-50 hover:bg-gray-100 rounded-lg p-2 transition'
+          className='flex items-center gap-2 bg-slate-100 dark:bg-slate-600 rounded-lg p-2 transition'
         >
           <User userId={collaborator.userId} />
           <div className='text-xs leading-tight'>
-            <p className='font-medium text-gray-800 capitalize'>
+            <p className='font-medium text-slate-900 dark:text-slate-200 capitalize'>
               {collaborator.username}
               <span className='ml-1 text-green-500 font-normal'>online</span>
             </p>
-            <p className='text-gray-500 text-[11px]'>{collaborator.email}</p>
+            <p className='text-slate-500 dark:text-slate-300 text-[11px]'>{collaborator.email}</p>
           </div>
         </div>
       ))}
@@ -31,13 +31,11 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
 const Collaborators = ({ documentId }: Props) => {
   const { data } = useCollaborators(documentId);
 
-  console.log(data?.data);
-
   return (
     <>
       {data?.data && data.data.length > 0 && (
         <div className='mt-3'>
-          <p className='text-sm font-semibold text-gray-700 mb-2'>
+          <p className='text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2'>
             Collaborators
           </p>
           {collaboratorRenderer(data)}

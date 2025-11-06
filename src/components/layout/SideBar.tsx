@@ -1,28 +1,26 @@
 import { FaRegHardDrive } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5';
+import { quicksAsides } from '../../data/Aside';
 import useAside from '../../states/useAside';
 import Button from '../common/Button';
-import { quicksAsides } from '../../data/Aside';
 import Link from '../common/Link';
-import type { IconType } from 'react-icons';
 
 const SideBar = () => {
   const { collapsed, toggle } = useAside();
 
   return (
     <aside
-      className={`absolute z-20 bg-white w-3xs md:w-full h-lvh p-2 transform ${
+      className={`absolute z-20 bg-white dark:bg-slate-900 w-80 md:w-full h-lvh p-2 transform ${
         collapsed && '-translate-x-80'
-      } transition-transform duration-250 ease-in-out md:relative md:translate-x-0 shadow-[0_3px_10px_rgb(0,0,0,0.3)] md:shadow-none`}
+      } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
     >
-      <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2 '>
+      <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2'>
         <FaRegHardDrive className='text-blue-600' />
         <h1 className='font-bold'>DocVault</h1>
-        <div className='absolute right-0  md:hidden'>
+        <div className='absolute right-0 md:hidden'>
           <Button
             type='button'
             icon={IoClose}
-            theme='light'
             onClick={() => {
               toggle();
             }}
@@ -30,37 +28,27 @@ const SideBar = () => {
         </div>
       </div>
 
-      <nav className='border-b border-gray-300'>
-        <p className='text-gray-600 text-xs md:text-base px-3 mb-2'>
+      <nav className='border-b border-slate-300 dark:border-slate-600'>
+        <p className='text-slate-600 dark:text-slate-300 text-xs md:text-base px-3 mb-2'>
           Quick Access
         </p>
 
-        {quicksAsides.map((item, key) =>
-          linkBody(item.icon, item.title, item.endpoint, item.count, key)
-        )}
+        {quicksAsides.map((item, key) => (
+          <Link key={key} endpoint={item.endpoint}>
+            <div className='w-full px-2 py-2 md:px-4 md:py-2 flex flex-row items-center'>
+              <item.icon className='text-lg mr-4' />
+              <p className='text-sm text-slate-900 dark:text-slate-300'>
+                {item.title}
+              </p>
+              <p className='text-sm text-slate-900 dark:text-slate-300 ml-auto'>
+                {item.count}
+              </p>
+            </div>
+          </Link>
+        ))}
       </nav>
     </aside>
   );
 };
-
-const linkBody = (
-  Icon: IconType,
-  title: string,
-  endpoint: string,
-  count: number,
-  key: any
-) => (
-  <Link
-    children={
-      <div className='w-full md:px-4 md:py-2 flex flex-row items-center'>
-        <Icon className='text-lg mr-4' />
-        <p className='text-sm text-gray-900'>{title}</p>
-        <p className='text-sm text-gray-900 ml-auto'>{count}</p>
-      </div>
-    }
-    endpoint={endpoint}
-    key={key}
-  />
-);
 
 export default SideBar;

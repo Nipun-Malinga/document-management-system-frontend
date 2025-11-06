@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import ContentView from '../features/documents/components/ContentView';
+import ContentView from '../pages/ContentView';
 import DocumentContainer from '../features/documents/layouts/DocumentContainer';
 import { BaseEditor, CollaborativeEditor } from '../features/editor';
 import Editor from '../pages/Editor';

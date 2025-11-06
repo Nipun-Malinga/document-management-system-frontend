@@ -2,7 +2,7 @@ import { FaCircleInfo } from 'react-icons/fa6';
 import { LuFileText } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { OnlineUserList } from '..';
-import { Button, ItemWrapper } from '../../../components';
+import { Button } from '../../../components';
 import type { Document } from '../../../models/Document';
 import useInfoPopUp from '../../../states/useInfoPopUp';
 import BadgeList from './BadgeList';
@@ -20,24 +20,21 @@ const DocumentCard = ({ document }: Props) => {
 
   return (
     <div
-      className={`relative group w-full min-h-64 max-h-72 p-2.5 border border-gray-200 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
+      className={`relative group w-full min-h-64 max-h-72 p-2.5 border border-slate-200 dark:border-slate-600 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
         collapsed ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
       <div className='relative'>
-        <div className='absolute z-1 top-2 right-2 flex flex-col items-end transition duration-200 ease-in-out opacity-100 md:opacity-0 md:group-hover:opacity-100'>
-          <ItemWrapper>
-            <Button
-              icon={FaCircleInfo}
-              type='button'
-              theme='primary'
-              onClick={() => {
-                toggle();
-                setDocumentId(document.id);
-                resetBranchName();
-              }}
-            />
-          </ItemWrapper>
+        <div className='absolute z-1 top-0 right-0 flex flex-col items-end transition duration-200 ease-in-out opacity-100 md:opacity-0 md:group-hover:opacity-100'>
+          <Button
+            icon={FaCircleInfo}
+            type='button'
+            onClick={() => {
+              toggle();
+              setDocumentId(document.id);
+              resetBranchName();
+            }}
+          />
         </div>
 
         <div className='absolute z-1 bottom-2 right-2'>
@@ -50,7 +47,7 @@ const DocumentCard = ({ document }: Props) => {
               getEditorURI(document.id, document.mainBranchId, document.shared)
             )
           }
-          className='relative bg-blue-50 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'
+          className='relative bg-blue-50 dark:bg-slate-800 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'
         >
           <LuFileText className='text-6xl md:text-7xl text-blue-600' />
 
@@ -65,7 +62,7 @@ const DocumentCard = ({ document }: Props) => {
           <p className='text-base md:text-lg lg:text-sm capitalize font-medium'>
             {document.title}
           </p>
-          <p className='text-xs text-gray-500'>Created: {document.createdAt}</p>
+          <p className='text-xs text-slate-500'>Created: {document.createdAt}</p>
         </div>
       </div>
     </div>

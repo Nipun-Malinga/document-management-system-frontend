@@ -14,29 +14,23 @@ const InfoButtons = ({ documentId }: Props) => {
   const { toggle } = useInfoPopUp();
 
   return (
-    <div className='w-full flex flex-row gap-1'>
+    <div className='w-full flex justify-end gap-1'>
       <Button
         icon={MdOutlineEdit}
-        theme='primary'
         title='Edit'
         type='button'
-        className='w-full'
         onClick={() => {}}
       />
       <Button
         icon={FaRegShareFromSquare}
         title='Share'
-        theme='primary'
         type='button'
-        className='w-full'
         onClick={() => {}}
       />
       <Button
         icon={MdDeleteOutline}
-        theme='secondary'
         type='button'
         title='Delete'
-        className='w-full'
         onClick={() => {
           mutate();
           toggle();

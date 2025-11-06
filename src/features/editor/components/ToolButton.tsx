@@ -13,10 +13,9 @@ const ToolButton = ({ icon, active, disabled, onClick }: Props) => {
   return (
     <Button
       icon={icon}
-      theme={active ? 'neutral' : 'common'}
       disabled={disabled}
       onClick={onClick}
-      className={`${active ? 'text-gray-900!' : 'text-gray-700!'}`}
+      className={`${active ? 'text-slate-900!' : 'text-slate-700!'}`}
     />
   );
 };
