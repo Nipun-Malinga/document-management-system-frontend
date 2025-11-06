@@ -7,7 +7,7 @@ const LayoutDarker = ({ collapsed, onClick }: Props) => {
   return (
     <div
       onClick={onClick}
-      className={`fixed z-15 md:cursor-pointer w-full h-dvh ${
+      className={`absolute z-15 md:cursor-pointer w-full h-full ${
         !collapsed
           ? 'inset-0 bg-black/70 transition-all duration-200 ease-linear pointer-events-auto'
           : 'pointer-events-none'

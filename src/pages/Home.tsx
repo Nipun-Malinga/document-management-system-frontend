@@ -18,12 +18,12 @@ const Home = () => {
 
       <div className='relative flex-1 bg-white dark:bg-slate-900 flex flex-col overflow-hidden'>
         <LayoutDarker collapsed={collapsed} />
-        
+
         <div className='p-2 shrink-0'>
           <TopBar />
         </div>
 
-        <div className='flex-1 p-2 overflow-y-auto'>
+        <div className='flex-1 p-2 overflow-y-auto scrollbar scrollbar-thumb-slate-600 scrollbar-track-slate-50  dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-900'>
           <Outlet />
         </div>
       </div>

@@ -66,7 +66,7 @@ const BranchSwitch = ({ documentId, shared }: Props) => {
         title={`Branches: ${branches.length}`}
         type='button'
         onClick={() => setOpen(!open)}
-        className='h-7.5'
+        className='h-7.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-800'
       />
 
       <div
@@ -108,7 +108,7 @@ const BranchSwitch = ({ documentId, shared }: Props) => {
                   key={branch.id}
                   type='button'
                 >
-                  <div className='w-full flex flex-row justify-between items-center gap-2'>
+                  <div className='w-full flex flex-row justify-between items-center gap-2 cursor-pointer'>
                     <span
                       className={`text-sm truncate ${
                         isActive ? 'font-semibold' : 'font-normal'
