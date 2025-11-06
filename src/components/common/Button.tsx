@@ -29,7 +29,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {Icon && <Icon className='text-sm md:text-lg dark:text-slate-300' />}
+      {Icon && <Icon className='text-sm md:text-lg dark:text-gray-300' />}
       {title}
       {node}
     </Btn>

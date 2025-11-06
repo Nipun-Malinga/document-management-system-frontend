@@ -19,7 +19,7 @@ const Link = ({ title, endpoint, children, onClick }: slate) => {
   return (
     <div
       className={`mb-1.5 px-3 py-1 rounded-lg cursor-pointer flex flex-row items-center transition duration-100 ease-in-out ${
-        isLocation ? 'bg-slate-200' : 'hover:bg-slate-200 hover:dark:bg-slate-700'
+        isLocation ? 'bg-slate-300' : 'hover:bg-slate-300 hover:dark:bg-slate-600'
       }`}
       onClick={() => {
         onClick && onClick;

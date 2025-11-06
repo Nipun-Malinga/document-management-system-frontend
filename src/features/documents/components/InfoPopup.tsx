@@ -19,11 +19,12 @@ const InfoPopup = ({ documentId }: Props) => {
 
   return (
     <div
-      className={`fixed top-20 z-20 md:top-0 flex justify-center mt-4 md:mt-20 transition-opacity duration-200 ${
+      className={`fixed top-20 z-20 md:top-0 flex justify-between mt-4 md:mt-20 backdrop-blur-sm transition-opacity duration-200 ${
         collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
+      aria-hidden='true'
     >
-      <div className='relative w-[90vw] md:w-[70vw] lg:w-[60vw] bg-white dark:bg-slate-900 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 md:p-6 flex flex-col gap-4'>
+      <div className='relative w-[90vw] md:w-[70vw] lg:w-[60vw] bg-white dark:bg-slate-900 border dark:border-slate-600 rounded-2xl shadow-lg p-4 md:p-6 flex flex-col gap-1'>
         <div className='flex flex-row justify-between items-start gap-2'>
           <div className='flex flex-row gap-1 flex-wrap'>
             <BranchSwitch documentId={documentId} shared={data.shared} />
@@ -33,7 +34,7 @@ const InfoPopup = ({ documentId }: Props) => {
         </div>
 
         <div className='flex flex-col gap-3'>
-          <p className='text-lg font-semibold text-slate-900 pb-2 border-b border-slate-200 dark:border-slate-600'>
+          <p className='text-lg font-semibold text-slate-900 dark:text-white pb-2 border-b border-slate-200 dark:border-slate-600'>
             {data.title}
           </p>
 

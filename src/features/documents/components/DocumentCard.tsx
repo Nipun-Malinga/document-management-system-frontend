@@ -20,7 +20,7 @@ const DocumentCard = ({ document }: Props) => {
 
   return (
     <div
-      className={`relative group w-full min-h-64 max-h-72 p-2.5 border border-slate-200 dark:border-slate-600 rounded-lg flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
+      className={`relative group w-full min-h-64 max-h-72 p-2.5 border border-slate-300 dark:border-slate-600 rounded-2xl flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
         collapsed ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >

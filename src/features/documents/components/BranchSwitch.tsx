@@ -66,6 +66,7 @@ const BranchSwitch = ({ documentId, shared }: Props) => {
         title={`Branches: ${branches.length}`}
         type='button'
         onClick={() => setOpen(!open)}
+        className='h-7.5'
       />
 
       <div

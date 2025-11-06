@@ -10,7 +10,7 @@ const SideBar = () => {
 
   return (
     <aside
-      className={`absolute z-20 bg-white dark:bg-slate-900 w-80 md:w-full h-lvh p-2 transform ${
+      className={`absolute z-20 bg-white dark:bg-slate-900 w-70 md:w-full h-lvh p-2 transform ${
         collapsed && '-translate-x-80'
       } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
     >
