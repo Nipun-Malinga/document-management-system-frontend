@@ -3,7 +3,6 @@ import { Button } from '../../../components';
 
 interface Props {
   icon: IconType;
-
   active?: boolean;
   disabled?: boolean;
   onClick: () => void;
@@ -15,7 +14,7 @@ const ToolButton = ({ icon, active, disabled, onClick }: Props) => {
       icon={icon}
       disabled={disabled}
       onClick={onClick}
-      className={`${active ? 'text-slate-900!' : 'text-slate-700!'}`}
+      className={`${active ? 'bg-slate-700 text-slate-300!' : 'text-slate-900!'}`}
     />
   );
 };

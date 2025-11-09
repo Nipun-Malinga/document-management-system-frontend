@@ -28,9 +28,17 @@ interface Props {
   canRedo?: boolean;
   onUndo?: () => void;
   onRedo?: () => void;
+  disabled: boolean;
 }
 
-const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
+const Toolbar = ({
+  editor,
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+  disabled,
+}: Props) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showHighlightPicker, setShowHighlightPicker] = useState(false);
 
@@ -84,7 +92,13 @@ const Toolbar = ({ editor, canUndo, canRedo, onUndo, onRedo }: Props) => {
   }, [editor]);
 
   return (
-    <div className='flex flex-wrap justify-center items-center gap-1 p-2 border-b border-slate-200'>
+    <div
+      className={`flex flex-wrap justify-center items-center gap-1 p-2 border-b border-slate-200 ${
+        disabled
+          ? 'pointer-events-none opacity-80'
+          : 'pointer-events-auto opacity-100'
+      }`}
+    >
       {/* History (only render if solo editor) */}
       {onUndo && onRedo && (
         <div className='flex items-center gap-1 pr-2 border-r border-slate-300'>
