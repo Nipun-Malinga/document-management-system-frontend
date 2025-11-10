@@ -6,14 +6,12 @@ const UserDocuments = () => {
   const { data } = useUserDocuments();
 
   return (
-    <div className='w-full h-full flex justify-center'>
-      <DocumentGrid>
-        {data?.data &&
-          data.data.map((document, index) => (
-            <DocumentCard document={document} key={index} />
-          ))}
-      </DocumentGrid>
-    </div>
+    <DocumentGrid>
+      {data?.data &&
+        data.data.map((document, index) => (
+          <DocumentCard document={document} key={index} />
+        ))}
+    </DocumentGrid>
   );
 };
 

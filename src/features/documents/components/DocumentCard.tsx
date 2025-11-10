@@ -62,7 +62,9 @@ const DocumentCard = ({ document }: Props) => {
           <p className='text-base md:text-lg lg:text-sm capitalize font-medium'>
             {document.title}
           </p>
-          <p className='text-xs text-slate-500'>Created: {document.createdAt}</p>
+          <p className='text-xs text-slate-500'>
+            Created: {document.createdAt}
+          </p>
         </div>
       </div>
     </div>

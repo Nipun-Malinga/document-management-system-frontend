@@ -1,3 +1,5 @@
+import type { PageRequest } from './PageRequest';
+
 export interface Document {
   id: string;
   title: string;
@@ -10,12 +12,4 @@ export interface Document {
   updatedAt: string;
 }
 
-export interface DocumentsResponse {
-  data: Document[];
-  hasNext: boolean;
-  hasPrevious: boolean;
-  pageNumber: number;
-  pageSize: number;
-  totalElements: number;
-  totalPages: number;
-}
+export interface DocumentsResponse extends PageRequest<Document> {}
