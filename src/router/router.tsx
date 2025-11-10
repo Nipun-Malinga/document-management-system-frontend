@@ -1,18 +1,41 @@
 import { createBrowserRouter } from 'react-router-dom';
 import ContentView from '../pages/ContentView';
-import DocumentContainer from '../features/documents/layouts/DocumentContainer';
 import { BaseEditor, CollaborativeEditor } from '../features/editor';
 import Editor from '../pages/Editor';
 import Home from '../pages/Home';
+import {
+  DocumentViewLayer,
+  MainView,
+  Resents,
+  Shared,
+  Trash,
+} from '@/features/documents';
+import Quick from '@/features/documents/layouts/Quick';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/home',
     element: <Home />,
     children: [
       {
         index: true,
-        element: <DocumentContainer />,
+        element: <DocumentViewLayer children={<MainView />} />,
+      },
+      {
+        path: 'quick',
+        element: <DocumentViewLayer children={<Quick />} />,
+      },
+      {
+        path: 'resents',
+        element: <DocumentViewLayer children={<Resents />} />,
+      },
+      {
+        path: 'shared',
+        element: <DocumentViewLayer children={<Shared />} />,
+      },
+      {
+        path: 'trash',
+        element: <DocumentViewLayer children={<Trash />} />,
       },
     ],
   },

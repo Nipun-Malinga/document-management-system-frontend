@@ -1,16 +1,21 @@
-import { DocumentGrid, InfoPopUp } from '..';
+import type { ReactNode } from 'react';
+import { InfoPopUp } from '..';
 import { LayoutDarker } from '../../../components';
 import useInfoPopUp from '../../../states/useInfoPopUp';
 
-const DocumentContainer = () => {
+interface Props {
+  children?: ReactNode;
+}
+
+const DocumentViewLayer = ({ children }: Props) => {
   const { documentId, collapsed, toggle } = useInfoPopUp();
   return (
     <div className='w-full h-full flex justify-center'>
       <InfoPopUp documentId={documentId} />
       <LayoutDarker collapsed={collapsed} onClick={toggle} />
-      <DocumentGrid />
+      {children}
     </div>
   );
 };
 
-export default DocumentContainer;
+export default DocumentViewLayer;

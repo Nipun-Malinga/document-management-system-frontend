@@ -4,9 +4,11 @@ import { quicksAsides } from '../../data/Aside';
 import useAside from '../../states/useAside';
 import Button from '../common/Button';
 import Link from '../common/Link';
+import { useNavigate } from 'react-router-dom';
 
 const SideBar = () => {
   const { collapsed, toggle } = useAside();
+  const navigate = useNavigate();
 
   return (
     <aside
@@ -16,7 +18,12 @@ const SideBar = () => {
     >
       <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2'>
         <FaRegHardDrive className='text-blue-600' />
-        <h1 className='font-bold'>DocVault</h1>
+        <h1
+          className='font-bold cursor-pointer'
+          onClick={() => navigate('/home')}
+        >
+          DocManager
+        </h1>
         <div className='absolute right-0 md:hidden'>
           <Button
             type='button'

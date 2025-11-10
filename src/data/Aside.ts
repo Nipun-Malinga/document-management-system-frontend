@@ -15,13 +15,13 @@ export const quicksAsides: AsideQuick[] = [
   {
     icon: LuFiles,
     title: 'Quick Access',
-    endpoint: '/quick',
+    endpoint: 'quick',
     count: 4,
   },
   {
     icon: FaRegClock,
     title: 'Resents',
-    endpoint: '/resents',
+    endpoint: 'resents',
     count: 10,
   },
   {
@@ -33,7 +33,7 @@ export const quicksAsides: AsideQuick[] = [
   {
     icon: FaRegTrashAlt,
     title: 'Trash',
-    endpoint: '/trash',
+    endpoint: 'trash',
     count: 0,
   },
 ];
