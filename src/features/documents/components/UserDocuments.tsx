@@ -1,9 +1,9 @@
-import { useDocuments } from '@/hooks/useDocuments';
+import { useUserDocuments } from '@/hooks/document';
 import DocumentCard from './DocumentCard';
 import DocumentGrid from './DocumentGrid';
 
 const UserDocuments = () => {
-  const { data } = useDocuments();
+  const { data } = useUserDocuments();
 
   return (
     <div className='w-full h-full flex justify-center'>

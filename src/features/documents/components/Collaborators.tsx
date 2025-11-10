@@ -1,4 +1,4 @@
-import { useCollaborators } from '../../../hooks/useCollaborators';
+import useCollaborators from '@/hooks/document/collaboration/useCollaborators';
 import type { CollaboratorsResponse } from '../../../models/Collaborator';
 import { User } from '../../users';
 
@@ -20,7 +20,9 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
               {collaborator.username}
               <span className='ml-1 text-green-500 font-normal'>online</span>
             </p>
-            <p className='text-slate-500 dark:text-slate-300 text-[11px]'>{collaborator.email}</p>
+            <p className='text-slate-500 dark:text-slate-300 text-[11px]'>
+              {collaborator.email}
+            </p>
           </div>
         </div>
       ))}

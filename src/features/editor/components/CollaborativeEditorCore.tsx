@@ -3,13 +3,13 @@ import { useEditor } from '@tiptap/react';
 import { useEffect, useMemo } from 'react';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import * as Y from 'yjs';
-import { useProvider } from '../../../hooks/collaboration/useProvider';
 import {
   commonEditorConfigs,
   editorExtensions,
 } from '../configs/EditorConfigs';
 import CoreEditor from './CoreEditor';
 import Toolbar from './Toolbar';
+import { useProvider } from '@/hooks/document/collaboration';
 
 interface Props {
   documentId: string;

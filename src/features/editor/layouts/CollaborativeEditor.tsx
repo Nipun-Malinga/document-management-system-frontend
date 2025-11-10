@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import EditorContainer from '../components/EditorContainer';
 import CollaborativeEditorCore from '../components/CollaborativeEditorCore';
-import { useValidatePermissions } from '@/hooks/collaboration/useValidatePermissions';
+import { useValidatePermissions } from '@/hooks/document/collaboration';
 
 const CollaborativeEditor = () => {
   const { documentId, branchId } = useParams();

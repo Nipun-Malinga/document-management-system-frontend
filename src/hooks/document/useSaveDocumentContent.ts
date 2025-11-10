@@ -1,9 +1,8 @@
+import type { ContentRequest } from '@/models/Content';
+import APIService from '@/services/apiService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { ContentRequest } from '../models/Content';
-import APIService from '../services/apiService';
-import useAutoSave from '../states/useAutoSave';
 
-export const useSaveDocumentContent = (
+const useSaveDocumentContent = (
   documentId: string,
   branchId: string
 ) => {
@@ -32,3 +31,6 @@ export const useSaveDocumentContent = (
     },
   });
 };
+
+
+export default useSaveDocumentContent;

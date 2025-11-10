@@ -1,5 +1,5 @@
+import APIService from '@/services/apiService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import APIService from '../services/apiService';
 
 export const useDeleteDocument = (documentId: string) => {
   const queryClient = useQueryClient();
@@ -9,9 +9,7 @@ export const useDeleteDocument = (documentId: string) => {
     mutationKey: ['documents', documentId],
     mutationFn: () => service.delete(),
     onSuccess: () => {
-      const keys = [
-        ['documents-own']
-      ];
+      const keys = [['documents-own']];
 
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
@@ -20,3 +18,5 @@ export const useDeleteDocument = (documentId: string) => {
     },
   });
 };
+
+export default useDeleteDocument;
