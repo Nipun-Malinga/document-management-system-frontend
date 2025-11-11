@@ -1,17 +1,9 @@
-import type { IconType } from 'react-icons';
-import { LuFiles } from 'react-icons/lu';
-import { FaRegClock } from 'react-icons/fa6';
-import { LuUsers } from 'react-icons/lu';
+import type { SidebarLink } from '@/models/Link';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { FaRegClock } from 'react-icons/fa6';
+import { LuFiles, LuUsers } from 'react-icons/lu';
 
-export interface AsideQuick {
-  icon: IconType;
-  title: string;
-  endpoint: string;
-  count: number;
-}
-
-export const quicksAsides: AsideQuick[] = [
+export const quicksAsides: SidebarLink[] = [
   {
     icon: LuFiles,
     title: 'Quick Access',

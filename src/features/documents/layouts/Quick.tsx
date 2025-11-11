@@ -1,5 +1,13 @@
+import { Breadcrumb, Container } from '@/components';
+import { quickAccessBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
+
 const Quick = () => {
-  return <div>Quick</div>;
+  return (
+    <Container>
+      <Breadcrumb links={quickAccessBreadcrumb} />
+      Quick
+    </Container>
+  );
 };
 
 export default Quick;

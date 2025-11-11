@@ -1,20 +1,21 @@
+import { Container, LayoutDarker } from '@/components';
+import useInfoPopUp from '@/states/useInfoPopUp';
 import type { ReactNode } from 'react';
 import { InfoPopUp } from '..';
-import { LayoutDarker } from '../../../components';
-import useInfoPopUp from '../../../states/useInfoPopUp';
 
 interface Props {
-  children?: ReactNode;
+  children: ReactNode;
 }
 
 const DocumentViewLayer = ({ children }: Props) => {
   const { documentId, collapsed, toggle } = useInfoPopUp();
+
   return (
-    <div className='w-full h-full flex justify-center'>
+    <Container>
       <InfoPopUp documentId={documentId} />
       <LayoutDarker collapsed={collapsed} onClick={toggle} />
       {children}
-    </div>
+    </Container>
   );
 };
 

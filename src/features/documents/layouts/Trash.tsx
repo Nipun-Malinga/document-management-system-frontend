@@ -1,5 +1,13 @@
+import { Breadcrumb, Container } from '@/components';
+import { trashBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
+
 const Trash = () => {
-  return <div>Trash</div>;
+  return (
+    <Container>
+      <Breadcrumb links={trashBreadcrumb} />
+      Trash
+    </Container>
+  );
 };
 
 export default Trash;

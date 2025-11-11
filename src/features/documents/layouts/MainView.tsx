@@ -1,10 +1,13 @@
+import { Breadcrumb, Container } from '@/components';
 import UserDocuments from '../components/UserDocuments';
+import { mainViewBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
 
 const MainView = () => {
   return (
-    <div className='w-full'>
+    <Container>
+      <Breadcrumb links={mainViewBreadcrumb} />
       <UserDocuments />
-    </div>
+    </Container>
   );
 };
 
