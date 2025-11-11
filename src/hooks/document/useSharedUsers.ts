@@ -1,7 +1,7 @@
+import type { CollaboratorsResponse } from '@/models/Collaborator';
+import APIService from '@/services/apiService';
 import { useQuery } from '@tanstack/react-query';
 import ms from 'ms';
-import type { CollaboratorsResponse } from '../models/Collaborator';
-import APIService from '../services/apiService';
 
 export const useSharedUsers = (documentId: string) => {
   const service = new APIService<CollaboratorsResponse>(
@@ -17,3 +17,5 @@ export const useSharedUsers = (documentId: string) => {
     refetchInterval: ms('10 Minutes'),
   });
 };
+
+export default useSharedUsers;

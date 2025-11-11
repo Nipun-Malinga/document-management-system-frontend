@@ -9,7 +9,7 @@ const LayoutDarker = ({ collapsed, onClick }: Props) => {
       onClick={onClick}
       className={`absolute z-15 md:cursor-pointer w-full h-full ${
         !collapsed
-          ? 'inset-0 bg-black/70 transition-all duration-200 ease-linear pointer-events-auto'
+          ? 'inset-0 bg-black/20 transition-all duration-200 ease-linear pointer-events-auto backdrop-blur-xs'
           : 'pointer-events-none'
       }`}
     />

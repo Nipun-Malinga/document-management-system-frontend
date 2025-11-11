@@ -2,8 +2,8 @@ import { Button } from '../../../components';
 import { MdDeleteOutline } from 'react-icons/md';
 import { FaRegShareFromSquare } from 'react-icons/fa6';
 import { MdOutlineEdit } from 'react-icons/md';
-import { useDeleteDocument } from '../../../hooks/useDeleteDocument';
 import useInfoPopUp from '../../../states/useInfoPopUp';
+import { useDeleteDocument } from '@/hooks/document';
 
 interface Props {
   documentId: string;

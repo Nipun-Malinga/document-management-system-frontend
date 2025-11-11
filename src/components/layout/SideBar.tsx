@@ -1,22 +1,31 @@
 import { FaRegHardDrive } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5';
-import { quicksAsides } from '../../data/Aside';
-import useAside from '../../states/useAside';
-import Button from '../common/Button';
-import Link from '../common/Link';
+import { quicksAsides } from '@/data/Aside';
+import useAside from '@/states/useAside';
+import Button from '@/components/common/Button';
+import Link from '@/components/common/Link';
+import { useNavigate } from 'react-router-dom';
 
 const SideBar = () => {
   const { collapsed, toggle } = useAside();
+  const navigate = useNavigate();
 
   return (
     <aside
-      className={`absolute z-20 bg-white dark:bg-slate-900 w-70 md:w-full h-lvh p-2 transform ${
-        collapsed && '-translate-x-80'
-      } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
+      className={`absolute z-20 bg-white dark:bg-slate-900 w-70 md:w-full h-lvh p-2 transform transition-transform duration-300 ease-in-out ${
+        collapsed
+          ? '-translate-x-80 md:translate-x-0'
+          : 'translate-x-0 border-r'
+      } md:relative`}
     >
       <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2'>
         <FaRegHardDrive className='text-blue-600' />
-        <h1 className='font-bold'>DocVault</h1>
+        <h1
+          className='font-bold cursor-pointer'
+          onClick={() => navigate('/home')}
+        >
+          DocManager
+        </h1>
         <div className='absolute right-0 md:hidden'>
           <Button
             type='button'

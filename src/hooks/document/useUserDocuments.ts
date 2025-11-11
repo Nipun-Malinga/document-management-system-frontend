@@ -1,9 +1,9 @@
+import type { DocumentsResponse } from '@/models/Document';
+import APIService from '@/services/apiService';
 import { useQuery } from '@tanstack/react-query';
 import ms from 'ms';
-import type { DocumentsResponse } from '../models/Document';
-import APIService from '../services/apiService';
 
-export const useDocuments = () => {
+const useUserDocuments = () => {
   const service = new APIService<DocumentsResponse>('/documents');
   const data = () => service.get();
 
@@ -14,3 +14,5 @@ export const useDocuments = () => {
     refetchInterval: ms('10 Minutes'),
   });
 };
+
+export default useUserDocuments;

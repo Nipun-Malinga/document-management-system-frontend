@@ -1,11 +1,11 @@
 import { IoClose } from 'react-icons/io5';
-import { Button } from '../../../components';
-import { useDocument } from '../../../hooks/useDocument';
-import useInfoPopUp from '../../../states/useInfoPopUp';
+import { Button } from '@/components';
+import useInfoPopUp from '@/states/useInfoPopUp';
 import BadgeList from './BadgeList';
 import Collaborators from './Collaborators';
 import InfoButtons from './InfoButtons';
 import BranchSwitch from './BranchSwitch';
+import { useDocument } from '@/hooks/document';
 
 interface Props {
   documentId?: string | null;
@@ -18,13 +18,13 @@ const InfoPopup = ({ documentId }: Props) => {
   if (!(data && documentId)) return <></>;
 
   return (
-    <div
-      className={`fixed top-20 z-20 md:top-0 flex justify-between mt-4 md:mt-20 backdrop-blur-sm transition-opacity duration-200 ${
-        collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}
-      aria-hidden='true'
-    >
-      <div className='relative w-[90vw] md:w-[70vw] lg:w-[60vw] bg-white dark:bg-slate-900 border dark:border-slate-600 rounded-2xl shadow-lg p-4 md:p-6 flex flex-col gap-1'>
+    <div className='flex justify-center'>
+      <div
+        className={`fixed z-20 bg-white dark:bg-slate-900 border w-[90vw] md:w-[70vw] lg:w-[60vw] p-4 md:p-6 dark:border-slate-600 rounded-2xl shadow-lg flex flex-col gap-1 transition-opacity duration-200 ${
+          collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+        aria-hidden='true'
+      >
         <div className='flex flex-row justify-between items-start gap-2'>
           <div className='flex flex-row gap-1 flex-wrap'>
             <BranchSwitch documentId={documentId} shared={data.shared} />

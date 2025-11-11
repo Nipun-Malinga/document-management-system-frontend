@@ -3,24 +3,25 @@ import { useEditor } from '@tiptap/react';
 import { useEffect, useMemo } from 'react';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import * as Y from 'yjs';
-import { useProvider } from '../../../hooks/collaboration/useProvider';
 import {
   commonEditorConfigs,
   editorExtensions,
 } from '../configs/EditorConfigs';
 import CoreEditor from './CoreEditor';
 import Toolbar from './Toolbar';
+import { useProvider } from '@/hooks/document/collaboration';
 
 interface Props {
   documentId: string;
   branchId: string;
+  editable: boolean;
 }
 
-const CollaborativeEditor = ({ documentId, branchId }: Props) => {
+const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
   const ydoc = useMemo(() => new Y.Doc(), []);
 
   // Unique key to identify the document
-  const documentKey: string = `${documentId}:${branchId}`;
+  const documentKey: string = `documents/${documentId}/branches/${branchId}`;
 
   // For offline support
   new IndexeddbPersistence(documentKey, ydoc);
@@ -34,6 +35,7 @@ const CollaborativeEditor = ({ documentId, branchId }: Props) => {
         document: ydoc,
       }),
     ],
+    editable: editable,
     ...commonEditorConfigs,
   });
 
@@ -50,8 +52,14 @@ const CollaborativeEditor = ({ documentId, branchId }: Props) => {
       editor={editor}
       documentId={documentId}
       branchId={branchId}
-      toolbar={<Toolbar editor={editor} canRedo={false} canUndo={false} />}
-    />
+    >
+      <Toolbar
+        editor={editor}
+        canRedo={false}
+        canUndo={false}
+        disabled={!editable}
+      />
+    </CoreEditor>
   );
 };
 

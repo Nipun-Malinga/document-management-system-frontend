@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useSaveDocumentContent } from '../../../hooks/useSaveDocumentContent';
 import type { Editor } from '@tiptap/react';
+import { useSaveDocumentContent } from '@/hooks/document';
 
 interface Props {
   editor: Editor;

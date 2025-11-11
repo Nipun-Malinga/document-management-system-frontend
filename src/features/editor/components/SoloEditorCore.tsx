@@ -25,16 +25,16 @@ const SoloEditorCore = ({ content, documentId, branchId }: Props) => {
       editor={editor}
       documentId={documentId}
       branchId={branchId}
-      toolbar={
-        <Toolbar
-          editor={editor}
-          canRedo={true}
-          canUndo={true}
-          onRedo={editor.chain().focus().redo().run}
-          onUndo={editor.chain().focus().undo().run}
-        />
-      }
-    />
+    >
+      <Toolbar
+        editor={editor}
+        canRedo={true}
+        canUndo={true}
+        onRedo={editor.chain().focus().redo().run}
+        onUndo={editor.chain().focus().undo().run}
+        disabled={false}
+      />
+    </MainEditor>
   );
 };
 

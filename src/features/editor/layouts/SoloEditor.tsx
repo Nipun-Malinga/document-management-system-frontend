@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useDocumentContent } from '../../../hooks/useDocumentContent';
 import EditorContainer from '../components/EditorContainer';
 import SoloEditorCore from '../components/SoloEditorCore';
 import { convertToTiptapContent } from '../utils';
+import { useDocumentContent } from '@/hooks/document';
 
 export const BaseEditor = () => {
   const { documentId, branchId } = useParams();

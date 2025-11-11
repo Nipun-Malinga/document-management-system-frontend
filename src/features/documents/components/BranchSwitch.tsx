@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { FaCodeBranch } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components';
-import { useBranches } from '../../../hooks/useBranches';
 import useDocumentBranch from '../../../states/useDocumentBranch';
 import { getEditorURI } from '../services';
+import { useBranches } from '@/hooks/document';
 
 interface Props {
   documentId: string;

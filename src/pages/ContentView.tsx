@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useDocumentContent } from '../hooks/useDocumentContent';
 import { ContentRenderer } from '../features/editor';
 import { convertToTiptapContent } from '../features/editor/utils';
+import { useDocumentContent } from '@/hooks/document';
 
 const ContentView = () => {
   const { documentId, branchId } = useParams();

@@ -1,9 +1,9 @@
+import type { BranchResponse } from '@/models/Branch';
+import APIService from '@/services/apiService';
 import { useQuery } from '@tanstack/react-query';
-import APIService from '../services/apiService';
 import ms from 'ms';
-import type { BranchResponse } from '../models/Branch';
 
-export const useBranches = (documentId: string) => {
+const useBranches = (documentId: string) => {
   const service = new APIService<BranchResponse>(
     `/documents/${documentId}/branches`
   );
@@ -15,3 +15,5 @@ export const useBranches = (documentId: string) => {
     staleTime: ms('5 Minutes'),
   });
 };
+
+export default useBranches;

@@ -1,4 +1,4 @@
-import '../styles/styles.scss'
+import '../styles/styles.scss';
 
 import { Editor, EditorContent, EditorContext } from '@tiptap/react';
 import { useMemo, type ReactNode } from 'react';
@@ -9,7 +9,7 @@ interface Props {
   editor: Editor;
   documentId: string;
   branchId: string;
-  toolbar: ReactNode;
+  children: ReactNode;
 }
 
 const CoreEditor = ({
@@ -17,7 +17,7 @@ const CoreEditor = ({
   editor,
   documentId,
   branchId,
-  toolbar : Toolbar,
+  children,
 }: Props) => {
   const providerValue = useMemo(() => ({ editor }), [editor]);
 
@@ -29,7 +29,7 @@ const CoreEditor = ({
         documentId={documentId}
         branchId={branchId}
       />
-      {Toolbar}
+      {children}
       <EditorContent editor={editor} />
     </EditorContext.Provider>
   );
