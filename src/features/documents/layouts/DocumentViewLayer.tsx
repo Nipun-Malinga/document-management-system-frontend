@@ -1,4 +1,4 @@
-import { Container, LayoutDarker } from '@/components';
+import { Container } from '@/components';
 import useInfoPopUp from '@/states/useInfoPopUp';
 import type { ReactNode } from 'react';
 import { InfoPopUp } from '..';
@@ -8,12 +8,11 @@ interface Props {
 }
 
 const DocumentViewLayer = ({ children }: Props) => {
-  const { documentId, collapsed, toggle } = useInfoPopUp();
+  const { documentId } = useInfoPopUp();
 
   return (
     <Container>
       <InfoPopUp documentId={documentId} />
-      <LayoutDarker collapsed={collapsed} onClick={toggle} />
       {children}
     </Container>
   );

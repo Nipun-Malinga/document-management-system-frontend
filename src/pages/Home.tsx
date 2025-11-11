@@ -1,9 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import { LayoutDarker, SideBar, TopBar } from '../components';
-import useAside from '../states/useAside';
+import { LayoutDarker, SideBar, TopBar } from '@/components';
+import useAside from '@/states/useAside';
+import useInfoPopUp from '@/states/useInfoPopUp';
 
 const Home = () => {
   const { collapsed } = useAside();
+  const { collapsed: infoPopupCollapsed, toggle: toggleInfoPopup } =
+    useInfoPopUp();
 
   return (
     <main className='h-svh flex md:grid md:grid-cols-[15rem_1fr] lg:grid-cols-[18rem_1fr] overflow-hidden'>
@@ -17,7 +20,10 @@ const Home = () => {
       </div>
 
       <div className='relative flex-1 bg-white dark:bg-slate-900 flex flex-col overflow-hidden'>
-        <LayoutDarker collapsed={collapsed} />
+        <LayoutDarker
+          collapsed={collapsed && infoPopupCollapsed}
+          onClick={toggleInfoPopup}
+        />
 
         <div className='p-2 shrink-0'>
           <TopBar />
