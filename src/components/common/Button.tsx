@@ -4,7 +4,7 @@ import { Button as Btn } from '../ui/button';
 
 interface Props {
   title?: string;
-  node?: ReactNode;
+  children?: ReactNode;
   type?: 'button' | 'reset' | 'submit';
   icon?: IconType;
   onClick?: () => void;
@@ -14,7 +14,7 @@ interface Props {
 
 const Button = ({
   title,
-  node,
+  children,
   type = 'button',
   icon: Icon,
   onClick,
@@ -29,9 +29,15 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {Icon && <Icon className='text-base md:text-lg text-gray-700 dark:text-gray-300' />}
-      {title && <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>{title}</span>}
-      {node}
+      {Icon && (
+        <Icon className='text-base md:text-lg text-gray-700 dark:text-gray-300' />
+      )}
+      {title && (
+        <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+          {title}
+        </span>
+      )}
+      {children}
     </Btn>
   );
 };

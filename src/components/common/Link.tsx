@@ -22,7 +22,7 @@ const NavItem = ({ title, endpoint, children, onClick }: NavItemProps) => {
       tabIndex={0}
       className={`mb-1.5 px-3 py-1 rounded-lg cursor-pointer flex items-center transition duration-100 ease-in-out ${
         isActive
-          ? 'bg-gray-300 dark:bg-gray-700'
+          ? 'bg-gray-300 dark:bg-gray-700 font-bold'
           : 'hover:bg-gray-300 hover:dark:bg-gray-600'
       }`}
       onClick={() => {
