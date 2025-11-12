@@ -5,7 +5,7 @@ interface Props {
 }
 
 const Container = ({ children }: Props) => {
-  return <div className='w-full'>{children}</div>;
+  return <div className='w-full h-full'>{children}</div>;
 };
 
 export default Container;

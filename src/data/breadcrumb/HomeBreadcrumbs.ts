@@ -3,7 +3,7 @@ import type { Link } from '@/models/Link';
 export const mainViewBreadcrumb: Link[] = [
   {
     title: 'Home',
-    endpoint: '/home',
+    endpoint: '/dashboard/home',
   },
 ];
 

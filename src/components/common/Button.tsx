@@ -24,13 +24,13 @@ const Button = ({
   return (
     <Btn
       variant='ghost'
-      className={`p-2.5 cursor-pointer ${className}`}
+      className={`p-2.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-95 transition-all duration-150 rounded-lg ${className}`}
       type={type}
       onClick={onClick}
       disabled={disabled}
     >
-      {Icon && <Icon className='text-sm md:text-lg dark:text-gray-300' />}
-      {title}
+      {Icon && <Icon className='text-base md:text-lg text-gray-700 dark:text-gray-300' />}
+      {title && <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>{title}</span>}
       {node}
     </Btn>
   );

@@ -14,8 +14,8 @@ const SideBar = () => {
     <aside
       className={`absolute z-20 bg-white dark:bg-gray-900 w-70 md:w-full h-lvh p-2 transform transition-transform duration-300 ease-in-out ${
         collapsed
-          ? '-trangray-x-80 md:trangray-x-0'
-          : 'trangray-x-0 border-r'
+          ? '-translate-x-80 md:translate-x-0'
+          : 'translate-x-0 border-r'
       } md:relative`}
     >
       <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2'>

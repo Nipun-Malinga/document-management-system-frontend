@@ -11,15 +11,15 @@ import {
   Trash,
 } from '@/features/documents';
 import Quick from '@/features/documents/layouts/Quick';
-import { TrashDocumentTable } from '@/features/documents/components/trash';
 
 const router = createBrowserRouter([
   {
-    path: '/home',
+    path: '/dashboard',
     element: <Home />,
     children: [
       {
         index: true,
+        path: 'home',
         element: <DocumentViewLayer children={<MainView />} />,
       },
       {

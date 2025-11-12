@@ -9,8 +9,8 @@ const Home = () => {
     useInfoPopUp();
 
   return (
-    <main className='h-svh flex md:grid md:grid-cols-[15rem_1fr] lg:grid-cols-[18rem_1fr] overflow-hidden'>
-      <div className='hidden md:block border-r border-gray-300 dark:border-gray-600'>
+    <main className='h-svh flex md:grid md:grid-cols-[15rem_1fr] lg:grid-cols-[18rem_1fr] overflow-hidden bg-gray-50 dark:bg-gray-950'>
+      <div className='hidden md:block border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm'>
         <SideBar />
       </div>
 
@@ -19,17 +19,17 @@ const Home = () => {
         <SideBar />
       </div>
 
-      <div className='relative flex-1 bg-white dark:bg-gray-900 flex flex-col overflow-hidden'>
+      <div className='relative flex-1 bg-gray-50 dark:bg-gray-950 flex flex-col overflow-hidden'>
         <LayoutDarker
           collapsed={collapsed && infoPopupCollapsed}
-          onClick={toggleInfoPopup}
+          onClick={() => !infoPopupCollapsed && toggleInfoPopup()}
         />
 
-        <div className='p-2 shrink-0'>
+        <div className='p-4 shrink-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm'>
           <TopBar />
         </div>
 
-        <div className='flex-1 p-2 overflow-y-auto scrollbar scrollbar-thumb-gray-600 scrollbar-track-gray-50  dark:scrollbar-thumb-gray-300 dark:scrollbar-track-gray-900'>
+        <div className='flex-1 p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500 scrollbar-track-transparent dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500'>
           <Outlet />
         </div>
       </div>

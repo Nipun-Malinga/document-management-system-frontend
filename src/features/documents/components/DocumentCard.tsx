@@ -20,15 +20,16 @@ const DocumentCard = ({ document }: Props) => {
 
   return (
     <div
-      className={`relative group w-full min-h-64 max-h-72 p-2.5 border border-slate-300 dark:border-slate-600 rounded-2xl flex flex-col justify-around transition duration-200 ease-in-out hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] ${
+      className={`relative group w-full h-72 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl flex flex-col gap-3 transition-all duration-200 hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 hover:-translate-y-0.5 ${
         collapsed ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
-      <div className='relative'>
-        <div className='absolute z-1 top-0 right-0 flex flex-col items-end transition duration-200 ease-in-out opacity-100 md:opacity-0 md:group-hover:opacity-100'>
+      <div className='relative flex-1'>
+        <div className='absolute z-10 top-1 right-1 flex flex-col items-end transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100'>
           <Button
             icon={FaCircleInfo}
             type='button'
+            className='bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-900'
             onClick={() => {
               toggle();
               setDocumentId(document.id);
@@ -37,7 +38,7 @@ const DocumentCard = ({ document }: Props) => {
           />
         </div>
 
-        <div className='absolute z-1 bottom-2 right-2'>
+        <div className='absolute z-10 bottom-2 right-2'>
           <BadgeList document={document} />
         </div>
 
@@ -47,9 +48,9 @@ const DocumentCard = ({ document }: Props) => {
               getEditorURI(document.id, document.mainBranchId, document.shared)
             )
           }
-          className='relative bg-blue-50 dark:bg-slate-800 w-full min-h-40 rounded-md cursor-pointer flex justify-center items-center'
+          className='relative bg-blue-50 dark:bg-gray-600  w-full h-full rounded-lg cursor-pointer flex justify-center items-center overflow-hidden transition-all duration-200 hover:from-blue-100 hover:to-blue-200/50 dark:hover:from-gray-850 dark:hover:to-gray-800 ring-1 ring-gray-200 dark:ring-gray-700'
         >
-          <LuFileText className='text-6xl md:text-7xl text-blue-600' />
+          <LuFileText className='text-7xl text-blue-600 dark:text-blue-500 transition-transform duration-200 group-hover:scale-110' />
 
           <div className='absolute top-2 left-2'>
             <OnlineUserList documentId={document.id} />
@@ -57,15 +58,13 @@ const DocumentCard = ({ document }: Props) => {
         </div>
       </div>
 
-      <div className='flex justify-center'>
-        <div className='flex flex-col justify-between items-center'>
-          <p className='text-base md:text-lg lg:text-sm capitalize font-medium'>
-            {document.title}
-          </p>
-          <p className='text-xs text-slate-500'>
-            Created: {document.createdAt}
-          </p>
-        </div>
+      <div className='flex flex-col items-center gap-1 px-2'>
+        <p className='text-base font-semibold text-gray-900 dark:text-gray-100 capitalize line-clamp-1 w-full text-center'>
+          {document.title}
+        </p>
+        <p className='text-xs text-gray-500 dark:text-gray-400 font-medium'>
+          Created {document.createdAt}
+        </p>
       </div>
     </div>
   );

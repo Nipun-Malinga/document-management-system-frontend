@@ -1,9 +1,13 @@
 import type { SidebarLink } from '@/models/Link';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { FaRegClock } from 'react-icons/fa6';
-import { LuFiles, LuUsers } from 'react-icons/lu';
+import { LuClock, LuFiles, LuHouse, LuTrash, LuUsers } from 'react-icons/lu';
 
 export const quicksAsides: SidebarLink[] = [
+  {
+    icon: LuHouse,
+    title: 'Home',
+    endpoint: 'home',
+    count: 30,
+  },
   {
     icon: LuFiles,
     title: 'Quick Access',
@@ -11,7 +15,7 @@ export const quicksAsides: SidebarLink[] = [
     count: 4,
   },
   {
-    icon: FaRegClock,
+    icon: LuClock,
     title: 'Resents',
     endpoint: 'resents',
     count: 10,
@@ -23,7 +27,7 @@ export const quicksAsides: SidebarLink[] = [
     count: 20,
   },
   {
-    icon: FaRegTrashAlt,
+    icon: LuTrash,
     title: 'Trash',
     endpoint: 'trash',
     count: 0,
