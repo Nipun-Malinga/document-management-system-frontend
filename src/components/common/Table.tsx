@@ -8,7 +8,7 @@ interface Props {
 const Table = ({ children, titles }: Props) => {
   return (
     <table className='w-full'>
-      <thead className='bg-gray-50 border-b border-gray-200'>
+      <thead className='bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600'>
         <tr className='w-full'>
           {titles.map((title, index) => (
             <th

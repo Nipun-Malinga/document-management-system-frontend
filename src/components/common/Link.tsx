@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-interface slate {
+interface gray {
   title?: string;
   endpoint: string;
   children?: ReactNode;
   onClick?: () => void;
 }
 
-const Link = ({ title, endpoint, children, onClick }: slate) => {
+const Link = ({ title, endpoint, children, onClick }: gray) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,7 +19,7 @@ const Link = ({ title, endpoint, children, onClick }: slate) => {
   return (
     <div
       className={`mb-1.5 px-3 py-1 rounded-lg cursor-pointer flex flex-row items-center transition duration-100 ease-in-out ${
-        isLocation ? 'bg-slate-300' : 'hover:bg-slate-300 hover:dark:bg-slate-600'
+        isLocation ? 'bg-gray-300' : 'hover:bg-gray-300 hover:dark:bg-gray-600'
       }`}
       onClick={() => {
         onClick && onClick;

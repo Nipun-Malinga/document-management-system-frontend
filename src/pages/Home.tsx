@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <main className='h-svh flex md:grid md:grid-cols-[15rem_1fr] lg:grid-cols-[18rem_1fr] overflow-hidden'>
-      <div className='hidden md:block border-r border-slate-300 dark:border-slate-600'>
+      <div className='hidden md:block border-r border-gray-300 dark:border-gray-600'>
         <SideBar />
       </div>
 
@@ -19,7 +19,7 @@ const Home = () => {
         <SideBar />
       </div>
 
-      <div className='relative flex-1 bg-white dark:bg-slate-900 flex flex-col overflow-hidden'>
+      <div className='relative flex-1 bg-white dark:bg-gray-900 flex flex-col overflow-hidden'>
         <LayoutDarker
           collapsed={collapsed && infoPopupCollapsed}
           onClick={toggleInfoPopup}
@@ -29,7 +29,7 @@ const Home = () => {
           <TopBar />
         </div>
 
-        <div className='flex-1 p-2 overflow-y-auto scrollbar scrollbar-thumb-slate-600 scrollbar-track-slate-50  dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-900'>
+        <div className='flex-1 p-2 overflow-y-auto scrollbar scrollbar-thumb-gray-600 scrollbar-track-gray-50  dark:scrollbar-thumb-gray-300 dark:scrollbar-track-gray-900'>
           <Outlet />
         </div>
       </div>

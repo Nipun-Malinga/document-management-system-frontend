@@ -37,11 +37,11 @@ const TrashTableRow = ({ trash }: Props) => {
   );
 
   return (
-    <tr className='hover:bg-gray-50 transition-colors'>
+    <tr className='bg-slate-50 dark:bg-slate-900!'>
       <td className='px-6 py-4'>
         <div className='flex items-center gap-3'>
           <div className='flex flex-col'>
-            <span className='text-sm font-medium text-gray-900'>
+            <span className='text-sm font-medium text-slate-900 dark:text-slate-300'>
               {'branch' in trash
                 ? trash.branch.branchName
                 : trash.document.title}
@@ -58,7 +58,7 @@ const TrashTableRow = ({ trash }: Props) => {
         </div>
       </td>
       <td className='px-6 py-4 whitespace-nowrap'>
-        <span className='text-sm text-gray-500'>{trash.addedDate}</span>
+        <span className='text-sm text-slate-500'>{trash.addedDate}</span>
       </td>
       <td className='px-6 py-4 whitespace-nowrap text-right'>
         <div className='flex items-center justify-end gap-2'>

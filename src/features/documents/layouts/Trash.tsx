@@ -9,12 +9,14 @@ const Trash = () => {
     <Container>
       <Breadcrumb links={trashBreadcrumb} />
 
-      <div className='bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden'>
+      <div className='bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 overflow-hidden'>
         {/* Header */}
-        <div className='px-6 py-4 border-b border-gray-200 bg-gray-50'>
+        <div className='px-6 py-4 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900'>
           <div className='flex items-center gap-2'>
-            <Trash2 className='w-5 h-5 text-gray-600' />
-            <h2 className='text-lg font-semibold text-gray-900'>Trash</h2>
+            <Trash2 className='w-5 h-5 text-gray-600 dark:text-gray-200' />
+            <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-300'>
+              Trash
+            </h2>
           </div>
           <p className='text-sm text-gray-500 mt-1'>
             Items will be permanently deleted after 30 days
