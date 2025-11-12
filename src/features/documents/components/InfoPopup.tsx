@@ -23,7 +23,6 @@ const InfoPopup = ({ documentId }: Props) => {
         className={`fixed z-20 bg-white dark:bg-slate-900 border w-[90vw] md:w-[70vw] lg:w-[60vw] p-4 md:p-6 dark:border-slate-600 rounded-2xl shadow-lg flex flex-col gap-1 transition-opacity duration-200 ${
           collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
-        aria-hidden='true'
       >
         <div className='flex flex-row justify-between items-start gap-2'>
           <div className='flex flex-row gap-1 flex-wrap'>

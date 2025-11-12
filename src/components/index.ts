@@ -4,6 +4,7 @@ export { default as Badge } from './common/Badge';
 export { default as LayoutDarker } from './common/LayoutDarker';
 export { default as Breadcrumb } from './common/Breadcrumb';
 export { default as Container } from './common/Container';
+export { default as Table } from './common/Table';
 
 export { default as TopBar } from './layout/TopBar';
 export { default as SideBar } from './layout/SideBar';

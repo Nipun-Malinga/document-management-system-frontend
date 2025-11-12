@@ -18,7 +18,7 @@ const Breadcrumb = ({ links }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <BC>
+    <BC className='mb-6'>
       <BreadcrumbList>
         {links.map((link, key) => (
           <Fragment key={key}>

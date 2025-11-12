@@ -3,14 +3,14 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { FaRegShareFromSquare } from 'react-icons/fa6';
 import { MdOutlineEdit } from 'react-icons/md';
 import useInfoPopUp from '../../../states/useInfoPopUp';
-import { useDeleteDocument } from '@/hooks/document';
+import useTrashDocument from '@/hooks/document/useTrashDocument';
 
 interface Props {
   documentId: string;
 }
 
 const InfoButtons = ({ documentId }: Props) => {
-  const { mutate } = useDeleteDocument(documentId);
+  const { mutate } = useTrashDocument(documentId);
   const { toggle } = useInfoPopUp();
 
   return (

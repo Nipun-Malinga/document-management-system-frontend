@@ -1,8 +1,8 @@
-import useUserSharedDocuments from '@/hooks/document/useUserSharedDocuments';
 import DocumentGrid from '../components/DocumentGrid';
 import DocumentCard from '../components/DocumentCard';
 import { Breadcrumb, Container } from '@/components';
 import { sharedWithMeBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
+import { useUserSharedDocuments } from '@/hooks/document';
 
 const Shared = () => {
   const { data } = useUserSharedDocuments();

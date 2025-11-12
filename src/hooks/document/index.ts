@@ -1,7 +1,14 @@
 export { default as useBranches } from './useBranches';
+export { default as useDeleteBranch } from './useDeleteBranch';
 export { default as useDeleteDocument } from './useDeleteDocument';
 export { default as useDocument } from './useDocument';
 export { default as useDocumentContent } from './useDocumentContent';
 export { default as useUserDocuments } from './useUserDocuments';
 export { default as useSaveDocumentContent } from './useSaveDocumentContent';
+export { default as useRestoreDocument } from './useRestoreDocument';
+export { default as useRestoreBranch } from './useRestoreBranch';
 export { default as useSharedUsers } from './useSharedUsers';
+export { default as useTrashDocument } from './useTrashDocument';
+export { default as useUserSharedDocuments } from './useUserSharedDocuments';
+export { default as useTrashedDocuments } from './useTrashedDocuments';
+export { default as useTrashedBranches } from './useTrashedBranches';

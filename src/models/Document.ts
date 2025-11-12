@@ -10,6 +10,8 @@ export interface Document {
   branchCount: number;
   createdAt: string;
   updatedAt: string;
+  trashed: boolean;
+  favorite: boolean;
 }
 
 export interface DocumentsResponse extends PageRequest<Document> {}

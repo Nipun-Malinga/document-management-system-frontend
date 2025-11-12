@@ -1,21 +1,23 @@
 import APIService from '@/services/apiService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useDeleteDocument = (documentId: string) => {
+const useDeleteBranch = (documentId: string, branchId: string) => {
   const queryClient = useQueryClient();
-  const service = new APIService(`/documents/trash/delete/${documentId}`);
+  const service = new APIService(
+    `/documents/trash/delete/${documentId}/branches/${branchId}`
+  );
 
   return useMutation({
-    mutationKey: ['trashed_documents_own'],
+    mutationKey: ['trashed_branches_own'],
     mutationFn: () => service.delete(),
     onSuccess: () => {
-      const keys = [['documents-own'], ['trashed_documents_own']];
+      const keys = [['documents-own'], ['trashed_branches_own']];
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
     onError: () => {
-      console.log('Failed to delete document');
+      console.error('Failed to delete branch');
     },
   });
 };
 
-export default useDeleteDocument;
+export default useDeleteBranch;

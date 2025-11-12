@@ -1,12 +1,23 @@
 import { Breadcrumb, Container } from '@/components';
-import UserDocuments from '../components/UserDocuments';
 import { mainViewBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
+import { useUserDocuments } from '@/hooks/document';
+import DocumentCard from '../components/DocumentCard';
+import DocumentGrid from '../components/DocumentGrid';
 
 const MainView = () => {
+  const { data } = useUserDocuments();
+
   return (
     <Container>
       <Breadcrumb links={mainViewBreadcrumb} />
-      <UserDocuments />
+      <DocumentGrid>
+        {data?.data &&
+          data.data
+            .filter((item) => !item.trashed)
+            .map((document, index) => (
+              <DocumentCard document={document} key={index} />
+            ))}
+      </DocumentGrid>
     </Container>
   );
 };

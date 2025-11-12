@@ -11,6 +11,7 @@ import {
   Trash,
 } from '@/features/documents';
 import Quick from '@/features/documents/layouts/Quick';
+import { TrashDocumentTable } from '@/features/documents/components/trash';
 
 const router = createBrowserRouter([
   {
