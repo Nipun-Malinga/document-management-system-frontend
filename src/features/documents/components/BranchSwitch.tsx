@@ -90,39 +90,41 @@ const BranchSwitch = ({ documentId, shared }: Props) => {
               No branches available
             </p>
           ) : (
-            branches.map((branch) => {
-              const isActive = branchName === branch.branchName;
+            branches
+              .filter((branch) => !branch.trashed)
+              .map((branch) => {
+                const isActive = branchName === branch.branchName;
 
-              return (
-                <button
-                  onClick={() => {
-                    setOpen(false);
-                    setBranchName(branch.branchName);
-                    navigate(getEditorURI(documentId, branch.id, shared));
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
-                    isActive
-                      ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100'
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
-                  }`}
-                  key={branch.id}
-                  type='button'
-                >
-                  <div className='w-full flex flex-row justify-between items-center gap-2 cursor-pointer'>
-                    <span
-                      className={`text-sm truncate ${
-                        isActive ? 'font-semibold' : 'font-normal'
-                      }`}
-                    >
-                      {branch.branchName}
-                    </span>
-                    {isActive && (
-                      <span className='shrink-0 w-2 h-2 rounded-full bg-emerald-500' />
-                    )}
-                  </div>
-                </button>
-              );
-            })
+                return (
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      setBranchName(branch.branchName);
+                      navigate(getEditorURI(documentId, branch.id, shared));
+                    }}
+                    className={`w-full text-left px-3 py-2 my-0.5 rounded-md transition-colors ${
+                      isActive
+                        ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100'
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
+                    key={branch.id}
+                    type='button'
+                  >
+                    <div className='w-full flex flex-row justify-between items-center gap-2 cursor-pointer'>
+                      <span
+                        className={`text-sm truncate ${
+                          isActive ? 'font-semibold' : 'font-normal'
+                        }`}
+                      >
+                        {branch.branchName}
+                      </span>
+                      {isActive && (
+                        <span className='shrink-0 w-2 h-2 rounded-full bg-emerald-500' />
+                      )}
+                    </div>
+                  </button>
+                );
+              })
           )}
         </div>
       </div>

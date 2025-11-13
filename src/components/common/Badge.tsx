@@ -3,14 +3,17 @@ import { themeColors } from '../../themes/themes';
 import { Badge as Bdg } from '../ui/badge';
 
 interface Props {
-  text: String;
+  text: string;
   theme: ThemeVariant;
+  className?: string;
 }
 
-const Badge = ({ text, theme }: Props) => {
+const Badge = ({ text, theme, className = '' }: Props) => {
+  const colors = themeColors[theme];
+  
   return (
     <Bdg
-      className={`${themeColors[theme].background} ${themeColors[theme].fontColor} font-bold w-15 rounded-sm`}
+      className={`${colors.background} ${colors.fontColor} font-semibold text-xs px-3 py-1 rounded-md shadow-sm border border-transparent transition-all duration-150 hover:scale-105 ${className}`}
     >
       {text}
     </Bdg>

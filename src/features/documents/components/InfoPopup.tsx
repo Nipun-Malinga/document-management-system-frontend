@@ -15,48 +15,68 @@ const InfoPopup = ({ documentId }: Props) => {
   const { data } = useDocument(documentId ?? '');
   const { collapsed, toggle } = useInfoPopUp();
 
-  if (!(data && documentId)) return <></>;
-
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center items-start'>
       <div
-        className={`fixed z-20 bg-white dark:bg-slate-900 border w-[90vw] md:w-[70vw] lg:w-[60vw] p-4 md:p-6 dark:border-slate-600 rounded-2xl shadow-lg flex flex-col gap-1 transition-opacity duration-200 ${
-          collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        className={`fixed z-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 w-[90vw] md:w-[70vw] lg:w-[55vw] xl:w-[45vw] p-6 rounded-2xl shadow-2xl flex flex-col gap-6 transition-all duration-300 ${
+          collapsed
+            ? 'opacity-0 pointer-events-none scale-95 translate-y-4'
+            : 'opacity-100 scale-100 translate-y-0'
         }`}
       >
-        <div className='flex flex-row justify-between items-start gap-2'>
-          <div className='flex flex-row gap-1 flex-wrap'>
-            <BranchSwitch documentId={documentId} shared={data.shared} />
-            <BadgeList document={data} />
-          </div>
-          <Button icon={IoClose} type='button' onClick={toggle} />
-        </div>
+        {data && documentId && (
+          <>
+            {/* Header */}
+            <div className='flex flex-row justify-between items-start gap-3'>
+              <div className='flex flex-row gap-2 flex-wrap items-center'>
+                <BranchSwitch documentId={documentId} shared={data.shared} />
+                <BadgeList document={data} />
+              </div>
+              <Button
+                icon={IoClose}
+                type='button'
+                onClick={toggle}
+                className='shrink-0 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg'
+              />
+            </div>
 
-        <div className='flex flex-col gap-3'>
-          <p className='text-lg font-semibold text-slate-900 dark:text-white pb-2 border-b border-slate-200 dark:border-slate-600'>
-            {data.title}
-          </p>
+            {/* Content */}
+            <div className='flex flex-col gap-5'>
+              <div>
+                <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1'>
+                  {data.title}
+                </h2>
+                <div className='h-px bg-linear-to-r from-gray-200 via-gray-300 to-transparent dark:from-gray-700 dark:via-gray-600' />
+              </div>
 
-          <div className='text-sm text-slate-600 dark:text-slate-300 space-y-1'>
-            <p>
-              <span className='font-bold'>Created:</span>{' '}
-              <span className='text-slate-500 dark:text-slate-300'>
-                {data.createdAt}
-              </span>
-            </p>
-            <p>
-              <span className='font-bold'>Updated:</span>{' '}
-              <span className='text-slate-500 dark:text-slate-300'>
-                {data.updatedAt}
-              </span>
-            </p>
-          </div>
-          <Collaborators documentId={documentId} />
-        </div>
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
+                <div className='flex flex-col gap-1 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700'>
+                  <span className='font-semibold text-gray-700 dark:text-gray-300 text-xs uppercase tracking-wide'>
+                    Created
+                  </span>
+                  <span className='text-gray-900 dark:text-gray-100 font-medium'>
+                    {data.createdAt}
+                  </span>
+                </div>
+                <div className='flex flex-col gap-1 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700'>
+                  <span className='font-semibold text-gray-700 dark:text-gray-300 text-xs uppercase tracking-wide'>
+                    Updated
+                  </span>
+                  <span className='text-gray-900 dark:text-gray-100 font-medium'>
+                    {data.updatedAt}
+                  </span>
+                </div>
+              </div>
 
-        <div className='border-t border-slate-200 dark:border-slate-600 pt-3'>
-          <InfoButtons documentId={documentId} />
-        </div>
+              <Collaborators documentId={documentId} />
+            </div>
+
+            {/* Footer Actions */}
+            <div className='pt-4 border-t border-gray-200 dark:border-gray-700'>
+              <InfoButtons documentId={documentId} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

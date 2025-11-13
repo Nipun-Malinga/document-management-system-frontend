@@ -11,16 +11,26 @@ const TopBar = () => {
   return (
     <div className='w-full flex flex-row justify-between items-center gap-3 md:gap-4'>
       <div className='md:hidden shrink-0'>
-        <Button type='button' icon={IoMenu} onClick={toggle} />
+        <Button 
+          type='button' 
+          icon={IoMenu} 
+          onClick={toggle}
+          className='hover:bg-gray-100 dark:hover:bg-gray-800' 
+        />
       </div>
 
-      <div className='flex-1 max-w-2xl mx-auto'>
+      <div className='flex-1 max-w-3xl mx-auto'>
         <SearchInput output={(value) => {}} />
       </div>
 
-      <div className='flex items-center gap-1.5 shrink-0'>
+      <div className='flex items-center gap-2 shrink-0'>
         <DarkThemeButton />
-        <Button type='button' icon={HiDotsVertical} onClick={() => {}} />
+        <Button 
+          type='button' 
+          icon={HiDotsVertical} 
+          onClick={() => {}}
+          className='hover:bg-gray-100 dark:hover:bg-gray-800'
+        />
       </div>
     </div>
   );

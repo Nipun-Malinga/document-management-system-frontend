@@ -4,6 +4,7 @@ export interface Branch {
   branchName: string;
   createdAt: string;
   updatedAt: string;
+  trashed: boolean
 }
 
 export interface BranchResponse {

@@ -1,4 +1,5 @@
 import type { SidebarLink } from '@/models/Link';
+import type { SidebarData } from '@/models/SidebarData';
 import { LuClock, LuFiles, LuHouse, LuTrash, LuUsers } from 'react-icons/lu';
 
 export const quicksAsides: SidebarLink[] = [
