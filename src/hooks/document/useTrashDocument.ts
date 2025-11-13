@@ -9,7 +9,12 @@ const useTrashDocument = (documentId: string) => {
     mutationKey: ['documents', documentId],
     mutationFn: () => service.delete(),
     onSuccess: () => {
-      const keys = [['documents-own'], ['trashed_documents_own']];
+      const keys = [
+        ['documents-own'],
+        ['trashed_documents_own'],
+        ['documentCount'],
+        ['trashDocumentCount'],
+      ];
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
     onError: () => {

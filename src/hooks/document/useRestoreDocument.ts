@@ -9,7 +9,12 @@ const useRestoreDocument = (documentId: string) => {
     mutationKey: ['trashed_documents_own'],
     mutationFn: () => service.post(),
     onSuccess: () => {
-      const keys = [['documents-own'], ['trashed_documents_own']];
+      const keys = [
+        ['documents-own'],
+        ['trashed_documents_own'],
+        ['documentCount'],
+        ['trashDocumentCount']
+      ];
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
     onError: () => {

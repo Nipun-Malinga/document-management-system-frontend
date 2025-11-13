@@ -1,12 +1,16 @@
 import { FaRegHardDrive } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5';
-import { quicksAsides } from '@/data/Aside';
 import useAside from '@/states/useAside';
 import Button from '@/components/common/Button';
 import Link from '@/components/common/Link';
 import { useNavigate } from 'react-router-dom';
+import type { SidebarLink } from '@/models/Link';
 
-const SideBar = () => {
+interface Props {
+  sidebarLink: SidebarLink[];
+}
+
+const SideBar = ({ sidebarLink }: Props) => {
   const { collapsed, toggle } = useAside();
   const navigate = useNavigate();
 
@@ -42,7 +46,7 @@ const SideBar = () => {
           Quick Access
         </p>
 
-        {quicksAsides.map((item, key) => (
+        {sidebarLink.map((item, key) => (
           <Link key={key} endpoint={item.endpoint}>
             <div className='w-full px-2 py-2 md:px-4 md:py-2 flex flex-row items-center'>
               <item.icon className='text-lg mr-4' />

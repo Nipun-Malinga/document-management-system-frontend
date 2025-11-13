@@ -11,7 +11,11 @@ const useDeleteBranch = (documentId: string, branchId: string) => {
     mutationKey: ['trashed_branches_own'],
     mutationFn: () => service.delete(),
     onSuccess: () => {
-      const keys = [['documents-own'], ['trashed_branches_own']];
+      const keys = [
+        ['documents-own'],
+        ['trashed_branches_own'],
+        ['trashBranchCount'],
+      ];
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
     onError: () => {

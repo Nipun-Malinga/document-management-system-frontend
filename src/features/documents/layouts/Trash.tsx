@@ -3,8 +3,12 @@ import { trashBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Trash2, Clock } from 'lucide-react';
 import { TrashBranchTable, TrashDocumentTable } from '../components/trash';
+import { useTrashBranchCount, useTrashDocumentCount } from '@/hooks/sidebar';
 
 const Trash = () => {
+  const { data: trashDocumentCount } = useTrashDocumentCount();
+  const { data: trashBranchCount } = useTrashBranchCount();
+
   return (
     <Container>
       <Breadcrumb links={trashBreadcrumb} />
@@ -36,21 +40,21 @@ const Trash = () => {
         <Tabs defaultValue='documents' className=''>
           <div className='px-6 pt-4 pb-2 bg-gray-50 dark:bg-gray-900'>
             <TabsList className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-1 rounded-lg shadow-sm'>
-              <TabsTrigger 
-                className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium' 
+              <TabsTrigger
+                className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
                 value='documents'
               >
-                Documents
+                Documents {trashDocumentCount?.count ?? 0}
               </TabsTrigger>
-              <TabsTrigger 
-                className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium' 
+              <TabsTrigger
+                className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
                 value='branches'
               >
-                Branches
+                Branches {trashBranchCount?.count ?? 0}
               </TabsTrigger>
             </TabsList>
           </div>
-          
+
           <TabsContent value='documents' className='mt-0'>
             <TrashDocumentTable />
           </TabsContent>
