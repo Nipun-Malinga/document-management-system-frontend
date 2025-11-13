@@ -13,6 +13,7 @@ export const useDeleteDocument = (documentId: string) => {
         ['documents-own'],
         ['trashed_documents_own'],
         ['documentCount'],
+        ['trashDocumentCount']
       ];
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },

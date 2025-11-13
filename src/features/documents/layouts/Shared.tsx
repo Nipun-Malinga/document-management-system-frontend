@@ -8,7 +8,7 @@ const Shared = () => {
   const { data } = useUserSharedDocuments();
 
   return (
-    <Container>
+    <>
       <Breadcrumb links={sharedWithMeBreadcrumb} />
       <DocumentGrid>
         {data?.data &&
@@ -16,7 +16,7 @@ const Shared = () => {
             <DocumentCard document={document} key={index} />
           ))}
       </DocumentGrid>
-    </Container>
+    </>
   );
 };
 
