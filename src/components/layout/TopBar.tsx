@@ -20,7 +20,7 @@ const TopBar = () => {
       </div>
 
       <div className='flex-1 max-w-3xl mx-auto'>
-        <SearchInput output={(value) => {}} />
+        <SearchInput output={(value) => {console.log(value)}} />
       </div>
 
       <div className='flex items-center gap-2 shrink-0'>
