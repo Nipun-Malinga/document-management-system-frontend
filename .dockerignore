@@ -1,0 +1,37 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Logs
+logs
+*.log
+
+# Build output
+dist
+build
+.cache
+.next
+out
+
+# Runtime
+*.pid
+*.seed
+*.pid.lock
+
+# OS / editor files
+.DS_Store
+.vscode
+.idea
+*.swp
+
+# Testing
+coverage
+jest-cache
+jest-coverage
+
+# Docker
+Dockerfile.*
+docker-compose.*
