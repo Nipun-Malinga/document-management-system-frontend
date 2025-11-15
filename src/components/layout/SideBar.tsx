@@ -14,6 +14,8 @@ const SideBar = ({ sidebarLink }: Props) => {
   const { collapsed, toggle } = useAside();
   const navigate = useNavigate();
 
+  console.log(import.meta.env.VITE_SERVER_URL);
+
   return (
     <aside
       className={`absolute z-20 bg-white dark:bg-gray-900 w-70 md:w-full h-lvh p-2 transform transition-transform duration-300 ease-in-out ${
@@ -26,7 +28,7 @@ const SideBar = ({ sidebarLink }: Props) => {
         <FaRegHardDrive className='text-blue-600' />
         <h1
           className='font-bold cursor-pointer'
-          onClick={() => navigate('/home')}
+          onClick={() => navigate('/dashboard/home')}
         >
           DocManager
         </h1>

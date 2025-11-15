@@ -14,16 +14,18 @@ import DocumentCard from '../components/DocumentCard';
 import DocumentGrid from '../components/DocumentGrid';
 
 const MainView = () => {
-  const { data } = useUserDocuments();
+  const { data, error } = useUserDocuments();
 
-  const filtered = data?.data.filter((item) => !item.trashed);
-  const isEmpty = filtered && filtered.length;
+  const filtered = data?.data ? data.data.filter((item) => !item.trashed) : [];
+  const hasDocuments = filtered.length > 0;
+
+  console.log("Error: " , error)
 
   return (
     <>
       <Breadcrumb links={mainViewBreadcrumb} />
 
-      {isEmpty ? (
+      {hasDocuments ? (
         <DocumentGrid>
           {filtered.map((document, index) => (
             <DocumentCard document={document} key={index} />
@@ -37,8 +39,8 @@ const MainView = () => {
             </EmptyMedia>
             <EmptyTitle>No Documents Yet</EmptyTitle>
             <EmptyDescription>
-              You haven&apos;t created any documents yet. Get started by
-              creating your first document.
+              You haven't created any documents yet. Start by creating your
+              first document.
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
