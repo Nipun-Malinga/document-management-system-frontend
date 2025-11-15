@@ -14,12 +14,10 @@ import DocumentCard from '../components/DocumentCard';
 import DocumentGrid from '../components/DocumentGrid';
 
 const MainView = () => {
-  const { data, error } = useUserDocuments();
+  const { data } = useUserDocuments();
 
   const filtered = data?.data ? data.data.filter((item) => !item.trashed) : [];
   const hasDocuments = filtered.length > 0;
-
-  console.log("Error: " , error)
 
   return (
     <>

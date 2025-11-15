@@ -7,6 +7,7 @@ export { default as useUserDocuments } from './useUserDocuments';
 export { default as useSaveDocumentContent } from './useSaveDocumentContent';
 export { default as useRestoreDocument } from './useRestoreDocument';
 export { default as useRestoreBranch } from './useRestoreBranch';
+export { default as useToggleFavorite } from './useToggleFavorite';
 export { default as useSharedUsers } from './useSharedUsers';
 export { default as useTrashDocument } from './useTrashDocument';
 export { default as useUserSharedDocuments } from './useUserSharedDocuments';

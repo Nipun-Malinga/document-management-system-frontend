@@ -8,6 +8,9 @@ import useInfoPopUp from '../../../states/useInfoPopUp';
 import BadgeList from './BadgeList';
 import { getEditorURI } from '../services';
 import useDocumentBranch from '../../../states/useDocumentBranch';
+import { Toggle } from '@/components/ui/toggle';
+import { BookmarkIcon } from 'lucide-react';
+import { useToggleFavorite } from '@/hooks/document';
 
 interface Props {
   document: Document;
@@ -17,6 +20,7 @@ const DocumentCard = ({ document }: Props) => {
   const { setDocumentId, collapsed, toggle } = useInfoPopUp();
   const { resetBranchName } = useDocumentBranch();
   const navigate = useNavigate();
+  const { mutate: toggleFavorite } = useToggleFavorite(document.id);
 
   return (
     <div
@@ -25,7 +29,16 @@ const DocumentCard = ({ document }: Props) => {
       }`}
     >
       <div className='relative flex-1'>
-        <div className='absolute z-10 top-1 right-1 flex flex-col items-end transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100'>
+        <div className='absolute z-10 top-1 right-1 flex flex-row items-end gap-1 transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100'>
+          <Toggle
+            aria-label='Toggle bookmark'
+            size='default'
+            variant='outline'
+            onClick={() => toggleFavorite()}
+            className={`cursor-pointer ${document.favorite && 'bg-yellow-400 transition-colors'}`}
+          >
+            <BookmarkIcon />
+          </Toggle>
           <Button
             icon={FaCircleInfo}
             type='button'
