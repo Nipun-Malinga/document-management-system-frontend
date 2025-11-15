@@ -14,7 +14,7 @@ const ToolButton = ({ icon, active, disabled, onClick }: Props) => {
       icon={icon}
       disabled={disabled}
       onClick={onClick}
-      className={`${active ? 'bg-slate-700 text-slate-300!' : 'text-slate-900!'}`}
+      className={`${active ? 'bg-gray-400 dark:bg-gray-700 text-slate-300!' : 'text-slate-900!'}`}
     />
   );
 };

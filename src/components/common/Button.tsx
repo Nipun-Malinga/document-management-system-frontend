@@ -23,8 +23,8 @@ const Button = ({
 }: Props) => {
   return (
     <Btn
-      variant='ghost'
-      className={`p-2.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-95 transition-all duration-150 rounded-lg ${className}`}
+      variant='outline'
+      className={`bg-white p-2.5 cursor-pointer dark:hover:bg-gray-800 active:scale-95 transition-all duration-150 rounded-lg ${className}`}
       type={type}
       onClick={onClick}
       disabled={disabled}
