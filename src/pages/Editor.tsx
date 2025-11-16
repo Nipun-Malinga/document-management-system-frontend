@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 
 const Editor = () => {
   return (
-    <div>
+    <div className='dark:bg-gray-900'>
       <Outlet />
     </div>
   );

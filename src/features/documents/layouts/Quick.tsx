@@ -37,7 +37,7 @@ const Quick = () => {
             <EmptyMedia variant='icon'>
               <BookmarkCheck />
             </EmptyMedia>
-            <EmptyTitle>No Favorites Yet</EmptyTitle>
+            <EmptyTitle>No Favorites Yet.</EmptyTitle>
             <EmptyDescription>
               You don't have any favorites yet.
             </EmptyDescription>

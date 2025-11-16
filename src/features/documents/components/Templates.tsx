@@ -40,7 +40,7 @@ const Templates = () => {
   };
 
   return (
-    <div className='relative  '>
+    <div className='relative px-20'>
       <Carousel
         opts={{
           align: 'start',
@@ -59,7 +59,7 @@ const Templates = () => {
                     convertToTiptapContent(template.template)
                   );
                 }}
-                className='pl-4 select-none basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4'
+                className='pl-4 select-none basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/6'
               >
                 <div className='group cursor-pointer'>
                   <div className='relative h-64 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden'>
@@ -84,8 +84,8 @@ const Templates = () => {
             ))}
         </CarouselContent>
 
-        <CarouselPrevious className='left-10 -translate-x-1/2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-110 transition-all duration-200' />
-        <CarouselNext className='right-10 translate-x-1/2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-110 transition-all duration-200' />
+        <CarouselPrevious className='-translate-x-1/2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-110 transition-all duration-200' />
+        <CarouselNext className='translate-x-1/2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-110 transition-all duration-200' />
       </Carousel>
     </div>
   );

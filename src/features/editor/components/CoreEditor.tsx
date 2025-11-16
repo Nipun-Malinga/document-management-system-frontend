@@ -3,6 +3,7 @@ import '../styles/styles.scss';
 import { Editor, EditorContent, EditorContext } from '@tiptap/react';
 import { useMemo, type ReactNode } from 'react';
 import TopToolBar from './TopToolBar';
+import { useDocument } from '@/hooks/document';
 
 interface Props {
   enableAutoSaver: boolean;
@@ -20,10 +21,12 @@ const CoreEditor = ({
   children,
 }: Props) => {
   const providerValue = useMemo(() => ({ editor }), [editor]);
+  const { data } = useDocument(documentId);
 
   return (
     <EditorContext.Provider value={providerValue}>
       <TopToolBar
+        documentTitle={data?.title ?? 'Unknown'}
         enableAutoSaver={enableAutoSaver}
         editor={editor}
         documentId={documentId}

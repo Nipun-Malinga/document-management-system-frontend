@@ -35,7 +35,9 @@ const DocumentCard = ({ document }: Props) => {
             size='default'
             variant='outline'
             onClick={() => toggleFavorite()}
-            className={`cursor-pointer ${document.favorite && 'bg-yellow-400 transition-colors'}`}
+            className={`cursor-pointer ${
+              document.favorite && 'bg-yellow-400 transition-colors'
+            }`}
           >
             <BookmarkIcon />
           </Toggle>

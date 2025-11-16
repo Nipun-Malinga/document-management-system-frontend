@@ -1,3 +1,4 @@
+import { Alert } from '@/components';
 import {
   useDeleteBranch,
   useDeleteDocument,
@@ -9,8 +10,8 @@ import {
   AlertCircle,
   FileText,
   GitBranch,
-  RotateCcw,
   Trash2,
+  RotateCcw
 } from 'lucide-react';
 
 interface Props {
@@ -61,25 +62,36 @@ const TrashTableRow = ({ trash }: Props) => {
         <span className='text-sm text-slate-500'>{trash.addedDate}</span>
       </td>
       <td className='px-6 py-4 whitespace-nowrap text-right'>
-        <div className='flex items-center justify-end gap-2'>
-          <button
+        <div className='flex items-center justify-end gap-4'>
+          <Alert
+            trigger={
+              <span className='text-blue-400 flex items-center gap-1'>
+                <RotateCcw className='w-4 h-4' />
+                Restore
+              </span>
+            }
+            title='Are you absolutely sure?'
+            description='Do you want to recover this document?'
+            action='Delete'
             onClick={() => {
               'branch' in trash ? restoreBranch() : restoreDocument();
             }}
-            className='inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors cursor-pointer'
-          >
-            <RotateCcw className='w-4 h-4' />
-            Restore
-          </button>
-          <button
+          />
+
+          <Alert
+            trigger={
+              <span className='text-red-400 flex items-center gap-1'>
+                <Trash2 className='w-4 h-4' />
+                Delete
+              </span>
+            }
+            title='Are you absolutely sure?'
+            description='This action cannot be undone. This will permanently delete your document and remove your data from our servers.'
+            action='Delete'
             onClick={() => {
               'branch' in trash ? deleteBranch() : deleteDocument();
             }}
-            className='inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors cursor-pointer'
-          >
-            <Trash2 className='w-4 h-4' />
-            Delete
-          </button>
+          />
         </div>
       </td>
     </tr>

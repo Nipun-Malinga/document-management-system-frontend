@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import DarkThemeButton from '@/components/common/DarkThemeButton';
 
 interface Props {
+  documentTitle: string;
   enableAutoSaver: boolean;
   editor: Editor;
   documentId: string;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const TopToolBar = ({
+  documentTitle,
   enableAutoSaver,
   editor,
   documentId,
@@ -21,14 +23,15 @@ const TopToolBar = ({
 
   return (
     <div className='flex items-center gap-2'>
-      {enableAutoSaver && (
-        <AutoSaver
-          editor={editor}
-          documentId={documentId}
-          branchId={branchId}
-        />
-      )}
-      <div className='ml-auto flex justify-center items-center'>
+      <h1 className='text-lg'>{documentTitle}</h1>
+      <div className='ml-auto flex justify-center items-center gap-2'>
+        {enableAutoSaver && (
+          <AutoSaver
+            editor={editor}
+            documentId={documentId}
+            branchId={branchId}
+          />
+        )}
         <Button
           title='Preview'
           className='rounded-2xl'
