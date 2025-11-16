@@ -12,6 +12,7 @@ import { useUserDocuments } from '@/hooks/document';
 import { FolderOpen } from 'lucide-react';
 import DocumentCard from '../components/DocumentCard';
 import DocumentGrid from '../components/DocumentGrid';
+import Templates from '../components/Templates';
 
 const MainView = () => {
   const { data } = useUserDocuments();
@@ -23,6 +24,12 @@ const MainView = () => {
     <>
       <Breadcrumb links={mainViewBreadcrumb} />
 
+      <p className='font-bold text-sm mt-6'>Templates</p>
+
+      <Templates />
+
+      <p className='font-bold text-sm mt-6'>All Documents</p>
+
       {hasDocuments ? (
         <DocumentGrid>
           {filtered.map((document, index) => (
@@ -30,7 +37,7 @@ const MainView = () => {
           ))}
         </DocumentGrid>
       ) : (
-        <Empty className='mt-20'>
+        <Empty className='mt-5 md:mt-10 lg:mt-20'>
           <EmptyHeader>
             <EmptyMedia variant='icon'>
               <FolderOpen />
@@ -41,12 +48,6 @@ const MainView = () => {
               first document.
             </EmptyDescription>
           </EmptyHeader>
-          <EmptyContent>
-            <div className='flex gap-2'>
-              <Button title='Create Project' />
-              <Button title='Import Project' />
-            </div>
-          </EmptyContent>
         </Empty>
       )}
     </>

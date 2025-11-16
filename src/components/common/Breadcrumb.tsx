@@ -18,7 +18,7 @@ const Breadcrumb = ({ links }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <BC className='mb-6 px-1'>
+    <BC className='mb-6'>
       <BreadcrumbList className='flex items-center gap-2'>
         {links.map((link, key) => (
           <Fragment key={key}>

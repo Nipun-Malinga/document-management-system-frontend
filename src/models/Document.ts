@@ -1,10 +1,12 @@
 import type { PageRequest } from './PageRequest';
 
+type status = 'PUBLIC' | 'PRIVATE';
+
 export interface Document {
   id: string;
   title: string;
   ownerId: number;
-  status: string;
+  status: status;
   shared: boolean;
   mainBranchId: string;
   branchCount: number;
@@ -15,3 +17,6 @@ export interface Document {
 }
 
 export interface DocumentsResponse extends PageRequest<Document> {}
+export interface DocumentRequest extends Pick<Document, 'title' | 'status'> {
+  templateId: number;
+}

@@ -1,4 +1,5 @@
 export { default as useBranches } from './useBranches';
+export { default as useCreateDocument } from './useCreateDocument';
 export { default as useDeleteBranch } from './useDeleteBranch';
 export { default as useDeleteDocument } from './useDeleteDocument';
 export { default as useDocument } from './useDocument';
