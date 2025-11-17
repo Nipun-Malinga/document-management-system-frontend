@@ -4,6 +4,7 @@ import useAside from '../../states/useAside';
 import Button from '../common/Button';
 import SearchInput from '../common/SearchInput';
 import DarkThemeButton from '../common/DarkThemeButton';
+import User from '../common/User';
 
 const TopBar = () => {
   const { toggle } = useAside();
@@ -25,6 +26,7 @@ const TopBar = () => {
 
       <div className='flex items-center gap-2 shrink-0'>
         <DarkThemeButton />
+        <User/>
         <Button 
           type='button' 
           icon={HiDotsVertical} 

@@ -2,7 +2,7 @@ import { IoClose } from 'react-icons/io5';
 import { Button } from '@/components';
 import useInfoPopUp from '@/states/useInfoPopUp';
 import BadgeList from './BadgeList';
-import Collaborators from './Collaborators';
+import Collaborators from './collaborators/Collaborators';
 import InfoButtons from './InfoButtons';
 import BranchSwitch from './BranchSwitch';
 import { useDocument } from '@/hooks/document';

@@ -1,6 +1,6 @@
 import useCollaborators from '@/hooks/document/collaboration/useCollaborators';
-import type { CollaboratorsResponse } from '../../../models/Collaborator';
-import { User } from '../../users';
+import type { CollaboratorsResponse } from '../../../../models/Collaborator';
+import { User } from '../../../users';
 
 interface Props {
   documentId: string;
