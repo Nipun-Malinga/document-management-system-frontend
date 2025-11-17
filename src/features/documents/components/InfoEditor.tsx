@@ -9,8 +9,13 @@ import {
   FieldSet,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import type { Document } from '@/models/Document';
 
-const InfoEditor = () => {
+interface Props {
+  document: Document;
+}
+
+const InfoEditor = ({ document }: Props) => {
   return (
     <div className='bg-gray-50 dark:bg-gray-900 w-full p-5 border border-gray-200 dark:border-gray-700 rounded-2xl'>
       <form>
@@ -24,11 +29,11 @@ const InfoEditor = () => {
               <div className='grid md:grid-cols-2 gap-2'>
                 <Field>
                   <FieldLabel htmlFor='checkout-7j9-card-name-43j'>
-                    Presentation
+                    Document Title
                   </FieldLabel>
                   <Input
                     id='checkout-7j9-card-name-43j'
-                    placeholder='Evil Rabbit'
+                    placeholder={document.title}
                     required
                   />
                 </Field>

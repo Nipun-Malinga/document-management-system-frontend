@@ -1,5 +1,7 @@
 import User from '@/features/users/components/User';
 import type { Collaborator } from '@/models/Collaborator';
+import WebSocketService from '@/services/websocketService';
+import type { IMessage } from '@stomp/stompjs';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -9,9 +11,45 @@ interface Props {
 const CollaboratorCard = ({ collaborator }: Props) => {
   const [status, setStatus] = useState<boolean>(false);
 
+  const ws = WebSocketService.getInstance();
+  const client = ws.getClient();
+
   useEffect(() => {
-    setStatus(false);
-  }, []);
+    if (!client) return;
+
+    const initialStatus = () => {
+      const subscription = ws.subscribe(
+        `/app/user/${collaborator.userId}/status`,
+        (payload: IMessage) => {
+          try {
+            setStatus(JSON.parse(payload.body) as boolean);
+          } catch (err) {
+            console.error('Invalid message format:', payload.body);
+          }
+        }
+      );
+
+      return subscription;
+    };
+
+    const dynamicStatus = () => {
+      const subscription = ws.subscribe(
+        `/user/${collaborator.userId}/status`,
+        (payload: IMessage) => {
+          try {
+            setStatus(JSON.parse(payload.body) as boolean);
+          } catch (err) {
+            console.error('Invalid message format:', payload.body);
+          }
+        }
+      );
+
+      return subscription;
+    };
+
+    ws.subscribeManager(initialStatus);
+    ws.subscribeManager(dynamicStatus);
+  }, [client]);
 
   return (
     <div

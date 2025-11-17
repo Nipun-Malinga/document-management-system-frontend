@@ -38,7 +38,7 @@ const InfoTabs = ({ document }: Props) => {
         <InfoBase document={document} />
       </TabsContent>
       <TabsContent value='edit' className='mt-0'>
-        <InfoEditor />
+        <InfoEditor document={document} />
       </TabsContent>
       <TabsContent value='Collaborators' className='mt-0'>
         {' '}

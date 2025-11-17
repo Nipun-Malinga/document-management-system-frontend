@@ -10,7 +10,7 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
   return (
     <div className='max-h-72 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent grid grid-cols-1 sm:grid-cols-2 gap-3'>
       {collaborators.data.map((collaborator) => (
-        <Collaborator collaborator={collaborator} />
+        <Collaborator collaborator={collaborator} key={collaborator.userId} />
       ))}
     </div>
   );
