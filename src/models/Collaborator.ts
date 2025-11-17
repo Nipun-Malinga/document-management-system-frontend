@@ -1,6 +1,6 @@
 type permissions = 'READ_ONLY' | 'READ_WRITE';
 
-interface Collaborator {
+export interface Collaborator {
   userId: number;
   username: string;
   email: string;

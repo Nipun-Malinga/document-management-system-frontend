@@ -37,7 +37,7 @@ const Trash = () => {
         </div>
 
         {/* Tabs with modern styling */}
-        <Tabs defaultValue='documents' className=''>
+        <Tabs defaultValue='documents'>
           <div className='px-6 pt-4 pb-2 bg-gray-50 dark:bg-gray-900'>
             <TabsList className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-1 rounded-lg shadow-sm'>
               <TabsTrigger

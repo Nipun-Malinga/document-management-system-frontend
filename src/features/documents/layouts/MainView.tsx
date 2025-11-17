@@ -1,11 +1,10 @@
-import { Breadcrumb, Button } from '@/components';
+import { Breadcrumb } from '@/components';
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
-  EmptyTitle,
+  EmptyTitle
 } from '@/components/ui/empty';
 import { mainViewBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
 import { useUserDocuments } from '@/hooks/document';
