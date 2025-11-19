@@ -9,3 +9,5 @@ export { default as Alert } from './common/Alert';
 
 export { default as TopBar } from './layout/TopBar';
 export { default as SideBar } from './layout/SideBar';
+export { default as SignIn } from './layout/SignIn';
+export { default as Register } from './layout/Register';

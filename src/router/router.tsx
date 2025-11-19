@@ -1,8 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import ContentView from '../pages/ContentView';
 import { BaseEditor, CollaborativeEditor } from '../features/editor';
-import Editor from '../pages/Editor';
-import Home from '../pages/Home';
 import {
   DocumentViewLayer,
   MainView,
@@ -11,11 +8,31 @@ import {
   Trash,
 } from '@/features/documents';
 import Quick from '@/features/documents/layouts/Quick';
+import { Home, Editor, Dashboard, ContentView } from '@/pages';
+import { Register, SignIn } from '@/components';
 
 const router = createBrowserRouter([
   {
-    path: '/dashboard',
+    path: '/',
     element: <Home />,
+    children: [
+      {
+        index: true,
+        element: '',
+      },
+      {
+        path: 'auth/signin',
+        element: <SignIn />,
+      },
+      {
+        path: 'auth/registration',
+        element: <Register />,
+      },
+    ],
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
     children: [
       {
         index: true,
