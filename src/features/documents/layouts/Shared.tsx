@@ -21,7 +21,7 @@ const Shared = () => {
       {data?.data && data.data.length > 0 ? (
         <DocumentGrid>
           {data.data.map((document, index) => (
-            <DocumentCard document={document} key={index} />
+            <DocumentCard shared={true} document={document} key={index} />
           ))}
         </DocumentGrid>
       ) : (

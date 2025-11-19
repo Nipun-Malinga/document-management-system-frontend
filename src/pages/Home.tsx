@@ -7,7 +7,7 @@ import { sidebarData } from '@/data/Sidebar';
 
 const Home = () => {
   const { collapsed } = useAside();
-  const { collapsed: infoPopupCollapsed, toggle: toggleInfoPopup } =
+  const { collapsed: infoPopupCollapsed, toggleCollapsed } =
     useInfoPopUp();
   const sidebarInfo = useSidebarData();
 
@@ -25,7 +25,7 @@ const Home = () => {
       <div className='relative flex-1 bg-gray-50 dark:bg-gray-950 flex flex-col overflow-hidden'>
         <LayoutDarker
           collapsed={collapsed && infoPopupCollapsed}
-          onClick={() => !infoPopupCollapsed && toggleInfoPopup()}
+          onClick={() => !infoPopupCollapsed && toggleCollapsed()}
         />
 
         <div className='p-4 shrink-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm'>

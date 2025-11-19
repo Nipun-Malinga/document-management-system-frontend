@@ -11,15 +11,18 @@ import useDocumentBranch from '../../../states/useDocumentBranch';
 import { Toggle } from '@/components/ui/toggle';
 import { BookmarkIcon } from 'lucide-react';
 import { useToggleFavorite } from '@/hooks/document';
+import { useEffect } from 'react';
 
 interface Props {
   document: Document;
+  shared: boolean;
 }
 
-const DocumentCard = ({ document }: Props) => {
-  const { setDocumentId, collapsed, toggle } = useInfoPopUp();
-  const { resetBranchName } = useDocumentBranch();
+const DocumentCard = ({ document, shared }: Props) => {
   const navigate = useNavigate();
+  const { setDocumentId, collapsed, toggleCollapsed, setShared } =
+    useInfoPopUp();
+  const { resetBranchName } = useDocumentBranch();
   const { mutate: toggleFavorite } = useToggleFavorite(document.id);
 
   return (
@@ -46,9 +49,10 @@ const DocumentCard = ({ document }: Props) => {
             type='button'
             className='bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-900'
             onClick={() => {
-              toggle();
-              setDocumentId(document.id);
+              toggleCollapsed();
               resetBranchName();
+              setDocumentId(document.id);
+              setShared(shared);
             }}
           />
         </div>

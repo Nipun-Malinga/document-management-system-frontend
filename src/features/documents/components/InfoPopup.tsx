@@ -13,7 +13,7 @@ interface Props {
 
 const InfoPopup = ({ documentId }: Props) => {
   const { data } = useDocument(documentId ?? '');
-  const { collapsed, toggle } = useInfoPopUp();
+  const { collapsed, toggleCollapsed } = useInfoPopUp();
 
   return (
     <div className='flex justify-center items-start'>
@@ -35,7 +35,7 @@ const InfoPopup = ({ documentId }: Props) => {
               <Button
                 icon={IoClose}
                 type='button'
-                onClick={toggle}
+                onClick={toggleCollapsed}
                 className='shrink-0 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg'
               />
             </div>

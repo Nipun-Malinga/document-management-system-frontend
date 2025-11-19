@@ -3,7 +3,7 @@ import APIService from '@/services/apiService';
 import { useQuery } from '@tanstack/react-query';
 
 const useSharedWithCount = () => {
-  const service = new APIService<Count>('/documents/count/favorites');
+  const service = new APIService<Count>('/documents/shared/count/user');
   const data = () => service.get();
 
   return useQuery({
