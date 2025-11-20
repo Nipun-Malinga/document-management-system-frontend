@@ -1,5 +1,14 @@
 import * as z from 'zod';
 
+export type SignInRequest = {
+  email: string;
+  password: string;
+};
+
+export type SignInResponse = {
+  token: string;
+};
+
 export const signInSchema = z.object({
   email: z
     .email()

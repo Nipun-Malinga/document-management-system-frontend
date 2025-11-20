@@ -1,24 +1,19 @@
 import APIService from '@/services/apiService';
-import { useMutation } from '@tanstack/react-query';
-
-type SignInRequest = {
-  email: string;
-  password: string;
-};
-
-type SignInResponse = {
-  token: string;
-};
+import type { SignInRequest, SignInResponse } from '@/types/SignIn';
+import { updateAccessToken } from '@/utils/authUtils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useSignIn = () => {
   const service = new APIService<SignInRequest, SignInResponse>('/auth/login');
-  const mutateFn = (data: SignInRequest) => service.post(data);
+
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['signin'],
-    mutationFn: mutateFn,
+    mutationFn: (data: SignInRequest) => service.post(data),
     onSuccess: (response) => {
-      localStorage.setItem('jwt-access-token', response.token);
+      queryClient.clear();
+      updateAccessToken(response.token);
     },
   });
 };

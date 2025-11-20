@@ -1,19 +1,13 @@
 import APIService from '@/services/apiService';
-import type { TRegisterSchema } from '@/types/Register';
+import type {
+  RegisterRequest,
+  RegisterResponse,
+  TRegisterSchema,
+} from '@/types/Register';
 import { useMutation } from '@tanstack/react-query';
 
-interface RegistrationRequest {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  password: string;
-}
-
-interface RegistrationResponse {}
-
 const useRegistration = () => {
-  const service = new APIService<RegistrationRequest, RegistrationResponse>(
+  const service = new APIService<RegisterRequest, RegisterResponse>(
     '/users/register'
   );
   const mutateFn = (

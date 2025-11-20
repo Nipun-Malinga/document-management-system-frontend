@@ -5,13 +5,19 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useUser } from '@/hooks/user';
 import { Button } from '../ui/button';
+import { useNavigate } from 'react-router-dom';
+import { clearAccessToken } from '@/utils/authUtils';
+import { useQueryClient } from '@tanstack/react-query';
 
 const User = () => {
   const user = useUser();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -23,7 +29,17 @@ const User = () => {
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            clearAccessToken();
+            queryClient.clear();
+            queryClient.invalidateQueries();
+            queryClient.removeQueries();
+            navigate('/auth/signin');
+          }}
+        >
+          Log out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -9,7 +9,7 @@ import {
 } from '@/features/documents';
 import Quick from '@/features/documents/layouts/Quick';
 import { Home, Editor, Dashboard, ContentView } from '@/pages';
-import { Register, SignIn } from '@/components';
+import { Register, SecureRoute, SignIn } from '@/components';
 
 const router = createBrowserRouter([
   {
@@ -32,7 +32,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: (
+      <SecureRoute>
+        <Dashboard />
+      </SecureRoute>
+    ),
     children: [
       {
         index: true,
@@ -59,7 +63,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/document',
-    element: <Editor />,
+    element: (
+      <SecureRoute>
+        <Editor />
+      </SecureRoute>
+    ),
     children: [
       {
         path: ':documentId/branch/:branchId/view',

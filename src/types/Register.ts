@@ -1,5 +1,15 @@
 import * as z from 'zod';
 
+export type RegisterRequest = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+};
+
+export type RegisterResponse = {};
+
 export const registerSchema = z
   .object({
     firstName: z

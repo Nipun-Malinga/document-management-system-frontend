@@ -1,10 +1,16 @@
+import { getAccessToken } from '@/utils/authUtils';
 import axios, { type AxiosRequestConfig } from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem('jwt-access-token')}`,
-  },
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = getAccessToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 class APIService<T, K = T> {
