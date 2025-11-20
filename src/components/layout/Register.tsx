@@ -104,17 +104,17 @@ const Register = () => {
                     <Input
                       placeholder='John'
                       className={`pl-4 h-11 border-gray-300 dark:border-gray-600 focus:ring-2 transition-all ${
-                        errors.firstName
+                        errors.firstname
                           ? 'border-red-500 dark:border-red-500 focus:ring-red-500'
                           : 'focus:ring-blue-500'
                       }`}
-                      {...register('firstName')}
+                      {...register('firstname')}
                     />
                   </div>
-                  {errors.firstName && (
+                  {errors.firstname && (
                     <div className='flex items-center gap-1.5 text-red-600 dark:text-red-400 text-xs mt-1'>
                       <AlertCircle className='w-3.5 h-3.5 shrink-0' />
-                      <p>{errors.firstName.message}</p>
+                      <p>{errors.firstname.message}</p>
                     </div>
                   )}
                 </div>
@@ -126,17 +126,17 @@ const Register = () => {
                     <Input
                       placeholder='Doe'
                       className={`pl-4 h-11 border-gray-300 dark:border-gray-600 focus:ring-2 transition-all ${
-                        errors.lastName
+                        errors.lastname
                           ? 'border-red-500 dark:border-red-500 focus:ring-red-500'
                           : 'focus:ring-blue-500'
                       }`}
-                      {...register('lastName')}
+                      {...register('lastname')}
                     />
                   </div>
-                  {errors.lastName && (
+                  {errors.lastname && (
                     <div className='flex items-center gap-1.5 text-red-600 dark:text-red-400 text-xs mt-1'>
                       <AlertCircle className='w-3.5 h-3.5 shrink-0' />
-                      <p>{errors.lastName.message}</p>
+                      <p>{errors.lastname.message}</p>
                     </div>
                   )}
                 </div>

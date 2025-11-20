@@ -1,18 +1,12 @@
 import APIService from '@/services/apiService';
-import type {
-  RegisterRequest,
-  RegisterResponse,
-  TRegisterSchema,
-} from '@/types/Register';
+import type { RegisterRequest, RegisterResponse } from '@/types/Register';
 import { useMutation } from '@tanstack/react-query';
 
 const useRegistration = () => {
   const service = new APIService<RegisterRequest, RegisterResponse>(
     '/users/register'
   );
-  const mutateFn = (
-    data: Omit<TRegisterSchema, 'confirmPassword' | 'acceptTerms'>
-  ) => service.post(data);
+  const mutateFn = (data: RegisterRequest) => service.post(data);
 
   return useMutation({
     mutationKey: ['registration'],

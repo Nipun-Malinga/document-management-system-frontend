@@ -1,8 +1,8 @@
 import * as z from 'zod';
 
 export type RegisterRequest = {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   username: string;
   email: string;
   password: string;
@@ -12,11 +12,11 @@ export type RegisterResponse = {};
 
 export const registerSchema = z
   .object({
-    firstName: z
+    firstname: z
       .string()
       .nonempty('First name cannot be empty')
       .max(15, 'First name cannot have more than 15 characters'),
-    lastName: z.string(),
+    lastname: z.string(),
     username: z
       .string()
       .nonempty('Username cannot be empty')
@@ -28,6 +28,7 @@ export const registerSchema = z
       .max(30, 'Email cannot have more than 30 characters'),
     password: z
       .string()
+      .nonempty('Password cannot be empty')
       .min(8, 'Password must have at least 8 characters')
       .max(20, 'Password cannot have more than 20 characters'),
     confirmPassword: z

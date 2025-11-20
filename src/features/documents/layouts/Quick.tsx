@@ -28,7 +28,7 @@ const Quick = () => {
       {hasFavorites ? (
         <DocumentGrid>
           {favorites.map((document, index) => (
-            <DocumentCard document={document} key={index} />
+            <DocumentCard document={document} shared={false} key={index} />
           ))}
         </DocumentGrid>
       ) : (

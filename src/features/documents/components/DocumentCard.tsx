@@ -11,7 +11,6 @@ import useDocumentBranch from '../../../states/useDocumentBranch';
 import { Toggle } from '@/components/ui/toggle';
 import { BookmarkIcon } from 'lucide-react';
 import { useToggleFavorite } from '@/hooks/document';
-import { useEffect } from 'react';
 
 interface Props {
   document: Document;
