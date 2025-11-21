@@ -1,13 +1,20 @@
 import { Button } from '@/components';
+import {
+  FieldGroup,
+  FieldSet,
+  FieldLegend,
+  FieldDescription,
+  Field,
+  FieldLabel,
+  FieldError,
+  FieldSeparator,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useFindUser } from '@/hooks/user';
 import { userSchema, type TUserSchema } from '@/types/User';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  AlertCircle,
   LoaderCircle,
-  Mail,
-  Search,
   UserPlus,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -27,7 +34,8 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    reset,
+    formState: { errors, isReady },
   } = useForm<TUserSchema>({
     resolver: zodResolver(userSchema),
     mode: 'onChange',
@@ -52,38 +60,34 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-        <div className='space-y-2'>
-          <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-            Email Address
-          </label>
-          <div className='relative'>
-            <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
-            <Input
-              {...register('email')}
-              placeholder='johndoe@email.com'
-              className={`pl-10 h-11 border-gray-300 dark:border-gray-600 focus:ring-2 transition-all ${
-                errors.email
-                  ? 'border-red-500 dark:border-red-500 focus:ring-red-500'
-                  : 'focus:ring-blue-500'
-              }`}
-            />
-          </div>
-          {errors.email && (
-            <div className='flex items-center gap-1.5 text-red-600 dark:text-red-400 text-sm'>
-              <AlertCircle className='w-4 h-4 shrink-0' />
-              <p>{errors.email.message}</p>
-            </div>
-          )}
-        </div>
-
-        <Button
-          type='submit'
-          disabled={!isValid}
-          className='w-full h-11 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98] disabled:hover:shadow-md disabled:active:scale-100'
-        >
-          <Search className='w-4 h-4' />
-          Search User
-        </Button>
+        <FieldGroup>
+          <FieldSet>
+            <FieldLegend>{title}</FieldLegend>
+            <FieldDescription>{subTitle}</FieldDescription>
+            <FieldGroup>
+              <div className='grid md:grid-cols-2 gap-2'>
+                <Field>
+                  <FieldLabel htmlFor='checkout-7j9-card-name-43j'>
+                    User email
+                  </FieldLabel>
+                  <Input placeholder={document.title} {...register('email')} />
+                  {errors.email && (
+                    <FieldError>{errors.email.message}</FieldError>
+                  )}
+                </Field>
+              </div>
+            </FieldGroup>
+          </FieldSet>
+          <FieldSeparator />
+          <Field orientation='horizontal'>
+            <Button type='submit' disabled={!isReady}>
+              Submit
+            </Button>
+            <Button type='button' onClick={() => reset()}>
+              Cancel
+            </Button>
+          </Field>
+        </FieldGroup>
       </form>
 
       {/* Search Result */}
