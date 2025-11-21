@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearAccessToken } from '@/utils/authUtils';
 import { useQueryClient } from '@tanstack/react-query';
 
-const User = () => {
+const UserDropdown = () => {
   const user = useUser();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -45,4 +45,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default UserDropdown;
