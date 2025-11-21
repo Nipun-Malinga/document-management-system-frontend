@@ -1,9 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Document } from '@/models/Document';
+import useInfoPopUp from '@/states/useInfoPopUp';
 import InfoBase from './InfoBase';
 import InfoEditor from './InfoEditor';
-import { Collaborators } from './collaborators';
-import useInfoPopUp from '@/states/useInfoPopUp';
+import { Collaborators } from '../collaborators';
 
 interface Props {
   document: Document;

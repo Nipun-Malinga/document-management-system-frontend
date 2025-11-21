@@ -1,9 +1,9 @@
 import { IoClose } from 'react-icons/io5';
 import { Button } from '@/components';
 import useInfoPopUp from '@/states/useInfoPopUp';
-import BadgeList from './BadgeList';
+import BadgeList from '../BadgeList';
 import InfoButtons from './InfoButtons';
-import BranchSwitch from './BranchSwitch';
+import BranchSwitch from '../BranchSwitch';
 import { useDocument } from '@/hooks/document';
 import InfoTabs from './InfoTabs';
 

@@ -1,7 +1,7 @@
+import { Button } from '@/components';
 import useTrashDocument from '@/hooks/document/useTrashDocument';
+import useInfoPopUp from '@/states/useInfoPopUp';
 import { MdDeleteOutline } from 'react-icons/md';
-import { Button } from '../../../components';
-import useInfoPopUp from '../../../states/useInfoPopUp';
 
 interface Props {
   documentId: string;

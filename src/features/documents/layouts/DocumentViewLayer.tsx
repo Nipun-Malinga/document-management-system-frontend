@@ -1,7 +1,7 @@
 import { Container } from '@/components';
 import useInfoPopUp from '@/states/useInfoPopUp';
 import type { ReactNode } from 'react';
-import { InfoPopUp } from '..';
+import { InfoPopup } from '../components/info';
 
 interface Props {
   children: ReactNode;
@@ -12,7 +12,7 @@ const DocumentViewLayer = ({ children }: Props) => {
 
   return (
     <Container>
-      <InfoPopUp documentId={documentId} />
+      <InfoPopup documentId={documentId} />
       {children}
     </Container>
   );
