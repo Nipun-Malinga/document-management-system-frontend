@@ -1,14 +1,7 @@
-import { useSignIn } from '@/hooks/user';
+import { useSignIn, useUser } from '@/hooks/user';
 import { signInSchema, type SignInSchema } from '@/types/SignIn';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Eye,
-  EyeOff,
-  LoaderCircle,
-  Lock,
-  Mail,
-  User,
-} from 'lucide-react';
+import { Eye, EyeOff, LoaderCircle, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +25,7 @@ const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const { mutate, isPending } = useSignIn();
+  const user = useUser();
 
   const {
     register,
@@ -55,6 +49,8 @@ const Signin = () => {
       },
     });
   };
+
+  if (user) navigate('/dashboard/home');
 
   return (
     <AuthContainer>

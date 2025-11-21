@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContainer from '../common/AuthContainer';
 import Button from '../common/Button';
 import { Input } from '../ui/input';
-import { useRegistration } from '@/hooks/user';
+import { useRegistration, useUser } from '@/hooks/user';
 import Error from '../common/Error';
 import {
   Field,
@@ -34,6 +34,7 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const { mutate, isPending } = useRegistration();
+  const user = useUser();
 
   const {
     handleSubmit,
@@ -56,6 +57,7 @@ const Register = () => {
       },
     });
 
+  if (user) navigate('/dashboard/home');
   return (
     <AuthContainer>
       <div className='grid md:grid-cols-2 min-h-[700px]'>
