@@ -56,7 +56,7 @@ const CollaboratorCard = ({ collaborator }: Props) => {
       key={collaborator.userId}
       className='flex items-center gap-3 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl p-3 transition-all duration-150 border border-gray-200 dark:border-gray-700'
     >
-      <User userId={collaborator.userId} />
+      <User username={collaborator.username} />
       <div className='flex-1 min-w-0'>
         <div className='flex items-center gap-2 mb-0.5'>
           <p className='font-semibold text-sm text-gray-900 dark:text-gray-100 capitalize truncate'>

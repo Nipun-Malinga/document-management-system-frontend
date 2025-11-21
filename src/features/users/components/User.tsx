@@ -1,14 +1,16 @@
 interface Props {
-  userId: number;
+  username: string;
 }
 
-const User = ({ userId }: Props) => {
+const User = ({ username }: Props) => {
   return (
     <div
       style={generateRandomRgbColor()}
       className=' w-6 h-6 rounded-full border border-gray- dark:border-gray-300 flex justify-center items-center'
     >
-      <p className='text-xs text-white font-medium pt-0.5'>{userId}</p>
+      <p className='text-xs text-white font-medium pt-0.5'>
+        {username.charAt(0)}
+      </p>
     </div>
   );
 };
