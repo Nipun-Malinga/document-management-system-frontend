@@ -16,7 +16,7 @@ const Quick = () => {
   const { data } = useUserDocuments();
 
   const favorites = data?.data
-    ? data?.data.filter((data) => data.favorite)
+    ? data?.data.filter((data) => data.favorite && !data.trashed)
     : [];
 
   const hasFavorites = favorites.length > 0;

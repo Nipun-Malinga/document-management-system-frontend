@@ -13,7 +13,8 @@ const useRestoreDocument = (documentId: string) => {
         ['documents-own'],
         ['trashed_documents_own'],
         ['documentCount'],
-        ['trashDocumentCount']
+        ['trashDocumentCount'],
+        ['document-favorites-count'],
       ];
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
