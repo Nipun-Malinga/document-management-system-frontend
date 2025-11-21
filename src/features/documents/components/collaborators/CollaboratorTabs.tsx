@@ -1,59 +1,61 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Collaborators from './Collaborators';
+import { SearchUser } from '@/features/users';
+import { useShareDocument } from '@/hooks/document/collaboration';
 import type { Document } from '@/models/Document';
-import InfoBase from './InfoBase';
-import InfoEditor from './InfoEditor';
-import { CollaboratorTabs } from '../collaborators';
 import { useUser } from '@/hooks/user';
 
 interface Props {
   document: Document;
 }
 
-const InfoTabs = ({ document }: Props) => {
+const CollaboratorTabs = ({ document }: Props) => {
+  const { mutate, isPending } = useShareDocument(document.id);
   const user = useUser();
 
-  console.log(document.ownerId);
-
   return (
-    <Tabs defaultValue='information'>
+    <Tabs defaultValue='collaborators'>
       <div className='bg-gray-50 dark:bg-gray-900 md:px-6 p-2 pb-2 flex justify-center md:justify-start items-center rounded-2xl'>
         <TabsList className='bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-1 rounded-lg shadow-sm space-x-1'>
           <TabsTrigger
             className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
-            value='information'
-          >
-            Information
-          </TabsTrigger>
-          {document.ownerId === user?.id && (
-            <TabsTrigger
-              className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
-              value='edit'
-            >
-              Edit
-            </TabsTrigger>
-          )}
-          <TabsTrigger
-            className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
-            value='Collaborators'
+            value='collaborators'
           >
             Collaborators
           </TabsTrigger>
+
+          {document.ownerId === user?.id && (
+            <TabsTrigger
+              className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
+              value='add-collaborators'
+            >
+              Add Collaborators
+            </TabsTrigger>
+          )}
         </TabsList>
       </div>
 
-      <TabsContent value='information' className='mt-0'>
-        <InfoBase document={document} />
+      <TabsContent value='collaborators' className='mt-0'>
+        <Collaborators documentId={document.id} />
       </TabsContent>
+
       {document.ownerId == user?.id && (
-        <TabsContent value='edit' className='mt-0'>
-          <InfoEditor document={document} />
+        <TabsContent value='add-collaborators' className='mt-0'>
+          <SearchUser
+            onClick={(userId) =>
+              mutate({
+                userId: userId,
+                permission: 'READ_WRITE',
+              })
+            }
+            userPending={isPending}
+            title='Add Collaborator'
+            subTitle='Invite someone to collaborate'
+          />
         </TabsContent>
       )}
-      <TabsContent value='Collaborators' className='mt-0'>
-        <CollaboratorTabs document={document} />
-      </TabsContent>
     </Tabs>
   );
 };
 
-export default InfoTabs;
+export default CollaboratorTabs;
