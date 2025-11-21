@@ -2,12 +2,12 @@ import { FaCircleInfo } from 'react-icons/fa6';
 import { LuFileText } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { OnlineUserList } from '..';
-import { Button } from '../../../components';
-import type { Document } from '../../../models/Document';
-import useInfoPopUp from '../../../states/useInfoPopUp';
+import { Button } from '@/components';
+import type { Document } from '@/models/Document';
+import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
 import BadgeList from './BadgeList';
 import { getEditorURI } from '../services';
-import useDocumentBranch from '../../../states/useDocumentBranch';
+import useDocumentBranch from '@/states/useDocumentBranch';
 import { Toggle } from '@/components/ui/toggle';
 import { BookmarkIcon } from 'lucide-react';
 import { useToggleFavorite } from '@/hooks/document';
@@ -19,8 +19,8 @@ interface Props {
 
 const DocumentCard = ({ document, shared }: Props) => {
   const navigate = useNavigate();
-  const { setDocumentId, collapsed, toggleCollapsed, setShared } =
-    useInfoPopUp();
+  const { setDocumentId, collapsed, toggleDocumentInfoPopup, setShared } =
+    useDocumentInfoPopUp();
   const { resetBranchName } = useDocumentBranch();
   const { mutate: toggleFavorite } = useToggleFavorite(document.id);
 
@@ -48,7 +48,7 @@ const DocumentCard = ({ document, shared }: Props) => {
             type='button'
             className='bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-900'
             onClick={() => {
-              toggleCollapsed();
+              toggleDocumentInfoPopup();
               resetBranchName();
               setDocumentId(document.id);
               setShared(shared);

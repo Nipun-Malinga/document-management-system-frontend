@@ -1,6 +1,6 @@
 import { Button } from '@/components';
 import useTrashDocument from '@/hooks/document/useTrashDocument';
-import useInfoPopUp from '@/states/useInfoPopUp';
+import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
 import { MdDeleteOutline } from 'react-icons/md';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 
 const InfoButtons = ({ documentId }: Props) => {
   const { mutate } = useTrashDocument(documentId);
-  const { toggleCollapsed } = useInfoPopUp();
+  const { toggleCollapsed } = useDocumentInfoPopUp();
 
   return (
     <div className='w-full flex justify-end gap-1'>

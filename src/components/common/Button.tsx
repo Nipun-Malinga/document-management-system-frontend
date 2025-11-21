@@ -18,13 +18,13 @@ const Button = ({
   type = 'button',
   icon: Icon,
   onClick,
-  className = '',
+  className,
   disabled = false,
 }: Props) => {
   return (
     <Btn
       variant='outline'
-      className={`bg-white p-2.5 cursor-pointer dark:hover:bg-gray-800 active:scale-95 transition-all duration-150 rounded-lg ${className}`}
+      className={className}
       type={type}
       onClick={onClick}
       disabled={disabled}
