@@ -15,3 +15,5 @@ export { default as useUserSharedDocuments } from './useUserSharedDocuments';
 export { default as useTrashedDocuments } from './useTrashedDocuments';
 export { default as useTrashedBranches } from './useTrashedBranches';
 export { default as useUpdateDocumentInfo } from './useUpdateDocumentInfo';
+export { default as useTrashBranch } from './useTrashBranch';
+export { default as useMergeVersion } from './useMergeVersion';

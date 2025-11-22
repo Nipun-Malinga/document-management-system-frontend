@@ -2,7 +2,6 @@ import type { IMessage } from '@stomp/stompjs';
 import { useEffect } from 'react';
 import WebSocketService from '../../../services/websocketService';
 import useDocumentOnlineUsers from '../../../states/useDocumentOnlineUser';
-import User from '../../users/components/User';
 
 /*
   TODO: FETCH THE USER INFORMATION FROM THE SERVER BASED ON USER ID
@@ -65,7 +64,7 @@ const OnlineUsers = ({ documentId }: Props) => {
     <div className='relative'>
       {users.get(documentId)?.map((user, index) => (
         <div style={calculatePosition(index)} key={user}>
-          <User userId={user} />
+          {/* <User userId={user} /> */}
         </div>
       ))}
     </div>

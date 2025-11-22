@@ -6,7 +6,6 @@ import { Button } from '@/components';
 import type { Document } from '@/models/Document';
 import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
 import BadgeList from './BadgeList';
-import { getEditorURI } from '../services';
 import useDocumentBranch from '@/states/useDocumentBranch';
 import { Toggle } from '@/components/ui/toggle';
 import { BookmarkIcon } from 'lucide-react';
@@ -61,11 +60,11 @@ const DocumentCard = ({ document, shared }: Props) => {
         </div>
 
         <div
-          onClick={() =>
+          onClick={() => {
             navigate(
-              getEditorURI(document.id, document.mainBranchId, document.shared)
-            )
-          }
+              `/document/${document.id}/branch/${document.mainBranchId}/edit`
+            );
+          }}
           className='relative bg-blue-50 dark:bg-gray-600  w-full h-full rounded-lg cursor-pointer flex justify-center items-center overflow-hidden transition-all duration-200 hover:from-blue-100 hover:to-blue-200/50 dark:hover:from-gray-850 dark:hover:to-gray-800 ring-1 ring-gray-200 dark:ring-gray-700'
         >
           <LuFileText className='text-7xl text-blue-600 dark:text-blue-500 transition-transform duration-200 group-hover:scale-110' />

@@ -5,7 +5,7 @@ interface Token extends Omit<User, 'id'> {
   sub: string;
 }
 
-const useUser = (): User | null => {
+const useUser = (): Omit<User, 'firstname' | 'lastname'> | null => {
   try {
     const token = localStorage.getItem('jwt-access-token');
     if (!token) return null;

@@ -1,7 +1,7 @@
 import Collaboration from '@tiptap/extension-collaboration';
 import { useEditor } from '@tiptap/react';
 import { useEffect, useMemo } from 'react';
-import { IndexeddbPersistence } from 'y-indexeddb';
+// import { IndexeddbPersistence } from 'y-indexeddb';
 import * as Y from 'yjs';
 import {
   commonEditorConfigs,
@@ -24,7 +24,7 @@ const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
   const documentKey: string = `documents/${documentId}/branches/${branchId}`;
 
   // For offline support
-  new IndexeddbPersistence(documentKey, ydoc);
+  // new IndexeddbPersistence(documentKey, ydoc);
 
   const provider = useProvider(documentKey, ydoc);
 
@@ -37,12 +37,13 @@ const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
     ],
     editable: editable,
     ...commonEditorConfigs,
+    content: 'Hello'
   });
 
   useEffect(() => {
     return () => {
       provider.destroy();
-      editor?.destroy();
+      editor.destroy();
     };
   }, [editor]);
 

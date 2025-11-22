@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 const useRestoreBranch = (documentId: string, branchId: string) => {
   const queryClient = useQueryClient();
   const service = new APIService(
-    `/documents/trash/restore/${documentId}/branch/${branchId}`
+    `/documents/trash/restore/${documentId}/branches/${branchId}`
   );
 
   return useMutation({
@@ -12,6 +12,7 @@ const useRestoreBranch = (documentId: string, branchId: string) => {
     mutationFn: () => service.post(),
     onSuccess: () => {
       const keys = [
+        ['branches', documentId], 
         ['documents-own'],
         ['trashed_branches_own'],
         ['trashBranchCount'],

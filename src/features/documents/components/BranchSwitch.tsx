@@ -3,15 +3,13 @@ import { FaCodeBranch } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components';
 import useDocumentBranch from '../../../states/useDocumentBranch';
-import { getEditorURI } from '../services';
 import { useBranches } from '@/hooks/document';
 
 interface Props {
   documentId: string;
-  shared: boolean;
 }
 
-const BranchSwitch = ({ documentId, shared }: Props) => {
+const BranchSwitch = ({ documentId }: Props) => {
   const [open, setOpen] = useState(false);
   const { setBranchName, branchName } = useDocumentBranch();
   const navigate = useNavigate();
@@ -100,7 +98,7 @@ const BranchSwitch = ({ documentId, shared }: Props) => {
                     onClick={() => {
                       setOpen(false);
                       setBranchName(branch.branchName);
-                      navigate(getEditorURI(documentId, branch.id, shared));
+                      navigate('');
                     }}
                     className={`w-full text-left px-3 py-2 my-0.5 rounded-md transition-colors ${
                       isActive

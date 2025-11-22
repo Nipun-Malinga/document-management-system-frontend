@@ -9,7 +9,7 @@ interface Props {
 
 const InfoButtons = ({ documentId }: Props) => {
   const { mutate } = useTrashDocument(documentId);
-  const { toggleCollapsed } = useDocumentInfoPopUp();
+  const { toggleDocumentInfoPopup } = useDocumentInfoPopUp();
 
   return (
     <div className='w-full flex justify-end gap-1'>
@@ -19,7 +19,7 @@ const InfoButtons = ({ documentId }: Props) => {
         title='Delete'
         onClick={() => {
           mutate();
-          toggleCollapsed();
+          toggleDocumentInfoPopup();
         }}
       />
     </div>

@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { BaseEditor, CollaborativeEditor } from '../features/editor';
+import { EditorContainer } from '../features/editor';
 import {
   DocumentViewLayer,
   MainView,
@@ -75,11 +75,7 @@ const router = createBrowserRouter([
       },
       {
         path: ':documentId/branch/:branchId/edit',
-        element: <BaseEditor />,
-      },
-      {
-        path: ':documentId/branch/:branchId/edit/collaborative',
-        element: <CollaborativeEditor />,
+        element: <EditorContainer />,
       },
     ],
   },

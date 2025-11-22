@@ -3,6 +3,7 @@ import { Button } from '../../../components';
 import AutoSaver from './AutoSaver';
 import { useNavigate } from 'react-router-dom';
 import DarkThemeButton from '@/components/common/DarkThemeButton';
+import { InfoDrawer } from './info';
 
 interface Props {
   documentTitle: string;
@@ -40,6 +41,7 @@ const TopToolBar = ({
           }
         />
         <DarkThemeButton />
+        <InfoDrawer />
       </div>
     </div>
   );

@@ -10,3 +10,7 @@ export interface Branch {
 export interface BranchResponse {
   data: Branch[];
 }
+
+export interface BranchRequest {
+  branchName: string
+}

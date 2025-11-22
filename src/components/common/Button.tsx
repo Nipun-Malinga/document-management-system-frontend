@@ -24,7 +24,7 @@ const Button = ({
   return (
     <Btn
       variant='outline'
-      className={className}
+      className={`${className} cursor-pointer`}
       type={type}
       onClick={onClick}
       disabled={disabled}

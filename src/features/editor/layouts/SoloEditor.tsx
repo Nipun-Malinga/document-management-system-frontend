@@ -4,7 +4,7 @@ import SoloEditorCore from '../components/SoloEditorCore';
 import { convertToTiptapContent } from '../utils';
 import { useDocumentContent } from '@/hooks/document';
 
-export const BaseEditor = () => {
+export const SoloEditor = () => {
   const { documentId, branchId } = useParams();
   const { data } = useDocumentContent(documentId ?? '', branchId ?? '');
 
@@ -21,4 +21,4 @@ export const BaseEditor = () => {
   );
 };
 
-export default BaseEditor;
+export default SoloEditor;

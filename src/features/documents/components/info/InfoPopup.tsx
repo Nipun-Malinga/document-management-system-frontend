@@ -22,7 +22,7 @@ const InfoPopup = ({ documentId }: Props) => {
           {/* Header */}
           <div className='flex flex-row justify-between items-start gap-3'>
             <div className='flex flex-row gap-2 flex-wrap items-center'>
-              <BranchSwitch documentId={documentId} shared={data.shared} />
+              <BranchSwitch documentId={documentId} />
               <BadgeList document={data} />
             </div>
             <Button
