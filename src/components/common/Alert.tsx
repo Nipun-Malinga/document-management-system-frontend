@@ -17,14 +17,20 @@ interface Props {
   description: string;
   action: string;
   onClick: () => void;
+  className?: string;
 }
 
-const Alert = ({ trigger, title, description, action, onClick }: Props) => {
+const Alert = ({
+  trigger,
+  title,
+  description,
+  action,
+  onClick,
+  className,
+}: Props) => {
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-sm cursor-pointer'>
-        {trigger}
-      </AlertDialogTrigger>
+      <AlertDialogTrigger className={className}>{trigger}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

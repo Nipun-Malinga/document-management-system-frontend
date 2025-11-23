@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import AuthContainer from '../common/AuthContainer';
-import { FormButton } from '../common/Buttons';
+import Button from '../common/Button';
 import Error from '../common/Error';
 import {
   Field,
@@ -154,13 +154,20 @@ const Signin = () => {
                 </FieldSet>
                 <FieldSeparator />
                 <Field>
-                  <FormButton
-                    isPending={isPending}
-                    isValid={isValid}
-                    title='Sign In'
-                    pendingTitle='Signing'
-                    disabled={false}
-                  />
+                  <Button
+                    type='submit'
+                    disabled={isPending || !isValid}
+                    className='w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-lg transition-all duration-150 border border-blue-200 dark:border-blue-800 disabled:border-gray-200 dark:disabled:border-gray-700 active:scale-95 disabled:active:scale-100'
+                  >
+                    {isPending ? (
+                      <>
+                        <div className='w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin' />
+                        Signing in...
+                      </>
+                    ) : (
+                      <>Sign In</>
+                    )}
+                  </Button>
                 </Field>
               </FieldGroup>
             </form>

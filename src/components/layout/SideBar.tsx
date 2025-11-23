@@ -4,7 +4,7 @@ import useAside from '@/states/useAside';
 import { FaRegHardDrive } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../common/Buttons';
+import Button from '../common/Button';
 
 interface Props {
   sidebarLink: SidebarLink[];

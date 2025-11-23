@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import AuthContainer from '../common/AuthContainer';
-import { Button } from '../common/Buttons';
+import Button from '../common/Button';
 import Error from '../common/Error';
 import {
   Field,

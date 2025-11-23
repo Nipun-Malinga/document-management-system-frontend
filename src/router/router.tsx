@@ -1,5 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { EditorContainer } from '../features/editor';
+import { Register, SecureRoute, SignIn } from '@/components';
 import {
   DocumentViewLayer,
   MainView,
@@ -8,8 +7,9 @@ import {
   Trash,
 } from '@/features/documents';
 import Quick from '@/features/documents/layouts/Quick';
-import { Home, Editor, Dashboard, ContentView } from '@/pages';
-import { Register, SecureRoute, SignIn } from '@/components';
+import { ContentView, Dashboard, Editor, Home } from '@/pages';
+import { createBrowserRouter } from 'react-router-dom';
+import { EditorContainer } from '../features/editor';
 
 const router = createBrowserRouter([
   {
@@ -71,6 +71,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: ':documentId/branch/:branchId/view',
+        element: <ContentView />,
+      },
+      {
+        path: '',
         element: <ContentView />,
       },
       {

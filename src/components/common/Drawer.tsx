@@ -1,7 +1,7 @@
 import { History } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { DrawerContent, DrawerTrigger, Drawer as Drw } from '../ui/drawer';
-import { Button } from './Buttons';
+import Button from './Button';
 
 interface Props {
   title: string;

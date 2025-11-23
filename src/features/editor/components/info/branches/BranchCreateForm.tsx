@@ -1,5 +1,4 @@
 import { Button } from '@/components';
-import FormButton from '@/components/common/Buttons/FormButton';
 import {
   Dialog,
   DialogClose,
@@ -15,7 +14,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldLegend,
-  FieldSet
+  FieldSet,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import useCreateBranch from '@/hooks/document/useCreateBranch';
@@ -25,11 +24,7 @@ import { GitBranchIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
-interface Props {
-  title: string;
-}
-
-const BranchCreator = ({ title }: Props) => {
+const CreateBranchForm = () => {
   const { documentId, branchId } = useParams();
   const navigate = useNavigate();
 
@@ -56,8 +51,8 @@ const BranchCreator = ({ title }: Props) => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>{title}</Button>
+      <DialogTrigger asChild className='w-full'>
+        <Button className='w-full'>Create Branch</Button>
       </DialogTrigger>
 
       <DialogContent>
@@ -87,17 +82,25 @@ const BranchCreator = ({ title }: Props) => {
             </FieldSet>
           </FieldGroup>
 
-          <DialogFooter>
+          <DialogFooter className='mt-3'>
             <DialogClose asChild>
               <Button type='button'>Cancel</Button>
             </DialogClose>
 
-            <FormButton
-              isPending={isPending}
-              isValid={isValid}
-              title='Create'
-              pendingTitle='Creating'
-            />
+            <Button
+              type='submit'
+              disabled={!isValid}
+              className='flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-lg transition-all duration-150 border border-red-200 dark:border-red-800 disabled:border-gray-200 dark:disabled:border-gray-700 active:scale-95 disabled:active:scale-100'
+            >
+              {isPending ? (
+                <>
+                  <div className='w-4 h-4 border-2 border-red-300 border-t-red-600 rounded-full animate-spin' />
+                  Creating...
+                </>
+              ) : (
+                <>Create</>
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -105,4 +108,4 @@ const BranchCreator = ({ title }: Props) => {
   );
 };
 
-export default BranchCreator;
+export default CreateBranchForm;

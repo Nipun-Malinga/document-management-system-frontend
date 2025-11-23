@@ -6,91 +6,104 @@ import {
   useRestoreDocument,
 } from '@/hooks/document';
 import type { TrashBranch, TrashDocument } from '@/models/Trash';
-import {
-  AlertCircle,
-  FileText,
-  GitBranch,
-  Trash2,
-  RotateCcw
-} from 'lucide-react';
+import { FileText, GitBranch, Trash2, RotateCcw, Calendar } from 'lucide-react';
 
 interface Props {
   trash: TrashDocument | TrashBranch;
 }
 
 const TrashTableRow = ({ trash }: Props) => {
+  const isBranch = 'branch' in trash;
+  const itemName = isBranch ? trash.branch.branchName : trash.document.title;
+  const itemType = isBranch ? 'Branch' : 'Document';
+
   const { mutate: restoreDocument } = useRestoreDocument(
-    'document' in trash ? trash.document.id : ''
+    !isBranch ? trash.document.id : ''
   );
 
   const { mutate: restoreBranch } = useRestoreBranch(
-    'branch' in trash ? trash.branch.documentId : '',
-    'branch' in trash ? trash.branch.id : ''
+    isBranch ? trash.branch.documentId : '',
+    isBranch ? trash.branch.id : ''
   );
 
   const { mutate: deleteDocument } = useDeleteDocument(
-    'document' in trash ? trash.document.id : ''
+    !isBranch ? trash.document.id : ''
   );
 
   const { mutate: deleteBranch } = useDeleteBranch(
-    'branch' in trash ? trash.branch.documentId : '',
-    'branch' in trash ? trash.branch.id : ''
+    isBranch ? trash.branch.documentId : '',
+    isBranch ? trash.branch.id : ''
   );
 
+  const handleRestore = () => {
+    isBranch ? restoreBranch() : restoreDocument();
+  };
+
+  const handleDelete = () => {
+    isBranch ? deleteBranch() : deleteDocument();
+  };
+
   return (
-    <tr className='bg-slate-50 dark:bg-slate-900!'>
+    <tr className='border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150'>
       <td className='px-6 py-4'>
         <div className='flex items-center gap-3'>
-          <div className='flex flex-col'>
-            <span className='text-sm font-medium text-slate-900 dark:text-slate-300'>
-              {'branch' in trash
-                ? trash.branch.branchName
-                : trash.document.title}
-            </span>
-          </div>
-          <div className='shrink-0 rounded flex items-center justify-center gap-4'>
-            <AlertCircle className='w-4 h-4 text-red-400' />
-            {'branch' in trash ? (
-              <GitBranch className='w-4 h-4 text-blue-400' />
+          <div
+            className={`p-2 rounded-lg shrink-0 ${
+              isBranch
+                ? 'bg-purple-50 dark:bg-purple-900/20'
+                : 'bg-blue-50 dark:bg-blue-900/20'
+            }`}
+          >
+            {isBranch ? (
+              <GitBranch className='w-5 h-5 text-purple-600 dark:text-purple-400' />
             ) : (
-              <FileText className='w-4 h-4 text-blue-400' />
+              <FileText className='w-5 h-5 text-blue-600 dark:text-blue-400' />
             )}
+          </div>
+          <div className='flex flex-col min-w-0'>
+            <span className='text-sm font-semibold text-gray-900 dark:text-gray-100 truncate'>
+              {itemName}
+            </span>
+            <span className='text-xs text-gray-500 dark:text-gray-400 mt-0.5'>
+              {itemType}
+            </span>
           </div>
         </div>
       </td>
+
       <td className='px-6 py-4 whitespace-nowrap'>
-        <span className='text-sm text-slate-500'>{trash.addedDate}</span>
+        <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400'>
+          <Calendar className='w-4 h-4' />
+          <span>{trash.addedDate}</span>
+        </div>
       </td>
+
       <td className='px-6 py-4 whitespace-nowrap text-right'>
-        <div className='flex items-center justify-end gap-4'>
+        <div className='flex items-center justify-end gap-2'>
           <Alert
             trigger={
-              <span className='text-blue-400 flex items-center gap-1'>
+              <button className='flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg transition-all duration-150 border border-emerald-200 dark:border-emerald-800'>
                 <RotateCcw className='w-4 h-4' />
                 Restore
-              </span>
+              </button>
             }
-            title='Are you absolutely sure?'
-            description='Do you want to recover this document?'
-            action='Delete'
-            onClick={() => {
-              'branch' in trash ? restoreBranch() : restoreDocument();
-            }}
+            title='Restore Item?'
+            description={`Do you want to restore this ${itemType.toLowerCase()}? It will be moved back to your active items.`}
+            action='Restore'
+            onClick={handleRestore}
           />
 
           <Alert
             trigger={
-              <span className='text-red-400 flex items-center gap-1'>
+              <button className='flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-all duration-150 border border-red-200 dark:border-red-800'>
                 <Trash2 className='w-4 h-4' />
                 Delete
-              </span>
+              </button>
             }
-            title='Are you absolutely sure?'
-            description='This action cannot be undone. This will permanently delete your document and remove your data from our servers.'
-            action='Delete'
-            onClick={() => {
-              'branch' in trash ? deleteBranch() : deleteDocument();
-            }}
+            title='Permanently Delete?'
+            description={`This action cannot be undone. This will permanently delete your ${itemType.toLowerCase()} and remove all data from our servers.`}
+            action='Delete Permanently'
+            onClick={handleDelete}
           />
         </div>
       </td>

@@ -17,3 +17,4 @@ export { default as useTrashedBranches } from './useTrashedBranches';
 export { default as useUpdateDocumentInfo } from './useUpdateDocumentInfo';
 export { default as useTrashBranch } from './useTrashBranch';
 export { default as useMergeVersion } from './useMergeVersion';
+export { default as useCreateVersion } from './useCreateVersion';

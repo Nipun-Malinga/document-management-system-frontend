@@ -59,10 +59,10 @@ const Templates = () => {
                     convertToTiptapContent(template.template)
                   );
                 }}
-                className='pl-4 select-none basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/6'
+                className='pl-4 select-none basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/10'
               >
                 <div className='group cursor-pointer'>
-                  <div className='relative h-64 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden'>
+                  <div className='relative h-48 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden'>
                     {/* Template preview */}
                     <div className='absolute inset-0 flex flex-col p-6 overflow-hidden'>
                       <div className='text-xs text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors duration-300 line-clamp-14'>

@@ -1,8 +1,8 @@
+import DarkThemeButton from '@/components/common/DarkThemeButton';
 import type { Editor } from '@tiptap/react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components';
 import AutoSaver from './AutoSaver';
-import { useNavigate } from 'react-router-dom';
-import DarkThemeButton from '@/components/common/DarkThemeButton';
 import { InfoDrawer } from './info';
 
 interface Props {
@@ -23,9 +23,9 @@ const TopToolBar = ({
   const navigate = useNavigate();
 
   return (
-    <div className='flex items-center gap-2'>
+    <div className='flex flex-col-reverse md:flex-row justify-center items-center gap-2'>
       <h1 className='text-lg'>{documentTitle}</h1>
-      <div className='ml-auto flex justify-center items-center gap-2'>
+      <div className='md:ml-auto flex justify-center items-center gap-2'>
         {enableAutoSaver && (
           <AutoSaver
             editor={editor}

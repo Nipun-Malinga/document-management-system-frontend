@@ -1,7 +1,7 @@
 import type { PageRequest } from './PageRequest';
 import type { User } from './User';
 
-type Status = 'PUBLIC' | 'PRIVATE';
+export type Status = 'PUBLIC' | 'PRIVATE';
 
 export interface Version {
   id: string;
@@ -14,3 +14,5 @@ export interface Version {
 }
 
 export interface VersionResponse extends PageRequest<Version> {}
+
+export interface VersionRequest extends Pick<Version, 'title' | 'status'> {}
