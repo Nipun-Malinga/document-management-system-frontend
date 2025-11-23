@@ -1,10 +1,10 @@
+import Link from '@/components/common/Link';
+import type { SidebarLink } from '@/models/Link';
+import useAside from '@/states/useAside';
 import { FaRegHardDrive } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5';
-import useAside from '@/states/useAside';
-import Button from '@/components/common/Button';
-import Link from '@/components/common/Link';
 import { useNavigate } from 'react-router-dom';
-import type { SidebarLink } from '@/models/Link';
+import { Button } from '../common/Buttons';
 
 interface Props {
   sidebarLink: SidebarLink[];

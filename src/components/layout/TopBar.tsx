@@ -1,11 +1,11 @@
+import useAside from '@/states/useAside';
 import { HiDotsVertical } from 'react-icons/hi';
 import { IoMenu } from 'react-icons/io5';
-import useAside from '@/states/useAside';
-import Button from '../common/Button';
-import SearchInput from '../common/SearchInput';
+import { Button } from '../common/Buttons';
 import DarkThemeButton from '../common/DarkThemeButton';
-import UserDropdown from '../common/UserDropdown';
 import Notification from '../common/Notification';
+import SearchInput from '../common/SearchInput';
+import UserDropdown from '../common/UserDropdown';
 
 const TopBar = () => {
   const { toggle } = useAside();

@@ -4,24 +4,24 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
-  DialogTrigger
+  DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
-  FieldSeparator,
-  FieldSet,
+  FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import useCreateBranch from '@/hooks/document/useCreateBranch';
 import { createBranchSchema, type TCreateBranchSchema } from '@/types/Branch';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail } from 'lucide-react';
+import { GitBranchIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -34,14 +34,13 @@ const BranchCreator = ({ title }: Props) => {
   const navigate = useNavigate();
 
   if (!documentId || !branchId) {
-    navigate('/dashboard/home');
-    return;
+    navigate('/dashboard/home', { replace: true });
+    return null;
   }
 
   const { mutate, isPending } = useCreateBranch(documentId, branchId);
 
   const {
-    //
     register,
     handleSubmit,
     reset,
@@ -61,35 +60,33 @@ const BranchCreator = ({ title }: Props) => {
         <Button>{title}</Button>
       </DialogTrigger>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent>
+      <DialogContent>
+        <DialogTitle>Create a new branch</DialogTitle>
+        <DialogDescription>Enter a name for the new branch.</DialogDescription>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>Sign In</FieldLegend>
-              <FieldDescription>
-                Welcome back! Please enter your details
-              </FieldDescription>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel>Email Address</FieldLabel>
-                  <div className='relative'>
-                    <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
-                    <Input
-                      type='email'
-                      placeholder='john.doe@example.com'
-                      autoComplete='email'
-                      className='pl-10'
-                      {...register('branchName')}
-                    />
-                  </div>
-                  {errors.branchName && (
-                    <FieldError>{errors.branchName.message}</FieldError>
-                  )}
-                </Field>
-              </FieldGroup>
+              <FieldLegend>Create a new branch</FieldLegend>
+
+              <Field>
+                <FieldLabel>Branch name</FieldLabel>
+                <div className='relative'>
+                  <GitBranchIcon className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
+                  <Input
+                    type='text'
+                    className='pl-10'
+                    {...register('branchName')}
+                  />
+                </div>
+
+                {errors.branchName && (
+                  <FieldError>{errors.branchName.message}</FieldError>
+                )}
+              </Field>
             </FieldSet>
-            <FieldSeparator />
           </FieldGroup>
+
           <DialogFooter>
             <DialogClose asChild>
               <Button type='button'>Cancel</Button>
@@ -102,8 +99,8 @@ const BranchCreator = ({ title }: Props) => {
               pendingTitle='Creating'
             />
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 };

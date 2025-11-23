@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { IconType } from 'react-icons';
-import { Button as Btn } from '../ui/button';
+import { Button as Btn } from '../../ui/button';
 
 interface Props {
   title?: string;

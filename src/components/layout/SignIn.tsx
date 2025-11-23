@@ -1,13 +1,12 @@
 import { useSignIn, useUser } from '@/hooks/user';
 import { signInSchema, type SignInSchema } from '@/types/SignIn';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, LoaderCircle, Lock, Mail, User } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import AuthContainer from '../common/AuthContainer';
-import Button from '../common/Button';
-import { Input } from '../ui/input';
+import { FormButton } from '../common/Buttons';
 import Error from '../common/Error';
 import {
   Field,
@@ -19,6 +18,7 @@ import {
   FieldSeparator,
   FieldSet,
 } from '../ui/field';
+import { Input } from '../ui/input';
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -154,20 +154,13 @@ const Signin = () => {
                 </FieldSet>
                 <FieldSeparator />
                 <Field>
-                  <Button
-                    type='submit'
-                    disabled={!isValid || isPending}
-                    className='w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:hover:shadow-lg disabled:active:scale-100'
-                  >
-                    {isPending ? (
-                      <div className='flex items-center justify-center gap-2'>
-                        <LoaderCircle className='w-5 h-5 animate-spin' />
-                        <span>Signing in...</span>
-                      </div>
-                    ) : (
-                      'Sign In'
-                    )}
-                  </Button>
+                  <FormButton
+                    isPending={isPending}
+                    isValid={isValid}
+                    title='Sign In'
+                    pendingTitle='Signing'
+                    disabled={false}
+                  />
                 </Field>
               </FieldGroup>
             </form>

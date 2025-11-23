@@ -1,21 +1,20 @@
+import { useRegistration, useUser } from '@/hooks/user';
 import { registerSchema, type TRegisterSchema } from '@/types/Register';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Eye,
   EyeOff,
+  LoaderCircle,
   Lock,
   Mail,
   User,
   UserCircle,
-  LoaderCircle,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import AuthContainer from '../common/AuthContainer';
-import Button from '../common/Button';
-import { Input } from '../ui/input';
-import { useRegistration, useUser } from '@/hooks/user';
+import { Button } from '../common/Buttons';
 import Error from '../common/Error';
 import {
   Field,
@@ -27,6 +26,7 @@ import {
   FieldSeparator,
   FieldSet,
 } from '../ui/field';
+import { Input } from '../ui/input';
 
 const Register = () => {
   const navigate = useNavigate();
