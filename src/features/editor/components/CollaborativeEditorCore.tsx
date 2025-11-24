@@ -1,7 +1,10 @@
 import Collaboration from '@tiptap/extension-collaboration';
 import { useEditor } from '@tiptap/react';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 // import { IndexeddbPersistence } from 'y-indexeddb';
+import { useProvider } from '@/hooks/document/collaboration';
+import { useUser } from '@/hooks/user';
+import { CollaborationCaret } from '@tiptap/extension-collaboration-caret';
 import * as Y from 'yjs';
 import {
   commonEditorConfigs,
@@ -9,7 +12,6 @@ import {
 } from '../configs/EditorConfigs';
 import CoreEditor from './CoreEditor';
 import Toolbar from './Toolbar';
-import { useProvider } from '@/hooks/document/collaboration';
 
 interface Props {
   documentId: string;
@@ -18,15 +20,24 @@ interface Props {
 }
 
 const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
-  const ydoc = useMemo(() => new Y.Doc(), []);
-
   // Unique key to identify the document
   const documentKey: string = `documents/${documentId}/branches/${branchId}`;
 
+  const ydoc = useMemo(() => new Y.Doc(), []);
+  const provider = useProvider(documentKey, ydoc);
+  const user = useUser();
+
+  // Generate a random color for the user
+  const currentUser = useMemo(
+    () => ({
+      name: user?.username || 'Anonymous',
+      color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+    }),
+    [user?.username]
+  );
+
   // For offline support
   // new IndexeddbPersistence(documentKey, ydoc);
-
-  const provider = useProvider(documentKey, ydoc);
 
   const editor = useEditor({
     extensions: [
@@ -34,18 +45,17 @@ const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
       Collaboration.configure({
         document: ydoc,
       }),
+      CollaborationCaret.configure({
+        provider: provider,
+        user: currentUser,
+      }),
     ],
     editable: editable,
     ...commonEditorConfigs,
-    content: 'Hello'
+    onContentError: ({ disableCollaboration }) => {
+      disableCollaboration();
+    },
   });
-
-  useEffect(() => {
-    return () => {
-      provider.destroy();
-      editor.destroy();
-    };
-  }, [editor]);
 
   return (
     <CoreEditor

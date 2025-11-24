@@ -94,7 +94,7 @@ const Toolbar = ({
   return (
     <div className='flex flex-col md:flex-row justify-between items-center border-b border-gray-200 dark:border-gray-700'>
       <div
-        className={`flex flex-wrap justify-center items-center gap-2 my-2 py-3 bg-white dark:bg-gray-900 ${
+        className={`flex flex-wrap justify-center items-center gap-2 my-2 py-3 ${
           disabled
             ? 'pointer-events-none opacity-50'
             : 'pointer-events-auto opacity-100'

@@ -32,7 +32,7 @@ const MainView = () => {
       {hasDocuments ? (
         <DocumentGrid>
           {filtered.map((document, index) => (
-            <DocumentCard shared={false} document={document} key={index} />
+            <DocumentCard document={document} key={index} />
           ))}
         </DocumentGrid>
       ) : (

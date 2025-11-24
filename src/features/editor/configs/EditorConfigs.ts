@@ -82,7 +82,7 @@ export const editorExtensions = (collaborative = false): AnyExtension[] => {
 export const commonEditorConfigs: UseEditorOptions = {
   editorProps: {
     attributes: {
-      class: 'outline-none w-full h-[85vh] p-2',
+      class: 'outline-none px-2 py-4', 
     },
   },
 };

@@ -13,10 +13,9 @@ import { useToggleFavorite } from '@/hooks/document';
 
 interface Props {
   document: Document;
-  shared: boolean;
 }
 
-const DocumentCard = ({ document, shared }: Props) => {
+const DocumentCard = ({ document }: Props) => {
   const navigate = useNavigate();
   const { setDocumentId, collapsed, toggleDocumentInfoPopup, setShared } =
     useDocumentInfoPopUp();
@@ -49,7 +48,7 @@ const DocumentCard = ({ document, shared }: Props) => {
               toggleDocumentInfoPopup();
               resetBranchName();
               setDocumentId(document.id);
-              setShared(shared);
+              setShared(document.shared);
             }}
           />
         </div>
