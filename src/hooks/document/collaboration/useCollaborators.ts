@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import ms from 'ms';
-import type { CollaboratorsResponse } from '../../../models/Collaborator';
-import APIService from '../../../services/apiService';
+import type { CollaboratorsResponse } from '@/models/Collaborator';
+import APIService from '@/services/apiService';
 
 const useCollaborators = (documentId: string) => {
   const service = new APIService<CollaboratorsResponse>(

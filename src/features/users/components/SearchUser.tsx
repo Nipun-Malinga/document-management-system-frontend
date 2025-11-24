@@ -26,7 +26,7 @@ interface Props {
 
 const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
   const [email, setEmail] = useState<string>('');
-  const { data: fetchedUser } = useFindUser(email);
+  const { data: fetchedUser, isError } = useFindUser(email);
   const user = useUser();
 
   const {
@@ -87,7 +87,7 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
       </form>
 
       {/* Search Result */}
-      {fetchedUser && fetchedUser.id !== user?.id ? (
+      {fetchedUser && (
         <div className='mt-4 p-4 bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
@@ -106,6 +106,7 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
               </div>
             </div>
             <Button
+              disabled={user?.id === fetchedUser.id}
               onClick={() => onClick(fetchedUser.id)}
               className='px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-150 shadow-sm hover:shadow-md active:scale-95'
             >
@@ -117,7 +118,9 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
             </Button>
           </div>
         </div>
-      ) : (
+      )}
+
+      {isError && (
         <p className='mt-4 p-4 text-center bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300'>
           No User Found
         </p>

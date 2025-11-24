@@ -14,7 +14,6 @@ const useShareDocument = (documentId: string) => {
     mutationKey: ['shareDocument'],
     mutationFn: mutateFn,
     onSuccess: () => {
-      ['collaborators', documentId];
       const keys = [['collaborators', documentId]];
       keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
     },
