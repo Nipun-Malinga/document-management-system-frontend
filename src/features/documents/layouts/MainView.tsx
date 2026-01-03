@@ -1,10 +1,10 @@
-import { Breadcrumb } from '@/components';
+import { Breadcrumb, SearchInput } from '@/components';
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
-  EmptyTitle
+  EmptyTitle,
 } from '@/components/ui/empty';
 import { mainViewBreadcrumb } from '@/data/breadcrumb/HomeBreadcrumbs';
 import { useUserDocuments } from '@/hooks/document';
@@ -29,6 +29,13 @@ const MainView = () => {
 
       <p className='font-bold text-sm mt-6'>All Documents</p>
 
+      <div className='flex-1 max-w-3xl mx-auto'>
+        <SearchInput
+          output={(value) => {
+            console.log(value);
+          }}
+        />
+      </div>
       {hasDocuments ? (
         <DocumentGrid>
           {filtered.map((document, index) => (

@@ -5,16 +5,22 @@ interface NavItemProps {
   title?: string;
   endpoint: string;
   children?: ReactNode;
+  className?: string;
   onClick?: () => void;
 }
 
-const NavItem = ({ title, endpoint, children, onClick }: NavItemProps) => {
+const NavItem = ({
+  title,
+  endpoint,
+  children,
+  className,
+  onClick,
+}: NavItemProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const isActive =
-    location.pathname === endpoint ||
-    location.pathname.startsWith(`/dashboard/${endpoint}`);
+    location.pathname === endpoint || location.pathname.startsWith(endpoint);
 
   return (
     <div
@@ -24,10 +30,10 @@ const NavItem = ({ title, endpoint, children, onClick }: NavItemProps) => {
         isActive
           ? 'bg-gray-300 dark:bg-gray-700 font-bold'
           : 'hover:bg-gray-300 hover:dark:bg-gray-600'
-      }`}
+      } ${className}`}
       onClick={() => {
         onClick?.();
-        navigate(`/dashboard/${endpoint}`);
+        navigate(endpoint);
       }}
     >
       {title && <span>{title}</span>}

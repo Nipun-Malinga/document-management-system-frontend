@@ -10,15 +10,16 @@ import Quick from '@/features/documents/layouts/Quick';
 import { ContentView, Dashboard, Editor, Home } from '@/pages';
 import { createBrowserRouter } from 'react-router-dom';
 import { EditorContainer } from '../features/editor';
+import Main from '@/pages/Main';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <Main />,
     children: [
       {
         index: true,
-        element: '',
+        element: <Home />,
       },
       {
         path: 'auth/signin',

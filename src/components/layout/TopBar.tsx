@@ -3,7 +3,6 @@ import { HiDotsVertical } from 'react-icons/hi';
 import { IoMenu } from 'react-icons/io5';
 import DarkThemeButton from '../common/DarkThemeButton';
 import Notification from '../common/Notification';
-import SearchInput from '../common/SearchInput';
 import UserDropdown from '../common/UserDropdown';
 import Button from '../common/Button';
 
@@ -11,21 +10,13 @@ const TopBar = () => {
   const { toggle } = useAside();
 
   return (
-    <div className='w-full flex flex-row justify-between items-center gap-3 md:gap-4'>
+    <div className='w-full flex flex-row justify-end items-center gap-3 md:gap-4'>
       <div className='md:hidden shrink-0'>
         <Button
           type='button'
           icon={IoMenu}
           onClick={toggle}
           className='hover:bg-gray-100 dark:hover:bg-gray-800'
-        />
-      </div>
-
-      <div className='flex-1 max-w-3xl mx-auto'>
-        <SearchInput
-          output={(value) => {
-            console.log(value);
-          }}
         />
       </div>
 
