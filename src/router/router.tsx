@@ -8,14 +8,30 @@ import {
 } from '@/features/documents';
 import Quick from '@/features/documents/layouts/Quick';
 import { ContentView, Dashboard, Editor, Home } from '@/pages';
-import { createBrowserRouter } from 'react-router-dom';
-import { EditorContainer } from '../features/editor';
+import {
+  createBrowserRouter,
+  isRouteErrorResponse,
+  useRouteError,
+} from 'react-router-dom';
+import { EditorContainer } from '@/features/editor';
 import Main from '@/pages/Main';
+import Error from '@/pages/errors/Error';
+
+function RootErrorBoundary() {
+  let error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return <Error error={error.data} status={error.status} />;
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
+}
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Main />,
+    ErrorBoundary: RootErrorBoundary,
     children: [
       {
         index: true,
