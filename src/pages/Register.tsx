@@ -13,9 +13,9 @@ import {
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import AuthContainer from '../common/AuthContainer';
-import Button from '../common/Button';
-import Error from '../common/Error';
+import AuthContainer from '../components/common/AuthContainer';
+import Button from '../components/common/Button';
+import Error from '../components/common/Error';
 import {
   Field,
   FieldDescription,
@@ -25,8 +25,8 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from '../ui/field';
-import { Input } from '../ui/input';
+} from '../components/ui/field';
+import { Input } from '../components/ui/input';
 
 const Register = () => {
   const navigate = useNavigate();

@@ -1,4 +1,3 @@
-import { Register, SecureRoute, SignIn } from '@/components';
 import {
   DocumentViewLayer,
   MainView,
@@ -15,7 +14,10 @@ import {
 } from 'react-router-dom';
 import { EditorContainer } from '@/features/editor';
 import Main from '@/pages/Main';
-import Error from '@/pages/errors/Error';
+import Error from '@/pages/Error';
+import SignIn from '@/pages/SignIn';
+import Register from '@/pages/Register';
+import { SecureRoute } from '@/components';
 
 function RootErrorBoundary() {
   let error = useRouteError();
