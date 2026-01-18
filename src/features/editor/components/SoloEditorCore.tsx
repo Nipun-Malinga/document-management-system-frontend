@@ -3,7 +3,7 @@ import {
   commonEditorConfigs,
   editorExtensions,
 } from '../configs/EditorConfigs';
-import MainEditor from './CoreEditor';
+import CoreEditor from './CoreEditor';
 import Toolbar from './Toolbar';
 
 interface Props {
@@ -20,7 +20,7 @@ const SoloEditorCore = ({ content, documentId, branchId }: Props) => {
   });
 
   return (
-    <MainEditor
+    <CoreEditor
       enableAutoSaver={true}
       editor={editor}
       documentId={documentId}
@@ -34,7 +34,7 @@ const SoloEditorCore = ({ content, documentId, branchId }: Props) => {
         onUndo={editor.chain().focus().undo().run}
         disabled={false}
       />
-    </MainEditor>
+    </CoreEditor>
   );
 };
 

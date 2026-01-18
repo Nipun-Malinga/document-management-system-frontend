@@ -1,7 +1,7 @@
 import Collaboration from '@tiptap/extension-collaboration';
 import { useEditor } from '@tiptap/react';
 import { useMemo } from 'react';
-// import { IndexeddbPersistence } from 'y-indexeddb';
+  // import { IndexeddbPersistence } from 'y-indexeddb';
 import { useProvider } from '@/hooks/document/collaboration';
 import { useUser } from '@/hooks/user';
 import { CollaborationCaret } from '@tiptap/extension-collaboration-caret';

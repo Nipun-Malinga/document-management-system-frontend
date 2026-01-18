@@ -22,7 +22,7 @@ const Templates = () => {
   const createDocument = (
     templateId: number,
     name: string,
-    content: Content
+    content: Content,
   ) => {
     setTemplate({
       id: templateId,
@@ -35,7 +35,7 @@ const Templates = () => {
       templateId: templateId,
     }).then(
       (doc) =>
-        doc && navigate(`/document/${doc.id}/branch/${doc.mainBranchId}/edit`)
+        doc && navigate(`/document/${doc.id}/branch/${doc.mainBranchId}/edit`),
     );
   };
 
@@ -56,7 +56,7 @@ const Templates = () => {
                   createDocument(
                     template.id,
                     template.title,
-                    convertToTiptapContent(template.template)
+                    convertToTiptapContent(template.template),
                   );
                 }}
                 className='pl-4 select-none basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/6'
@@ -67,6 +67,7 @@ const Templates = () => {
                     <div className='absolute inset-0 flex flex-col p-0.5 overflow-hidden'>
                       <div className=' text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 pb-4 overflow-hidden'>
                         <ContentRenderer
+                          type='secondary'
                           content={convertToTiptapContent(template.template)}
                         />
                       </div>

@@ -1,12 +1,17 @@
+import { useUser } from '@/hooks/user';
 import useAside from '@/states/useAside';
+import { UserStar } from 'lucide-react';
 import { IoMenu } from 'react-icons/io5';
+import Button from '../common/Button';
 import DarkThemeButton from '../common/DarkThemeButton';
 import Notification from '../common/Notification';
 import UserDropdown from '../common/UserDropdown';
-import Button from '../common/Button';
+import { useNavigate } from 'react-router-dom';
 
 const TopBar = () => {
   const { toggle } = useAside();
+  const navigate = useNavigate();
+  const user = useUser();
 
   return (
     <div className='w-full flex flex-row justify-end items-center gap-3 md:gap-4'>
@@ -23,12 +28,14 @@ const TopBar = () => {
         <Notification />
         <DarkThemeButton />
         <UserDropdown />
-        {/* <Button
-          type='button'
-          icon={HiDotsVertical}
-          onClick={() => {}}
-          className='hover:bg-gray-100 dark:hover:bg-gray-800'
-        /> */}
+        {user?.role === 'ADMIN' && (
+          <Button
+            type='button'
+            icon={UserStar}
+            onClick={() => navigate('/admin/dashboard')}
+            className='hover:bg-gray-100 dark:hover:bg-gray-800'
+          />
+        )}
       </div>
     </div>
   );

@@ -1,19 +1,15 @@
 import { Container } from '@/components';
-import type { ReactNode } from 'react';
 import { InfoPopup } from '../components/info';
 import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
+import { Outlet } from 'react-router-dom';
 
-interface Props {
-  children: ReactNode;
-}
-
-const DocumentViewLayer = ({ children }: Props) => {
+const DocumentViewLayer = () => {
   const { documentId } = useDocumentInfoPopUp();
 
   return (
     <Container>
       <InfoPopup documentId={documentId} />
-      {children}
+      <Outlet/>
     </Container>
   );
 };

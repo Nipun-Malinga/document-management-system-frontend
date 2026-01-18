@@ -3,7 +3,7 @@ import InfoTabs from './InfoTabs';
 
 const InfoDrawer = () => {
   return (
-    <Drawer title='Version Information'>
+    <Drawer title='Advanced'>
       <InfoTabs />
     </Drawer>
   );

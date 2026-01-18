@@ -21,10 +21,8 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
 
 const Collaborators = ({ documentId }: Props) => {
   const { data } = useCollaborators(documentId);
-
   return (
     <div className='space-y-6'>
-      {/* Current Collaborators Section */}
       {data?.data && data.data.length > 0 && (
         <div className='bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm'>
           <div className='flex items-center justify-between mb-4'>

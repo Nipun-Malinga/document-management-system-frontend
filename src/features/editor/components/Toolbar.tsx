@@ -1,8 +1,10 @@
 import type { Editor } from '@tiptap/core';
 import { useEditorState } from '@tiptap/react';
-import { useCallback, useState } from 'react';
-import { FaRedo, FaUndo, FaUnlink } from 'react-icons/fa';
+import { useCallback, useEffect, useState } from 'react';
 import {
+  FaRedo,
+  FaUndo,
+  FaUnlink,
   FaAlignCenter,
   FaAlignJustify,
   FaAlignLeft,
@@ -18,7 +20,7 @@ import {
   FaPalette,
   FaStrikethrough,
   FaUnderline,
-} from 'react-icons/fa6';
+} from 'react-icons/fa';
 import { MdFormatClear } from 'react-icons/md';
 import ToolButton from './ToolButton';
 
@@ -31,6 +33,18 @@ interface Props {
   disabled: boolean;
 }
 
+const COLORS = [
+  '#FFFFFF',
+  '#000000',
+  '#FF0000',
+  '#00FF00',
+  '#0000FF',
+  '#FFFF00',
+  '#FF00FF',
+  '#00FFFF',
+  '#FFA500',
+];
+
 const Toolbar = ({
   editor,
   canUndo,
@@ -42,85 +56,67 @@ const Toolbar = ({
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showHighlightPicker, setShowHighlightPicker] = useState(false);
 
+  /** Close popovers when toolbar is disabled */
+  useEffect(() => {
+    if (disabled) {
+      setShowColorPicker(false);
+      setShowHighlightPicker(false);
+    }
+  }, [disabled]);
+
   const editorState = useEditorState({
-    editor: editor,
+    editor,
     selector(ctx) {
       return {
-        isBold: ctx.editor.isActive('bold'),
-        isItalic: ctx.editor.isActive('italic'),
-        isUnderline: ctx.editor.isActive('underline'),
-        isStrike: ctx.editor.isActive('strike'),
-        isCode: ctx.editor.isActive('code'),
-        isBulletList: ctx.editor.isActive('bulletList'),
-        isOrderedList: ctx.editor.isActive('orderedList'),
-        isBlockquote: ctx.editor.isActive('blockquote'),
-        isCodeBlock: ctx.editor.isActive('codeBlock'),
-        isH1: ctx.editor.isActive('heading', { level: 1 }),
-        isH2: ctx.editor.isActive('heading', { level: 2 }),
-        isH3: ctx.editor.isActive('heading', { level: 3 }),
-        isAlignLeft: ctx.editor.isActive({ textAlign: 'left' }),
-        isAlignCenter: ctx.editor.isActive({ textAlign: 'center' }),
-        isAlignRight: ctx.editor.isActive({ textAlign: 'right' }),
-        isAlignJustify: ctx.editor.isActive({ textAlign: 'justify' }),
+        bold: ctx.editor.isActive('bold'),
+        italic: ctx.editor.isActive('italic'),
+        underline: ctx.editor.isActive('underline'),
+        strike: ctx.editor.isActive('strike'),
+        code: ctx.editor.isActive('code'),
+        bullet: ctx.editor.isActive('bulletList'),
+        ordered: ctx.editor.isActive('orderedList'),
+        left: ctx.editor.isActive({ textAlign: 'left' }),
+        center: ctx.editor.isActive({ textAlign: 'center' }),
+        right: ctx.editor.isActive({ textAlign: 'right' }),
+        justify: ctx.editor.isActive({ textAlign: 'justify' }),
       };
     },
   });
 
-  const colors = [
-    '#FFFFFF',
-    '#000000',
-    '#FF0000',
-    '#00FF00',
-    '#0000FF',
-    '#FFFF00',
-    '#FF00FF',
-    '#00FFFF',
-    '#FFA500',
-  ];
+  const addImage = useCallback(() => {
+    const url = window.prompt('Image URL');
+    if (url) editor.chain().focus().setImage({ src: url }).run();
+  }, [editor]);
 
   const setLink = () => {
-    const url = window.prompt('Enter URL:');
+    const url = window.prompt('Enter URL');
     if (url) editor.chain().focus().setLink({ href: url }).run();
   };
 
-  const addImage = useCallback(() => {
-    const url = window.prompt('URL');
-
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
-
   return (
-    <div className='flex flex-col md:flex-row justify-between items-center border-b border-gray-200 dark:border-gray-700'>
+    <div className="relative overflow-visible border-b border-gray-200 dark:border-gray-700">
       <div
-        className={`flex flex-wrap justify-center items-center gap-2 my-2 py-3 ${
-          disabled
-            ? 'pointer-events-none opacity-50'
-            : 'pointer-events-auto opacity-100'
-        }`}
+        className={`
+          flex items-center gap-2
+          px-3 py-2
+          overflow-x-auto whitespace-nowrap
+          scrollbar-thin
+          md:flex-wrap md:overflow-visible
+          ${disabled ? 'pointer-events-none opacity-50' : ''}
+        `}
       >
         {/* History */}
         {onUndo && onRedo && (
-          <div className='flex items-center gap-1 pr-2 border-r border-gray-300 dark:border-gray-600'>
+          <div className="flex items-center gap-1 md:border-r md:pr-2">
             <ToolButton icon={FaUndo} onClick={onUndo} disabled={!canUndo} />
             <ToolButton icon={FaRedo} onClick={onRedo} disabled={!canRedo} />
           </div>
         )}
 
-        {/* Headings */}
-        <div className='hidden md:flex items-center gap-2 pr-2 border-r border-gray-300 dark:border-gray-600'>
+        {/* Headings (space reserved to avoid jump) */}
+        <div className="hidden md:flex w-[140px] md:border-r md:pr-2">
           <select
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === 'p') {
-                editor.chain().focus().setParagraph().run();
-              } else {
-                const level = parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6;
-                editor.chain().focus().toggleHeading({ level: level }).run();
-              }
-            }}
-            className='px-3 py-1.5 text-sm font-medium bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-gray-700 dark:text-gray-300 transition-all duration-150 hover:border-gray-400 dark:hover:border-gray-500'
+            className="w-full px-2 py-1.5 text-sm rounded-lg border dark:bg-gray-900"
             value={
               editor.isActive('heading', { level: 1 })
                 ? '1'
@@ -130,153 +126,101 @@ const Toolbar = ({
                 ? '3'
                 : 'p'
             }
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === 'p') {
+                editor.chain().focus().setParagraph().run();
+              } else {
+                editor.chain().focus().toggleHeading({ level: +v as 1 | 2 | 3 }).run();
+              }
+            }}
           >
-            <option value='p'>Paragraph</option>
-            <option value='1'>Heading 1</option>
-            <option value='2'>Heading 2</option>
-            <option value='3'>Heading 3</option>
+            <option value="p">Paragraph</option>
+            <option value="1">Heading 1</option>
+            <option value="2">Heading 2</option>
+            <option value="3">Heading 3</option>
           </select>
         </div>
 
-        {/* Text Formatting */}
-        <div className='flex items-center gap-1 pr-2 border-r border-gray-300 dark:border-gray-600'>
-          <ToolButton
-            icon={FaBold}
-            onClick={() => editor.chain().focus().toggleBold().run()}
-            active={editorState.isBold}
-          />
-          <ToolButton
-            icon={FaItalic}
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-            active={editorState.isItalic}
-          />
-          <ToolButton
-            icon={FaUnderline}
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
-            active={editorState.isUnderline}
-          />
-          <ToolButton
-            icon={FaStrikethrough}
-            onClick={() => editor.chain().focus().toggleStrike().run()}
-            active={editorState.isStrike}
-          />
-          <ToolButton
-            icon={FaCode}
-            onClick={() => editor.chain().focus().toggleCode().run()}
-            active={editorState.isCode}
-          />
+        {/* Text formatting */}
+        <div className="flex items-center gap-1 md:border-r md:pr-2">
+          <ToolButton icon={FaBold} active={editorState.bold} onClick={() => editor.chain().focus().toggleBold().run()} />
+          <ToolButton icon={FaItalic} active={editorState.italic} onClick={() => editor.chain().focus().toggleItalic().run()} />
+          <ToolButton icon={FaUnderline} active={editorState.underline} onClick={() => editor.chain().focus().toggleUnderline().run()} />
+          <ToolButton icon={FaStrikethrough} active={editorState.strike} onClick={() => editor.chain().focus().toggleStrike().run()} />
+          <ToolButton icon={FaCode} active={editorState.code} onClick={() => editor.chain().focus().toggleCode().run()} />
         </div>
 
         {/* Colors */}
-        <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300 dark:border-gray-600 relative'>
-          <div className='relative'>
-            <ToolButton
-              icon={FaHighlighter}
-              onClick={() => {
-                setShowHighlightPicker(!showHighlightPicker);
-                setShowColorPicker(false);
-              }}
-            />
-            {showHighlightPicker && (
-              <div className='absolute w-36 top-full mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-10 grid grid-cols-4 gap-2'>
-                {colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => {
-                      editor.chain().focus().setColor(color).run();
-                      setShowHighlightPicker(false);
-                    }}
-                    className='w-7 h-7 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:scale-110 hover:border-blue-500 transition-all duration-150 cursor-pointer shadow-sm'
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-          <div className='relative'>
-            <ToolButton
-              icon={FaPalette}
-              onClick={() => {
-                setShowColorPicker(!showColorPicker);
-                setShowHighlightPicker(false);
-              }}
-            />
-            {showColorPicker && (
-              <div className='absolute w-36 top-full mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-10 grid grid-cols-4 gap-2'>
-                {colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => {
-                      editor.chain().focus().setBackgroundColor(color).run();
-                      setShowColorPicker(false);
-                    }}
-                    className='w-7 h-7 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:scale-110 hover:border-blue-500 transition-all duration-150 cursor-pointer shadow-sm'
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="hidden md:flex items-center gap-1 md:border-r md:pr-2 relative">
           <ToolButton
-            icon={MdFormatClear}
-            onClick={() => editor.chain().focus().unsetAllMarks().run()}
+            icon={FaHighlighter}
+            onClick={() => {
+              setShowHighlightPicker((v) => !v);
+              setShowColorPicker(false);
+            }}
           />
+          {showHighlightPicker && (
+            <div className="absolute right-0 md:left-0 top-full mt-2 z-50 grid grid-cols-4 gap-2 p-3 w-36 rounded-xl bg-white dark:bg-gray-800 border shadow-xl">
+              {COLORS.map((c) => (
+                <button
+                  key={c}
+                  className="w-7 h-7 rounded-md border"
+                  style={{ backgroundColor: c }}
+                  onClick={() => {
+                    editor.chain().focus().setColor(c).run();
+                    setShowHighlightPicker(false);
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          <ToolButton
+            icon={FaPalette}
+            onClick={() => {
+              setShowColorPicker((v) => !v);
+              setShowHighlightPicker(false);
+            }}
+          />
+          {showColorPicker && (
+            <div className="absolute right-0 md:left-0 top-full mt-2 z-50 grid grid-cols-4 gap-2 p-3 w-36 rounded-xl bg-white dark:bg-gray-800 border shadow-xl">
+              {COLORS.map((c) => (
+                <button
+                  key={c}
+                  className="w-7 h-7 rounded-md border"
+                  style={{ backgroundColor: c }}
+                  onClick={() => {
+                    editor.chain().focus().setBackgroundColor(c).run();
+                    setShowColorPicker(false);
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          <ToolButton icon={MdFormatClear} onClick={() => editor.chain().focus().unsetAllMarks().run()} />
         </div>
 
-        {/* Lists & Quotes */}
-        <div className='flex items-center gap-1 pr-2 border-r border-gray-300 dark:border-gray-600'>
-          <ToolButton
-            icon={FaListUl}
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            active={editorState.isBulletList}
-          />
-          <ToolButton
-            icon={FaListOl}
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            active={editorState.isOrderedList}
-          />
+        {/* Lists */}
+        <div className="flex items-center gap-1 md:border-r md:pr-2">
+          <ToolButton icon={FaListUl} active={editorState.bullet} onClick={() => editor.chain().focus().toggleBulletList().run()} />
+          <ToolButton icon={FaListOl} active={editorState.ordered} onClick={() => editor.chain().focus().toggleOrderedList().run()} />
         </div>
 
-        {/* Links & Images */}
-        <div className='hidden md:flex items-center gap-1 pr-2 border-r border-gray-300 dark:border-gray-600'>
+        {/* Links & images */}
+        <div className="hidden md:flex items-center gap-1 md:border-r md:pr-2">
           <ToolButton icon={FaLink} onClick={setLink} />
-          <ToolButton
-            icon={FaUnlink}
-            onClick={() => editor.chain().focus().unsetLink().run()}
-          />
+          <ToolButton icon={FaUnlink} onClick={() => editor.chain().focus().unsetLink().run()} />
           <ToolButton icon={FaImage} onClick={addImage} />
         </div>
 
         {/* Alignment */}
-        <div className='flex items-center gap-1'>
-          <ToolButton
-            icon={FaAlignLeft}
-            onClick={() => {
-              editor.chain().focus().setTextAlign('left').run();
-            }}
-            active={editorState.isAlignLeft}
-          />
-          <ToolButton
-            icon={FaAlignCenter}
-            onClick={() => {
-              editor.chain().focus().setTextAlign('center').run();
-            }}
-            active={editorState.isAlignCenter}
-          />
-          <ToolButton
-            icon={FaAlignRight}
-            onClick={() => {
-              editor.chain().focus().setTextAlign('right').run();
-            }}
-            active={editorState.isAlignRight}
-          />
-          <ToolButton
-            icon={FaAlignJustify}
-            onClick={() => {
-              editor.chain().focus().setTextAlign('justify').run();
-            }}
-            active={editorState.isAlignJustify}
-          />
+        <div className="flex items-center gap-1">
+          <ToolButton icon={FaAlignLeft} active={editorState.left} onClick={() => editor.chain().focus().setTextAlign('left').run()} />
+          <ToolButton icon={FaAlignCenter} active={editorState.center} onClick={() => editor.chain().focus().setTextAlign('center').run()} />
+          <ToolButton icon={FaAlignRight} active={editorState.right} onClick={() => editor.chain().focus().setTextAlign('right').run()} />
+          <ToolButton icon={FaAlignJustify} active={editorState.justify} onClick={() => editor.chain().focus().setTextAlign('justify').run()} />
         </div>
       </div>
     </div>

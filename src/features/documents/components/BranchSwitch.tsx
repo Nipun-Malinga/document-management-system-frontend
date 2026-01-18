@@ -98,7 +98,9 @@ const BranchSwitch = ({ documentId }: Props) => {
                     onClick={() => {
                       setOpen(false);
                       setBranchName(branch.branchName);
-                      navigate('');
+                      navigate(
+                        `/document/${branch.documentId}/branch/${branch.id}/edit`,
+                      );
                     }}
                     className={`w-full text-left px-3 py-2 my-0.5 rounded-md transition-colors ${
                       isActive

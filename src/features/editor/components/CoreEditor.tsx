@@ -10,7 +10,7 @@ interface Props {
   editor: Editor;
   documentId: string;
   branchId: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const CoreEditor = ({
@@ -25,7 +25,7 @@ const CoreEditor = ({
 
   return (
     <EditorContext.Provider value={providerValue}>
-      <div className='flex flex-col h-screen overflow-hidden bg-gray-50 dark:bg-gray-950'>
+      <div className='flex min-h-dvh flex-col bg-gray-50 dark:bg-gray-950'>
         <TopToolBar
           documentTitle={data?.title ?? 'Untitled Document'}
           enableAutoSaver={enableAutoSaver}
@@ -34,14 +34,26 @@ const CoreEditor = ({
           branchId={branchId}
         />
 
-        {children}
+        {children && (
+          <div className='shrink-0 border-b border-gray-200 dark:border-gray-800'>
+            {children}
+          </div>
+        )}
 
-        <div className='flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent'>
-          <div className='max-w-4xl mx-auto px-4 py-8 md:px-8 md:py-12'>
-            <div className='bg-white dark:bg-gray-800 rounded-xl shadow-xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden'>
+        <div className='flex-1 min-h-0 overflow-y-auto scrollbar-thin'>
+          <div className='mx-auto max-w-4xl px-4 py-6 sm:px-8 sm:py-10'>
+            <div className='rounded-xl border bg-white shadow-lg dark:bg-gray-800'>
               <EditorContent
                 editor={editor}
-                className='prose prose-sm sm:prose lg:prose-lg dark:prose-invert max-w-none outline-none px-8 py-12 md:px-16 md:py-16 min-h-[calc(150vh-16rem)]'
+                role='textbox'
+                aria-label='Document editor'
+                className='
+              prose prose-sm sm:prose lg:prose-lg
+              dark:prose-invert
+              max-w-none
+              px-4 py-6 sm:px-8 sm:py-10 md:px-16 md:py-16
+              outline-none
+            '
               />
             </div>
           </div>
