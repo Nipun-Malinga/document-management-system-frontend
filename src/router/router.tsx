@@ -1,3 +1,4 @@
+import { SecureRoute } from '@/components';
 import {
   DocumentViewLayer,
   MainView,
@@ -6,18 +7,18 @@ import {
   Trash,
 } from '@/features/documents';
 import Quick from '@/features/documents/layouts/Quick';
+import { EditorContainer } from '@/features/editor';
 import { ContentView, Dashboard, Editor, Home } from '@/pages';
+import AdminSignin from '@/pages/admin/AdminSignin';
+import Error from '@/pages/Error';
+import Main from '@/pages/Main';
+import Register from '@/pages/Register';
+import SignIn from '@/pages/SignIn';
 import {
   createBrowserRouter,
   isRouteErrorResponse,
   useRouteError,
 } from 'react-router-dom';
-import { EditorContainer } from '@/features/editor';
-import Main from '@/pages/Main';
-import Error from '@/pages/Error';
-import SignIn from '@/pages/SignIn';
-import Register from '@/pages/Register';
-import { SecureRoute } from '@/components';
 
 function RootErrorBoundary() {
   let error = useRouteError();
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: 'auth/registration',
         element: <Register />,
+      },
+      {
+        path: '/admin/auth/signin',
+        element: <AdminSignin />,
       },
     ],
   },
@@ -99,6 +104,19 @@ const router = createBrowserRouter([
       {
         path: ':documentId/branch/:branchId/edit',
         element: <EditorContainer />,
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: (
+      <SecureRoute navigation='/admin/auth/signin' type='ADMIN'>
+        <Main />
+      </SecureRoute>
+    ),
+    children: [
+      {
+        path: 'dashboard',
       },
     ],
   },

@@ -1,5 +1,4 @@
 import useAside from '@/states/useAside';
-import { HiDotsVertical } from 'react-icons/hi';
 import { IoMenu } from 'react-icons/io5';
 import DarkThemeButton from '../common/DarkThemeButton';
 import Notification from '../common/Notification';
@@ -24,12 +23,12 @@ const TopBar = () => {
         <Notification />
         <DarkThemeButton />
         <UserDropdown />
-        <Button
+        {/* <Button
           type='button'
           icon={HiDotsVertical}
           onClick={() => {}}
           className='hover:bg-gray-100 dark:hover:bg-gray-800'
-        />
+        /> */}
       </div>
     </div>
   );
