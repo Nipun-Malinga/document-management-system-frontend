@@ -1,6 +1,7 @@
 import { useRegistration, useUser } from '@/hooks/user';
 import { registerSchema, type TRegisterSchema } from '@/types/Register';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { isAxiosError } from 'axios';
 import {
   Eye,
   EyeOff,
@@ -12,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import AuthContainer from '../components/common/AuthContainer';
 import Button from '../components/common/Button';
 import Error from '../components/common/Error';
@@ -33,7 +34,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const { mutate, isPending } = useRegistration();
+  const { mutateAsync, isPending } = useRegistration();
   const user = useUser();
 
   const {
@@ -45,19 +46,25 @@ const Register = () => {
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<TRegisterSchema> = (data) =>
-    mutate(data, {
-      onSuccess: () => navigate('/auth/signin'),
-      onError: (error: any) => {
-        const status = error.response?.status;
+  const onSubmit: SubmitHandler<TRegisterSchema> = async (data) => {
+    setApiError(null);
 
-        if (status === 409)
-          setApiError('Email already registered in the system.');
-        else setApiError('Something went wrong please try again.');
-      },
-    });
+    try {
+      await mutateAsync(data);
+    } catch (error) {
+      const status = isAxiosError(error) ? error.response?.status : undefined;
 
-  if (user) navigate('/dashboard/home');
+      if (status === 409)
+        setApiError('Email already registered in the system.');
+      else setApiError('Something went wrong please try again.');
+
+      return;
+    }
+
+    await navigate('/auth/signin', { replace: true });
+  };
+
+  if (user) return <Navigate to='/dashboard/home' replace />;
   return (
     <AuthContainer>
       <div className='grid md:grid-cols-2 min-h-[700px]'>
