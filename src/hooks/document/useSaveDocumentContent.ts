@@ -1,4 +1,4 @@
-import type { ContentRequest } from '@/models/Content';
+import type { ContentRequest, ContentResponse } from '@/models/Content';
 import APIService from '@/services/apiService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -21,10 +21,8 @@ const useSaveDocumentContent = (
     mutationKey: queryKey,
     mutationFn: (content: string) => mutationFn(content),
 
-    onSuccess: () => {
-      queryClient.setQueryData(queryKey, (content: string) => {
-        return { content, completed: true };
-      });
+    onSuccess: (_response, content) => {
+      queryClient.setQueryData<ContentResponse>(queryKey, { content });
     },
     onError: () => {
       console.error('Failed to update document content');
