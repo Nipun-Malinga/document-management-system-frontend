@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { useProvider } from '@/hooks/document/collaboration';
 import { useUser } from '@/hooks/user';
 import { CollaborationCaret } from '@tiptap/extension-collaboration-caret';
-import * as Y from 'yjs';
+import type { HocuspocusProvider } from '@hocuspocus/provider';
 import {
   commonEditorConfigs,
   editorExtensions,
@@ -19,12 +19,31 @@ interface Props {
   editable: boolean;
 }
 
-const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
-  // Unique key to identify the document
-  const documentKey: string = `documents/${documentId}/branches/${branchId}`;
+interface EditorProps extends Props {
+  provider: HocuspocusProvider;
+}
 
-  const ydoc = useMemo(() => new Y.Doc(), []);
-  const provider = useProvider(documentKey, ydoc);
+const CollaborativeEditorCore = (props: Props) => {
+  const documentKey = `documents/${props.documentId}/branches/${props.branchId}`;
+  const provider = useProvider(documentKey);
+
+  if (!provider) return null;
+
+  return (
+    <CollaborativeEditor
+      key={provider.document.guid}
+      {...props}
+      provider={provider}
+    />
+  );
+};
+
+const CollaborativeEditor = ({
+  documentId,
+  branchId,
+  editable,
+  provider,
+}: EditorProps) => {
   const user = useUser();
 
   // Generate a random color for the user
@@ -36,14 +55,11 @@ const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
     [user?.username]
   );
 
-  // For offline support
-  // new IndexeddbPersistence(documentKey, ydoc);
-
   const editor = useEditor({
     extensions: [
       ...editorExtensions(true),
       Collaboration.configure({
-        document: ydoc,
+        document: provider.document,
       }),
       CollaborationCaret.configure({
         provider: provider,
@@ -74,4 +90,4 @@ const CollaborativeEditor = ({ documentId, branchId, editable }: Props) => {
   );
 };
 
-export default CollaborativeEditor;
+export default CollaborativeEditorCore;
