@@ -13,6 +13,7 @@ export const SoloEditor = () => {
   return (
     <EditorContainer>
       <SoloEditorCore
+        key={`${documentId}/${branchId}`}
         documentId={documentId}
         branchId={branchId}
         content={convertToTiptapContent(data.content)}

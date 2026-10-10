@@ -13,6 +13,7 @@ const CollaborativeEditor = () => {
   return (
     <EditorContainer>
       <CollaborativeEditorCore
+        key={`${documentId}/${branchId}`}
         documentId={documentId}
         branchId={branchId}
         editable={data.permission !== 'READ_ONLY'}
