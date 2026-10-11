@@ -18,8 +18,8 @@ export const quickAccessBreadcrumb: Link[] = [
 export const resentsBreadcrumb: Link[] = [
   ...mainViewBreadcrumb,
   {
-    title: 'Quick Access',
-    endpoint: '/quick',
+    title: 'Recents',
+    endpoint: '/dashboard/resents',
   },
 ];
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useSoloActionState from '../../../persistence/useSoloActionState';
-import { actionError } from '../../../persistence/actionError';
+import { applyFormError } from '@/utils/formErrors';
 import { Button } from '@/components';
 import {
   Dialog,
@@ -39,6 +39,8 @@ const CreateBranchForm = () => {
     register,
     handleSubmit,
     reset,
+    setError: setFieldError,
+    clearErrors,
     formState: { errors, isValid },
   } = useForm<TCreateBranchSchema>({
     resolver: zodResolver(createBranchSchema),
@@ -47,9 +49,9 @@ const CreateBranchForm = () => {
 
   const onSubmit = async (data: TCreateBranchSchema) => {
     if (!canWrite || isPending || safety.disabled) return;
-    setError('');
+    setError(''); clearErrors();
     try { await mutateAsync(data); reset(); }
-    catch (error) { setError(actionError(error)); }
+    catch (error) { setError(applyFormError(error, setFieldError, ['branchName'])); }
   };
 
   if (!canWrite) return null;
@@ -71,10 +73,11 @@ const CreateBranchForm = () => {
               <FieldLegend>Create a new branch</FieldLegend>
 
               <Field>
-                <FieldLabel>Branch name</FieldLabel>
+                <FieldLabel htmlFor='snapshot-branchName'>Branch name</FieldLabel>
                 <div className='relative'>
                   <GitBranchIcon className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                   <Input
+                    id='snapshot-branchName'
                     type='text'
                     className='pl-10'
                     {...register('branchName')}

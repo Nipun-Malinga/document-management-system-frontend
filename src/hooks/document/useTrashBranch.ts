@@ -1,7 +1,10 @@
+import { refreshDocumentMutation } from './documentMutationCache';
+import { getSession } from '@/states/sessionStore';
 import APIService from '@/services/apiService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useTrashBranch = (documentId: string, branchId: string) => {
+  const epoch = getSession().epoch;
   const service = new APIService(
     `/documents/trash/${documentId}/branches/${branchId}`
   );
@@ -9,15 +12,11 @@ const useTrashBranch = (documentId: string, branchId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    retry: false,
     mutationKey: ['trashBranch', branchId],
     mutationFn: mutateFn,
-    onSuccess: () => {
-      const keys = [
-        ['branches', documentId],
-        ['trashed_branches_own'],
-        ['trashBranchCount'],
-      ];
-      keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
+    onSuccess: async () => {
+      await refreshDocumentMutation(queryClient, 'trashBranch', documentId, epoch);
     },
   });
 };

@@ -11,13 +11,13 @@ export type SignInResponse = {
 
 export const signInSchema = z.object({
   email: z
-    .email()
-    .nonempty('Email cannot be empty')
-    .max(30, 'Email cannot have more than 30 characters'),
+    .email({ pattern: z.regexes.html5Email })
+    .nonempty('Email cannot be empty'),
   password: z
     .string()
     .min(8, 'Password must have at least 8 characters')
-    .max(20, 'Password cannot have more than 20 characters'),
+    .max(20, 'Password cannot have more than 20 characters')
+    .refine((value) => value.trim().length > 0, 'Password cannot be blank'),
 });
 
 export type SignInSchema = z.infer<typeof signInSchema>;

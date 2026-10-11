@@ -1,4 +1,5 @@
-import { assertSession, getSession } from '@/states/sessionStore';
+import { refreshDocumentMutation } from './documentMutationCache';
+import { getSession } from '@/states/sessionStore';
 import { createSoloSnapshot } from '@/features/editor/persistence/documentWorkflows';
 import type { BranchRequest } from '@/models/Branch';
 import APIService from '@/services/apiService';
@@ -18,9 +19,7 @@ const useCreateBranch = (documentId: string, branchId: string) => {
     mutationFn: mutateFn,
     retry: false,
     onSuccess: async () => {
-      assertSession(epoch);
-      const keys = [['branches', documentId]];
-      await Promise.all(keys.map((key) => queryClient.invalidateQueries({ queryKey: key })));
+      await refreshDocumentMutation(queryClient, 'createBranch', documentId, epoch);
     },
   });
 };

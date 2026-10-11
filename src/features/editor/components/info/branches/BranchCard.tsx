@@ -27,7 +27,7 @@ const BranchCard = ({ branch }: Props) => {
   const { branchId } = useParams();
   const navigate = useNavigate();
   const { canWrite, isOwner } = useDocumentAccess(branch.documentId, branchId ?? '');
-  const { mutate, isPending } = useTrashBranch(branch.documentId, branch.id);
+  const { mutateAsync, isPending } = useTrashBranch(branch.documentId, branch.id);
   const isCurrentBranch = branch.id === branchId;
   const isMainBranch = branch.branchName.toLowerCase() === 'main';
 
@@ -116,7 +116,7 @@ const BranchCard = ({ branch }: Props) => {
               title='Delete Branch?'
               description={''}
               action='Delete'
-              onClick={() => { if (isOwner) mutate(); }}
+              onClick={async () => { if (isOwner) await mutateAsync(); }}
             />
           )}
         </div>

@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button';
+import { collectionErrorMessage } from '@/utils/collectionUtils';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import SoloEditor from './SoloEditor';
@@ -13,11 +15,11 @@ const EditorMode = ({ shared }: { shared: boolean }) => {
 
 const EditorContainer = () => {
   const { documentId, branchId } = useParams();
-  const { data, isError } = useDocument(documentId ?? '');
+  const { data, isError, error, refetch } = useDocument(documentId ?? '');
   return <>
     <EditorNavigationGuard />
     {data ? <EditorMode key={`${documentId}/${branchId}`} shared={data.shared} /> :
-      <p role={isError ? 'alert' : 'status'}>{isError ? 'Unable to load this document.' : 'Loading document…'}</p>}
+      isError ? <div role='alert'><p>{collectionErrorMessage(error, 'this document')}</p><Button onClick={() => { void refetch(); }}>Retry document</Button></div> : <p role='status'>Loading document…</p>}
   </>;
 };
 export default EditorContainer;

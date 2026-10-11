@@ -1,3 +1,4 @@
+import { actionError } from '@/features/editor/persistence/actionError';
 import { FaCircleInfo } from 'react-icons/fa6';
 import { LuFileText } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +23,7 @@ const DocumentCard = ({ document }: Props) => {
   const { setDocumentId, collapsed, toggleDocumentInfoPopup, setShared } =
     useDocumentInfoPopUp();
   const { resetBranchName } = useDocumentBranch();
-  const { mutate: toggleFavorite } = useToggleFavorite(document.id);
+  const { mutate: toggleFavorite, isPending, isError, error } = useToggleFavorite(document.id);
 
   return (
     <div
@@ -35,6 +36,7 @@ const DocumentCard = ({ document }: Props) => {
           {isOwner && (
             <Toggle
               aria-label='Toggle bookmark'
+              disabled={isPending}
               size='default'
               variant='outline'
               pressed={document.favorite}
@@ -80,9 +82,10 @@ const DocumentCard = ({ document }: Props) => {
           {document.title}
         </p>
         <p className='text-xs text-gray-500 dark:text-gray-400'>
-          Created {document.createdAt}
+          Updated {document.updatedAt}
         </p>
       </div>
+      {isError && <p role='alert' className='px-4 pb-3 text-sm text-destructive'>{actionError(error)}</p>}
     </div>
   );
 };

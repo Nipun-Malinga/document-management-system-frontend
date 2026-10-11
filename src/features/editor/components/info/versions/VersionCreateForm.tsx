@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useSoloActionState from '../../../persistence/useSoloActionState';
-import { actionError } from '../../../persistence/actionError';
+import { applyFormError } from '@/utils/formErrors';
 import { Button } from '@/components';
 import {
   FieldGroup,
@@ -52,6 +52,8 @@ const VersionCreateForm = () => {
     handleSubmit,
     control,
     reset,
+    setError: setFieldError,
+    clearErrors,
     formState: { isValid, errors },
   } = useForm<TCreateVersionSchema>({
     resolver: zodResolver(createVersionSchema),
@@ -62,9 +64,9 @@ const VersionCreateForm = () => {
 
   const onSubmit = async (data: TCreateVersionSchema) => {
     if (!canWrite || isPending || safety.disabled) return;
-    setError('');
+    setError(''); clearErrors();
     try { await mutateAsync(data); reset(); }
-    catch (error) { setError(actionError(error)); }
+    catch (error) { setError(applyFormError(error, setFieldError, ['title', 'status'])); }
   };
 
   if (!canWrite) return null;
@@ -88,11 +90,12 @@ const VersionCreateForm = () => {
               <FieldLegend>Version details</FieldLegend>
 
               <Field>
-                <FieldLabel>Version name</FieldLabel>
+                <FieldLabel htmlFor='snapshot-title'>Version name</FieldLabel>
 
                 <div className="relative">
                   <GitBranchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
+                    id='snapshot-title'
                     type="text"
                     className="pl-10"
                     placeholder="Version name"
@@ -108,7 +111,7 @@ const VersionCreateForm = () => {
           </FieldGroup>
 
           <Field>
-            <FieldLabel>Visibility</FieldLabel>
+            <FieldLabel htmlFor='snapshot-status'>Visibility</FieldLabel>
 
             <Controller
               name="status"
@@ -118,7 +121,7 @@ const VersionCreateForm = () => {
                   onValueChange={field.onChange}
                   value={field.value}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id='snapshot-status' className="w-full">
                     <SelectValue placeholder="Select visibility" />
                   </SelectTrigger>
 

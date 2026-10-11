@@ -1,3 +1,4 @@
+import { actionError } from '@/features/editor/persistence/actionError';
 import { Button } from '@/components';
 import useTrashDocument from '@/hooks/document/useTrashDocument';
 import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const InfoButtons = ({ documentId }: Props) => {
-  const { mutate } = useTrashDocument(documentId);
+  const { mutateAsync, isPending, isError: mutationError, error } = useTrashDocument(documentId);
   const { toggleDocumentInfoPopup } = useDocumentInfoPopUp();
   const user = useUser();
   const { data, isError, isFetching } = useDocument(documentId);
@@ -24,12 +25,13 @@ const InfoButtons = ({ documentId }: Props) => {
         icon={MdDeleteOutline}
         type='button'
         title='Delete'
+        disabled={isPending}
         onClick={() => {
           if (!isOwner) return;
-          mutate();
-          toggleDocumentInfoPopup();
+          void mutateAsync().then(() => toggleDocumentInfoPopup()).catch(() => {});
         }}
       />
+      {mutationError && <p role='alert' className='text-sm text-destructive'>{actionError(error)}</p>}
     </div>
   );
 };

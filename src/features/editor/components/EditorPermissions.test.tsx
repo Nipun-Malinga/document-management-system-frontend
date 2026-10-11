@@ -101,6 +101,21 @@ describe('editor permission changes', () => {
     ydoc.destroy();
   });
 
+  it('reports collaboration disconnection and recovers its status without REST autosaving', () => {
+    const ydoc = new Doc();
+    const on = vi.fn<(event: string, callback: (data: { status: 'connecting' | 'connected' | 'disconnected' }) => void) => void>();
+    const off = vi.fn();
+    state.provider = { document: ydoc, on, off } as unknown as HocuspocusProvider;
+    const { unmount } = render(<CollaborativeEditorCore documentId='doc' branchId='main' editable />);
+    const status = on.mock.calls.find(([event]) => event === 'status')![1];
+    act(() => status({ status: 'disconnected' }));
+    expect(screen.getByRole('status')).toHaveTextContent('server persistence is not confirmed');
+    act(() => status({ status: 'connected' }));
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.getByTestId('core')).toHaveAttribute('data-autosave', 'false');
+    unmount(); expect(off).toHaveBeenCalledWith('status', status); ydoc.destroy();
+  });
+
   it('writes only dirty content at 30 seconds and stops after permission loss or unmount', async () => {
     vi.useFakeTimers();
     const put = vi.spyOn(APIService.prototype, 'put').mockResolvedValue({});

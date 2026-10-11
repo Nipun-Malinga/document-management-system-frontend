@@ -30,7 +30,7 @@ const CollaborativeEditorCore = (props: Props) => {
   const documentKey = `documents/${props.documentId}/branches/${props.branchId}`;
   const provider = useProvider(documentKey);
 
-  if (!provider) return null;
+  if (!provider) return <p role='status'>Preparing collaborative editor…</p>;
 
   return (
     <CollaborativeEditor
@@ -50,15 +50,20 @@ const CollaborativeEditor = ({
   const user = useUser();
   useEffect(() => registerPersistence({ documentId, branchId, epoch: getSession().epoch, mode: 'collaborative', coordinator: null }), [documentId, branchId]);
   const [authenticationFailed, setAuthenticationFailed] = useState(false);
-  const canEdit = editable && !authenticationFailed;
+  const [contentError, setContentError] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>(provider.configuration?.websocketProvider?.status ?? 'connecting');
+  const canEdit = editable && !authenticationFailed && !contentError;
   useEffect(() => {
     const failed = () => setAuthenticationFailed(true);
     const authenticated = () => setAuthenticationFailed(false);
+    const status = ({ status }: { status: 'connecting' | 'connected' | 'disconnected' }) => setConnectionStatus(status);
     provider.on('authenticationFailed', failed);
     provider.on('authenticated', authenticated);
+    provider.on('status', status);
     return () => {
       provider.off('authenticationFailed', failed);
       provider.off('authenticated', authenticated);
+      provider.off('status', status);
     };
   }, [provider]);
 
@@ -83,9 +88,11 @@ const CollaborativeEditor = ({
       }),
     ],
     editable: canEdit,
+    enableContentCheck: true,
     ...commonEditorConfigs,
     onContentError: ({ disableCollaboration }) => {
       disableCollaboration();
+      setContentError(true);
     },
   });
 
@@ -100,6 +107,10 @@ const CollaborativeEditor = ({
       documentId={documentId}
       branchId={branchId}
     >
+      {contentError && <p role='alert'>Collaborative content is incompatible with this editor. Editing is paused; reload after the content or editor configuration has been repaired.</p>}
+      {!authenticationFailed && connectionStatus !== 'connected' && <p role='status'>
+        {connectionStatus === 'disconnected' ? 'Collaboration is disconnected. Keep this editor open while it reconnects; server persistence is not confirmed.' : 'Connecting to collaboration… Server persistence is not confirmed.'}
+      </p>}
       {authenticationFailed && (
         <div role='alert'>
           <p>Unable to authenticate collaboration. Editing is paused; your local document is preserved.</p>

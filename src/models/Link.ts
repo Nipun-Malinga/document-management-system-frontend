@@ -7,5 +7,5 @@ export interface Link {
 
 export interface SidebarLink extends Link {
   icon: IconType;
-  count: number;
+  count: number | null;
 }

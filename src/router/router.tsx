@@ -10,26 +10,14 @@ import Quick from '@/features/documents/layouts/Quick';
 import { EditorContainer } from '@/features/editor';
 import { AdminDashboard, ContentView, Dashboard, Editor, Home } from '@/pages';
 import AdminSignin from '@/pages/admin/AdminSignin';
-import Error from '@/pages/Error';
+import RootErrorBoundary from './RootErrorBoundary';
 import Main from '@/pages/Main';
 import Register from '@/pages/Register';
 import SignIn from '@/pages/SignIn';
 import {
   createBrowserRouter,
-  isRouteErrorResponse,
-  useRouteError,
   Navigate,
 } from 'react-router-dom';
-
-function RootErrorBoundary() {
-  const error = useRouteError();
-
-  if (isRouteErrorResponse(error)) {
-    return <Error error={error.data} status={error.status} />;
-  }
-
-  return <h1>Unknown Error</h1>;
-}
 
 const router = createBrowserRouter([
   {

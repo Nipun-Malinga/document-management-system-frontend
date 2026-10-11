@@ -1,7 +1,7 @@
+import { applyFormError } from '@/utils/formErrors';
 import { useRegistration, useUser } from '@/hooks/user';
 import { registerSchema, type TRegisterSchema } from '@/types/Register';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isAxiosError } from 'axios';
 import {
   Eye,
   EyeOff,
@@ -40,6 +40,8 @@ const Register = () => {
   const {
     handleSubmit,
     register,
+    setError,
+    clearErrors,
     formState: { errors, isValid },
   } = useForm<TRegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -48,15 +50,13 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<TRegisterSchema> = async (data) => {
     setApiError(null);
+    clearErrors();
 
     try {
-      await mutateAsync(data);
+      const { firstname, lastname, username, email, password } = data;
+      await mutateAsync({ firstname, lastname, username, email, password });
     } catch (error) {
-      const status = isAxiosError(error) ? error.response?.status : undefined;
-
-      if (status === 409)
-        setApiError('Email already registered in the system.');
-      else setApiError('Something went wrong please try again.');
+      setApiError(applyFormError(error, setError, ['firstname', 'lastname', 'username', 'email', 'password']));
 
       return;
     }
@@ -110,16 +110,18 @@ const Register = () => {
                     {/* First Name & Last Name */}
                     <div className='grid grid-cols-2 gap-4'>
                       <Field>
-                        <FieldLabel>First Name</FieldLabel>
-                        <Input placeholder='John' {...register('firstname')} />
+                        <FieldLabel htmlFor='register-firstname'>First Name</FieldLabel>
+                        <Input
+                          id='register-firstname' placeholder='John' {...register('firstname')} />
                         {errors.firstname && (
                           <FieldError>{errors.firstname.message}</FieldError>
                         )}
                       </Field>
 
                       <Field>
-                        <FieldLabel>Last Name</FieldLabel>
-                        <Input placeholder='Doe' {...register('lastname')} />
+                        <FieldLabel htmlFor='register-lastname'>Last Name</FieldLabel>
+                        <Input
+                          id='register-lastname' placeholder='Doe' {...register('lastname')} />
                         {errors.lastname && (
                           <FieldError>{errors.lastname.message}</FieldError>
                         )}
@@ -128,10 +130,11 @@ const Register = () => {
 
                     {/* Username */}
                     <Field>
-                      <FieldLabel>Username</FieldLabel>
+                      <FieldLabel htmlFor='register-username'>Username</FieldLabel>
                       <div className='relative'>
                         <User className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                         <Input
+                          id='register-username'
                           type='text'
                           placeholder='johndoe'
                           autoComplete='username'
@@ -146,10 +149,11 @@ const Register = () => {
 
                     {/* Email */}
                     <Field>
-                      <FieldLabel>Email Address</FieldLabel>
+                      <FieldLabel htmlFor='register-email'>Email Address</FieldLabel>
                       <div className='relative'>
                         <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                         <Input
+                          id='register-email'
                           type='email'
                           placeholder='john.doe@example.com'
                           autoComplete='email'
@@ -164,10 +168,11 @@ const Register = () => {
 
                     {/* Password */}
                     <Field>
-                      <FieldLabel>Password</FieldLabel>
+                      <FieldLabel htmlFor='register-password'>Password</FieldLabel>
                       <div className='relative'>
                         <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                         <Input
+                          id='register-password'
                           type={showPassword ? 'text' : 'password'}
                           placeholder='••••••••'
                           autoComplete='new-password'
@@ -193,10 +198,11 @@ const Register = () => {
 
                     {/* Confirm Password */}
                     <Field>
-                      <FieldLabel>Confirm Password</FieldLabel>
+                      <FieldLabel htmlFor='register-confirmPassword'>Confirm Password</FieldLabel>
                       <div className='relative'>
                         <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                         <Input
+                          id='register-confirmPassword'
                           type={showConfirmPassword ? 'text' : 'password'}
                           placeholder='••••••••'
                           autoComplete='new-password'

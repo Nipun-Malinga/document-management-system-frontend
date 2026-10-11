@@ -1,4 +1,4 @@
-import { isAxiosError } from 'axios';
+import { applyFormError } from '@/utils/formErrors';
 import { getSession, useSessionStore } from '@/states/sessionStore';
 import { useSignIn, useUser } from '@/hooks/user';
 import { signInSchema, type SignInSchema } from '@/types/SignIn';
@@ -28,6 +28,8 @@ const AdminSignin = () => {
 
   const {
     register,
+    setError,
+    clearErrors,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<SignInSchema>({
@@ -37,15 +39,14 @@ const AdminSignin = () => {
 
   const onSubmit: SubmitHandler<SignInSchema> = (data) => {
     setApiError(null);
+    clearErrors();
     mutate(data, {
       onSuccess: () => {
         if (getSession().user?.role === 'ADMIN') navigate('/admin/dashboard');
         else setApiError('This account does not have administrator access.');
       },
       onError: (error) => {
-        const status = isAxiosError(error) ? error.response?.status : undefined;
-        if (status === 401) setApiError('Invalid email or password.');
-        else setApiError('Something went wrong. Please try again.');
+        setApiError(applyFormError(error, setError, ['email', 'password']));
       },
     });
   };
@@ -71,16 +72,17 @@ const AdminSignin = () => {
           </div>
 
           {/* Error Message */}
-          {apiError && <Error error='Sign In Failed' />}
+
 
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
             <FieldGroup>
               <FieldSet>
                 <Field>
-                  <FieldLabel>Email Address</FieldLabel>
+                  <FieldLabel htmlFor='admin-signin-email'>Email Address</FieldLabel>
                   <div className='relative'>
                     <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                     <Input
+                      id='admin-signin-email'
                       type='email'
                       placeholder='admin@example.com'
                       autoComplete='email'
@@ -98,10 +100,11 @@ const AdminSignin = () => {
                 </Field>
 
                 <Field>
-                  <FieldLabel>Password</FieldLabel>
+                  <FieldLabel htmlFor='admin-signin-password'>Password</FieldLabel>
                   <div className='relative'>
                     <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                     <Input
+                      id='admin-signin-password'
                       type={showPassword ? 'text' : 'password'}
                       placeholder='••••••••'
                       autoComplete='current-password'

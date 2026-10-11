@@ -5,7 +5,10 @@ import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import type { AnyExtension, UseEditorOptions } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { imageUploadHandler } from '../handlers/imageUploadHandler';
+import { imageMimeTypes, insertUploadedImages } from '../handlers/imageUploadHandler';
+import { Extension } from '@tiptap/core';
+import { Plugin } from '@tiptap/pm/state';
+import { reportUpload } from '../handlers/uploadFeedback';
 
 export const editorExtensions = (collaborative = false): AnyExtension[] => {
   const baseExtensions: AnyExtension[] = [
@@ -30,52 +33,26 @@ export const editorExtensions = (collaborative = false): AnyExtension[] => {
         alwaysPreserveAspectRatio: true,
       },
     }),
-    FileHandler.configure({
-      allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
-
-      onDrop: async (currentEditor, files, pos) => {
-        if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
-        for (const file of files) {
-          try {
-            const imageUrl = await imageUploadHandler(file);
-            if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
-            currentEditor
-              .chain()
-              .insertContentAt(pos, {
-                type: 'image',
-                attrs: { src: imageUrl },
-              })
-              .focus()
-              .run();
-          } catch (err) {
-            console.error('Image upload failed:', err);
-          }
-        }
-      },
-
-      onPaste: async (currentEditor, files, htmlContent) => {
-        if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
-        if (htmlContent) {
-          console.log(htmlContent);
+    Extension.create({
+      name: 'imageUploadFeedback',
+      addProseMirrorPlugins() {
+        const editor = this.editor;
+        const warn = (files: File[]) => {
+          if (editor.isEditable && files.some((file) => !imageMimeTypes.includes(file.type))) reportUpload(editor, 'Only PNG and JPEG images are supported.');
           return false;
-        }
-
-        for (const file of files) {
-          try {
-            const imageUrl = await imageUploadHandler(file);
-            if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
-            currentEditor
-              .chain()
-              .insertContentAt(currentEditor.state.selection.anchor, {
-                type: 'image',
-                attrs: { src: imageUrl },
-              })
-              .focus()
-              .run();
-          } catch (err) {
-            console.error('Image upload failed:', err);
-          }
-        }
+        };
+        return [new Plugin({ props: { handleDOMEvents: {
+          drop: (_view, event) => warn(Array.from(event.dataTransfer?.files ?? [])),
+          paste: (_view, event) => warn(Array.from(event.clipboardData?.files ?? [])),
+        } } })];
+      },
+    }),
+    FileHandler.configure({
+      allowedMimeTypes: imageMimeTypes,
+      onDrop: (editor, files, pos) => { void insertUploadedImages(editor, files, pos); },
+      onPaste: (editor, files, htmlContent) => {
+        if (htmlContent) return false;
+        void insertUploadedImages(editor, files, editor.state.selection.anchor);
       },
     }),
   ];

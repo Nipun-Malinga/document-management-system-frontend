@@ -17,30 +17,30 @@ const TrashTableRow = ({ trash }: Props) => {
   const itemName = isBranch ? trash.branch.branchName : trash.document.title;
   const itemType = isBranch ? 'Branch' : 'Document';
 
-  const { mutate: restoreDocument } = useRestoreDocument(
+  const { mutateAsync: restoreDocument } = useRestoreDocument(
     !isBranch ? trash.document.id : ''
   );
 
-  const { mutate: restoreBranch } = useRestoreBranch(
+  const { mutateAsync: restoreBranch } = useRestoreBranch(
     isBranch ? trash.branch.documentId : '',
     isBranch ? trash.branch.id : ''
   );
 
-  const { mutate: deleteDocument } = useDeleteDocument(
+  const { mutateAsync: deleteDocument } = useDeleteDocument(
     !isBranch ? trash.document.id : ''
   );
 
-  const { mutate: deleteBranch } = useDeleteBranch(
+  const { mutateAsync: deleteBranch } = useDeleteBranch(
     isBranch ? trash.branch.documentId : '',
     isBranch ? trash.branch.id : ''
   );
 
   const handleRestore = () => {
-    isBranch ? restoreBranch() : restoreDocument();
+    return isBranch ? restoreBranch() : restoreDocument();
   };
 
   const handleDelete = () => {
-    isBranch ? deleteBranch() : deleteDocument();
+    return isBranch ? deleteBranch() : deleteDocument();
   };
 
   return (

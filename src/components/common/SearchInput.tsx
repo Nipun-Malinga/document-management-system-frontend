@@ -2,9 +2,10 @@ import { FiSearch } from 'react-icons/fi';
 
 interface Props {
   output: (value: string) => void;
+  value?: string;
 }
 
-const SearchInput = ({ output }: Props) => {
+const SearchInput = ({ output, value }: Props) => {
   return (
     <div className='relative group w-full max-w-xs md:max-w-xl'>
       {/* Search Container */}
@@ -15,7 +16,9 @@ const SearchInput = ({ output }: Props) => {
         {/* Input Field */}
         <input
           type='text'
-          placeholder={''}
+          aria-label='Search documents by exact title'
+          placeholder='Search by exact title'
+          value={value}
           onChange={(e) => output(e.target.value)}
           className='flex-1 text-sm bg-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none'
         />

@@ -1,3 +1,4 @@
+import { collectionErrorMessage } from '@/utils/collectionUtils';
 import { useParams } from 'react-router-dom';
 import EditorContainer from '../components/EditorContainer';
 import SoloEditorCore from '../components/SoloEditorCore';
@@ -14,7 +15,7 @@ export const SoloEditor = () => {
   const access = useDocumentAccess(documentId ?? '', branchId ?? '');
 
   if (access.isPending) return <p role='status'>Checking document access...</p>;
-  if (access.isError) return <p role='alert'>Unable to verify document access. Please try again.</p>;
+  if (access.isError) return <div role='alert'><p>{collectionErrorMessage(access.error, 'document access')}</p><Button variant='outline' onClick={() => { void access.retry(); }}>Retry access check</Button></div>;
   if (!access.canRead) return <p role='alert'>You do not have access to this document.</p>;
 
   if (!(documentId && branchId)) return null;

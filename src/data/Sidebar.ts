@@ -18,7 +18,7 @@ export const sidebarData = (data: SidebarData): SidebarLink[] => {
     },
     {
       icon: LuClock,
-      title: 'Resents',
+      title: 'Recents',
       endpoint: 'resents',
       count: data.resents,
     },

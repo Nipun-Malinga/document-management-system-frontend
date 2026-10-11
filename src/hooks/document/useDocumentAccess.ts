@@ -28,6 +28,8 @@ const useDocumentAccess = (documentId: string, branchId: string) => {
 
   return {
     canRead,
+    error: permissions.error,
+    retry: permissions.refetch,
     canWrite,
     isOwner: Boolean(
       authenticated && canRead && !permissions.isFetching && user && !document.isError && !document.isFetching &&

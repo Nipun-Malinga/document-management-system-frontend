@@ -1,3 +1,4 @@
+import DocumentSearch from '../components/DocumentSearch';
 import useCollectionParams from '@/hooks/useCollectionParams';
 import type { DocumentParams } from '@/models/PageResponse';
 import CollectionResults from '../components/collections/CollectionResults';
@@ -33,6 +34,7 @@ const MainView = () => {
 
       <p className='font-bold text-sm mt-6'>All Documents</p>
 
+      <DocumentSearch title={params.title} onSearch={(title) => update({ title })} />
       <CollectionFilters params={params} update={update} fields={[{ name: 'title', label: 'Title' }, statusField, { name: 'favorite', label: 'Favorite', options: [['true', 'Yes'], ['false', 'No']] }]} sorts={documentSorts} label='documents' />
       <CollectionResults query={query} label='documents' empty={Object.entries(params).some(([key, value]) => !['page', 'size', 'sort'].includes(key) && value !== undefined && value !== '') ? undefined : (
         <Empty className='mt-5 md:mt-10 lg:mt-20'>

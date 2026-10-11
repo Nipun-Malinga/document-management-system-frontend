@@ -101,11 +101,12 @@ describe('Stage 1 action containment', () => {
   });
 
   it('preserves the owner favorite action without presence requests', async () => {
-    const get = vi.spyOn(APIService.prototype, 'get');
+    const get = vi.spyOn(APIService.prototype, 'get').mockResolvedValue(document);
     renderControls('ADMIN', 1);
     fireEvent.click(screen.getByRole('button', { name: 'Toggle bookmark' }));
     await waitFor(() => expect(APIService.prototype.post).toHaveBeenCalledTimes(1));
-    expect(get).not.toHaveBeenCalled();
+    // Favorite now refreshes metadata; document-presence subscriptions stay removed.
+    await waitFor(() => expect(get).toHaveBeenCalledTimes(1));
     // Only document and branch Delete remain; versions have no Delete action.
     expect(screen.getAllByRole('button', { name: 'Delete' })).toHaveLength(2);
   });

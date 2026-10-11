@@ -1,3 +1,4 @@
+import UploadFeedback from './UploadFeedback';
 import '../styles/styles.scss';
 
 import { Editor, EditorContent, EditorContext } from '@tiptap/react';
@@ -32,6 +33,8 @@ const CoreEditor = ({
           documentId={documentId}
           branchId={branchId}
         />
+
+        <UploadFeedback editor={editor} />
 
         {children && (
           <div className='shrink-0 border-b border-gray-200 dark:border-gray-800'>

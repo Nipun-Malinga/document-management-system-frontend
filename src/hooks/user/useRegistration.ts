@@ -9,6 +9,7 @@ const useRegistration = () => {
   const mutateFn = (data: RegisterRequest) => service.post(data);
 
   return useMutation({
+    retry: false,
     mutationKey: ['registration'],
     mutationFn: mutateFn,
   });

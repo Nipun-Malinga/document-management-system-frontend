@@ -1,4 +1,4 @@
-import { isAxiosError } from 'axios';
+import { applyFormError } from '@/utils/formErrors';
 import { useSessionStore } from '@/states/sessionStore';
 import { useSignIn, useUser } from '@/hooks/user';
 import { signInSchema, type SignInSchema } from '@/types/SignIn';
@@ -32,6 +32,8 @@ const Signin = () => {
 
   const {
     register,
+    setError,
+    clearErrors,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<SignInSchema>({
@@ -41,14 +43,13 @@ const Signin = () => {
 
   const onSubmit: SubmitHandler<SignInSchema> = (data) => {
     setApiError(null);
+    clearErrors();
     mutate(data, {
       onSuccess: () => {
         navigate('/dashboard/home');
       },
       onError: (error) => {
-        const status = isAxiosError(error) ? error.response?.status : undefined;
-        if (status === 401) setApiError('Invalid email or password.');
-        else setApiError('Something went wrong please try again.');
+        setApiError(applyFormError(error, setError, ['email', 'password']));
       },
     });
   };
@@ -97,10 +98,11 @@ const Signin = () => {
                   </FieldDescription>
                   <FieldGroup>
                     <Field>
-                      <FieldLabel>Email Address</FieldLabel>
+                      <FieldLabel htmlFor='signin-email'>Email Address</FieldLabel>
                       <div className='relative'>
                         <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                         <Input
+                          id='signin-email'
                           type='email'
                           placeholder='john.doe@example.com'
                           autoComplete='email'
@@ -114,10 +116,11 @@ const Signin = () => {
                     </Field>
 
                     <Field>
-                      <FieldLabel>Password</FieldLabel>
+                      <FieldLabel htmlFor='signin-password'>Password</FieldLabel>
                       <div className='relative'>
                         <Lock className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                         <Input
+                          id='signin-password'
                           type={showPassword ? 'text' : 'password'}
                           placeholder='••••••••'
                           autoComplete='new-password'
@@ -136,10 +139,6 @@ const Signin = () => {
                           )}
                         </button>
                       </div>
-                      {errors.password && (
-                        <FieldError>{errors.password.message}</FieldError>
-                      )}
-
                       {errors.password && (
                         <FieldError>{errors.password.message}</FieldError>
                       )}

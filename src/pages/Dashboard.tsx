@@ -32,8 +32,8 @@ const Home = () => {
             asideCollapsed && documentInfoCollapsed && userProfileCollapsed
           }
           onClick={() => {
-            !documentInfoCollapsed && toggleDocumentInfoPopup();
-            !userProfileCollapsed && toggleProfilePopup();
+            if (!documentInfoCollapsed) toggleDocumentInfoPopup();
+            if (!userProfileCollapsed) toggleProfilePopup();
           }}
         />
 

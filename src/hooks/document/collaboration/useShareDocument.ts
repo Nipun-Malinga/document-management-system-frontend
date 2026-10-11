@@ -1,4 +1,5 @@
-import { assertSession, getSession } from '@/states/sessionStore';
+import { refreshDocumentMutation } from '../documentMutationCache';
+import { getSession } from '@/states/sessionStore';
 import type { ShareDocumentRequest } from '@/models/SharedDocument';
 import type { Document } from '@/models/Document';
 import APIService from '@/services/apiService';
@@ -24,11 +25,7 @@ const useShareDocument = (documentId: string) => {
       return service.post(request);
     },
     onSuccess: async () => {
-      assertSession(epoch);
-      await Promise.all([
-        ['document', documentId], ['collaborators', documentId], ['permissions', documentId],
-        ['documents-own'], ['shared-with'], ['documentCount'], ['sharedWithCount'],
-      ].map((queryKey) => queryClient.invalidateQueries({ queryKey })));
+      await refreshDocumentMutation(queryClient, 'share', documentId, epoch);
     },
   });
 };

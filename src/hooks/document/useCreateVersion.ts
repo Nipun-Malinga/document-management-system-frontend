@@ -1,4 +1,5 @@
-import { assertSession, getSession } from '@/states/sessionStore';
+import { refreshDocumentMutation } from './documentMutationCache';
+import { getSession } from '@/states/sessionStore';
 import { createSoloSnapshot } from '@/features/editor/persistence/documentWorkflows';
 import type { VersionRequest } from '@/models/Version';
 import APIService from '@/services/apiService';
@@ -17,9 +18,7 @@ const useCreateVersion = (documentId: string, branchId: string) => {
     mutationFn: mutationFn,
     retry: false,
     onSuccess: async () => {
-      assertSession(epoch);
-      const keys = [['versions', documentId]];
-      await Promise.all(keys.map((key) => queryClient.invalidateQueries({ queryKey: key })));
+      await refreshDocumentMutation(queryClient, 'createVersion', documentId, epoch);
     },
   });
 };

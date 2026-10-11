@@ -1,3 +1,4 @@
+import { collectionErrorMessage } from '@/utils/collectionUtils';
 import { IoClose } from 'react-icons/io5';
 import { Button, PopupWrapper } from '@/components';
 import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
@@ -12,11 +13,16 @@ interface Props {
 }
 
 const InfoPopup = ({ documentId }: Props) => {
-  const { data } = useDocument(documentId ?? '');
+  const { data, isPending, isError, error, refetch } = useDocument(documentId ?? '');
   const { collapsed, toggleDocumentInfoPopup } = useDocumentInfoPopUp();
 
   return (
     <PopupWrapper collapsed={collapsed}>
+      {documentId && !data && <div>
+        <Button title='Close document information' icon={IoClose} onClick={toggleDocumentInfoPopup} />
+        {isPending && <p role='status'>Loading document information…</p>}
+        {isError && <div role='alert'><p>{collectionErrorMessage(error, 'document information')}</p><Button title='Retry document information' onClick={() => { void refetch(); }} /></div>}
+      </div>}
       {data && documentId && (
         <>
           {/* Header */}

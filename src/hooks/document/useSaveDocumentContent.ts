@@ -1,3 +1,4 @@
+import { refreshDocumentMutation } from './documentMutationCache';
 import { assertSession, getSession } from '@/states/sessionStore';
 import type { ContentRequest, ContentResponse } from '@/models/Content';
 import APIService from '@/services/apiService';
@@ -23,9 +24,10 @@ const useSaveDocumentContent = (
     mutationKey: queryKey,
     mutationFn: (content: string) => mutationFn(content),
 
-    onSuccess: (_response, content) => {
+    onSuccess: async (_response, content) => {
       assertSession(epoch);
       queryClient.setQueryData<ContentResponse>(queryKey, { content });
+      await refreshDocumentMutation(queryClient, 'save', documentId, epoch);
     },
     retry: false,
   });

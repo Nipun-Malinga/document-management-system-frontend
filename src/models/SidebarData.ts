@@ -1,7 +1,7 @@
 export interface SidebarData {
-  documents: number;
-  quick: number;
-  resents: number;
-  shared: number;
-  trash: number;
+  documents: number | null;
+  quick: number | null;
+  resents: number | null;
+  shared: number | null;
+  trash: number | null;
 }

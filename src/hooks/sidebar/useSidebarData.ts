@@ -1,27 +1,22 @@
+import type { SidebarData } from '@/models/SidebarData';
+import useRecentDocuments from '../document/useRecentDocuments';
 import useDocumentCount from './useDocumentCount';
 import useFavoriteCount from './useFavoriteCount';
 import useSharedWithCount from './useSharedWithCount';
 import useTrashAllCount from './useTrashAllCount';
 
-interface SidebarData {
-  documents: number;
-  quick: number;
-  resents: number;
-  shared: number;
-  trash: number;
-}
-// TODO: IMPLEMENT THE RESENTS HOOK
 const useSidebarData = (): SidebarData => {
-  const { data: documentCount } = useDocumentCount();
-  const { data: favoriteDocumentCount } = useFavoriteCount();
-  const { data: sharedWithCount } = useSharedWithCount();
+  const documents = useDocumentCount();
+  const favorites = useFavoriteCount();
+  const shared = useSharedWithCount();
+  const recent = useRecentDocuments();
   const allTrashCount = useTrashAllCount();
 
   return {
-    documents: documentCount?.count ?? 0,
-    quick: favoriteDocumentCount?.count ?? 0,
-    resents: 0,
-    shared: sharedWithCount?.count ?? 0,
+    documents: documents.isError ? null : documents.data?.count ?? null,
+    quick: favorites.isError ? null : favorites.data?.count ?? null,
+    resents: recent.isError ? null : recent.data?.totalElements ?? null,
+    shared: shared.isError ? null : shared.data?.count ?? null,
     trash: allTrashCount,
   };
 };

@@ -45,8 +45,8 @@ const SideBar = ({ sidebarLink }: Props) => {
               <p className='text-sm text-gray-900 dark:text-gray-300'>
                 {item.title}
               </p>
-              <p className='text-sm text-gray-900 dark:text-gray-300 ml-auto'>
-                {item.count}
+              <p aria-label={item.count === null ? `${item.title} count unavailable` : undefined} className='text-sm text-gray-900 dark:text-gray-300 ml-auto'>
+                {item.count ?? '—'}
               </p>
             </div>
           </Link>

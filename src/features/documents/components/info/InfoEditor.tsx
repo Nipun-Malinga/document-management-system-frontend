@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { applyFormError } from '@/utils/formErrors';
 import { Button } from '@/components';
 import {
   Field,
@@ -26,20 +28,28 @@ interface Props {
 }
 
 const InfoEditor = ({ document }: Props) => {
+  const [error, setApiError] = useState('');
   const {
     handleSubmit,
     register,
+    setError,
+    clearErrors,
     reset,
     formState: { isValid, errors },
   } = useForm<TDocumentInfoEditorSchema>({
     resolver: zodResolver(documentInfoEditorSchema),
+    mode: 'onChange',
+    defaultValues: { title: document.title },
   });
-  const { mutate, isPending } = useUpdateDocumentInfo(document.id);
+  const { mutateAsync, isPending } = useUpdateDocumentInfo(document.id);
   const user = useUser();
   const isOwner = document.ownerId === user?.id;
 
-  const onSubmit: SubmitHandler<TDocumentInfoEditorSchema> = (data) => {
-    if (isOwner) mutate(data);
+  const onSubmit: SubmitHandler<TDocumentInfoEditorSchema> = async (data) => {
+    if (!isOwner || isPending) return;
+    setApiError(''); clearErrors();
+    try { await mutateAsync(data); reset(data); }
+    catch (error) { setApiError(applyFormError(error, setError, ['title'])); }
   };
 
   if (!isOwner) return null;
@@ -56,10 +66,10 @@ const InfoEditor = ({ document }: Props) => {
             <FieldGroup>
               <div className='grid md:grid-cols-2 gap-2'>
                 <Field>
-                  <FieldLabel htmlFor='checkout-7j9-card-name-43j'>
+                  <FieldLabel htmlFor={`document-title-${document.id}`}>
                     Document Title
                   </FieldLabel>
-                  <Input placeholder={document.title} {...register('title')} />
+                  <Input id={`document-title-${document.id}`} placeholder={document.title} {...register('title')} />
                   {errors.title && (
                     <FieldError>{errors.title.message}</FieldError>
                   )}
@@ -67,6 +77,7 @@ const InfoEditor = ({ document }: Props) => {
               </div>
             </FieldGroup>
           </FieldSet>
+          {error && <p role='alert' className='text-sm text-destructive'>{error}</p>}
           <FieldSeparator />
           <Field orientation='horizontal'>
             <Button type='submit' disabled={!isValid || isPending}>
@@ -79,7 +90,7 @@ const InfoEditor = ({ document }: Props) => {
                 'Update'
               )}
             </Button>
-            <Button type='button' onClick={() => reset()}>
+            <Button type='button' disabled={isPending} onClick={() => { reset(); setApiError(''); }}>
               Cancel
             </Button>
           </Field>

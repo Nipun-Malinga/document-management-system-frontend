@@ -1,3 +1,4 @@
+import { collectionErrorMessage } from '@/utils/collectionUtils';
 import { Button } from '@/components';
 import {
   FieldGroup,
@@ -14,7 +15,7 @@ import { useFindUser, useUser } from '@/hooks/user';
 import { userSchema, type TUserSchema } from '@/types/User';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle, UserPlus } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 
 interface Props {
@@ -25,22 +26,25 @@ interface Props {
 }
 
 const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
+  const emailId = useId();
   const [email, setEmail] = useState<string>('');
-  const { data: fetchedUser, isError } = useFindUser(email);
+  const query = useFindUser(email);
+  const { data: fetchedUser, isError, isFetching } = query;
   const user = useUser();
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isReady },
+    formState: { errors, isValid },
   } = useForm<TUserSchema>({
     resolver: zodResolver(userSchema),
     mode: 'onChange',
   });
 
   const onSubmit: SubmitHandler<TUserSchema> = (data) => {
-    setEmail(data.email);
+    if (data.email === email) void query.refetch();
+    else setEmail(data.email);
   };
 
   return (
@@ -65,8 +69,8 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
             <FieldGroup>
               <div className='grid md:grid-cols-2 gap-2'>
                 <Field>
-                  <FieldLabel>User email</FieldLabel>
-                  <Input placeholder={document.title} {...register('email')} />
+                  <FieldLabel htmlFor={emailId}>User email</FieldLabel>
+                  <Input id={emailId} type='email' placeholder='person@example.com' {...register('email', { onChange: () => setEmail('') })} />
                   {errors.email && (
                     <FieldError>{errors.email.message}</FieldError>
                   )}
@@ -76,10 +80,10 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
           </FieldSet>
           <FieldSeparator />
           <Field orientation='horizontal'>
-            <Button type='submit' disabled={!isReady}>
+            <Button type='submit' disabled={!isValid || isFetching}>
               Submit
             </Button>
-            <Button type='button' onClick={() => reset()}>
+            <Button type='button' onClick={() => { reset(); setEmail(''); }}>
               Cancel
             </Button>
           </Field>
@@ -87,7 +91,7 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
       </form>
 
       {/* Search Result */}
-      {fetchedUser && (
+      {email && fetchedUser && !isError && !isFetching && (
         <div className='mt-4 p-4 bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
@@ -106,7 +110,7 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
               </div>
             </div>
             <Button
-              disabled={user?.id === fetchedUser.id}
+              disabled={userPending || user?.id === fetchedUser.id}
               onClick={() => onClick(fetchedUser.id)}
               className='px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-150 shadow-sm hover:shadow-md active:scale-95'
             >
@@ -120,11 +124,12 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
         </div>
       )}
 
-      {isError && (
-        <p className='mt-4 p-4 text-center bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300'>
-          No User Found
-        </p>
-      )}
+      {email && isFetching && <p role='status'>Looking up user…</p>}
+      {email && isError && <div role='alert' className='mt-4 space-y-2 text-sm text-foreground'>
+        <p>{collectionErrorMessage(query.error, 'this user')}</p>
+        <Button type='button' onClick={() => { void query.refetch(); }}>Retry lookup</Button>
+      </div>}
+
     </div>
   );
 };
