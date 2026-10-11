@@ -1,10 +1,12 @@
+import { isAxiosError } from 'axios';
+import { getSession, useSessionStore } from '@/states/sessionStore';
 import { useSignIn, useUser } from '@/hooks/user';
 import { signInSchema, type SignInSchema } from '@/types/SignIn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Lock, LogIn, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import AuthContainer from '../../components/common/AuthContainer';
 import Error from '../../components/common/Error';
 import {
@@ -22,6 +24,7 @@ const AdminSignin = () => {
   const [apiError, setApiError] = useState<string | null>(null);
   const { mutate, isPending } = useSignIn();
   const user = useUser();
+  const status = useSessionStore((state) => state.status);
 
   const {
     register,
@@ -36,17 +39,18 @@ const AdminSignin = () => {
     setApiError(null);
     mutate(data, {
       onSuccess: () => {
-        if (user && user.role == 'ADMIN') navigate('/admin/dashboard');
+        if (getSession().user?.role === 'ADMIN') navigate('/admin/dashboard');
+        else setApiError('This account does not have administrator access.');
       },
-      onError: (error: any) => {
-        const status = error.response?.status;
+      onError: (error) => {
+        const status = isAxiosError(error) ? error.response?.status : undefined;
         if (status === 401) setApiError('Invalid email or password.');
         else setApiError('Something went wrong. Please try again.');
       },
     });
   };
 
-  if (user && user.role == 'ADMIN') navigate('/admin/dashboard');
+  if (user?.role === 'ADMIN' && status === 'authenticated') return <Navigate to='/admin/dashboard' replace />;
 
   return (
     <AuthContainer>

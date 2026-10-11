@@ -1,3 +1,4 @@
+import { useSessionStore } from '@/states/sessionStore';
 import { useUser } from '@/hooks/user';
 import useDocument from './useDocument';
 import { useValidatePermissions } from './collaboration';
@@ -6,6 +7,7 @@ import { useValidatePermissions } from './collaboration';
 // Never authorize using a response for a different user/document/branch.
 const useDocumentAccess = (documentId: string, branchId: string) => {
   const user = useUser();
+  const authenticated = useSessionStore((state) => state.status === 'authenticated');
   const document = useDocument(documentId);
   const permissions = useValidatePermissions(documentId, branchId);
   const permission = permissions.data;
@@ -20,7 +22,7 @@ const useDocumentAccess = (documentId: string, branchId: string) => {
     permission?.permission === 'READ_WRITE' ||
     permission?.permission === 'ADMIN'
   );
-  const canWrite = canRead && !permissions.isFetching && (
+  const canWrite = authenticated && canRead && !permissions.isFetching && (
     permission?.permission === 'READ_WRITE' || permission?.permission === 'ADMIN'
   );
 
@@ -28,7 +30,7 @@ const useDocumentAccess = (documentId: string, branchId: string) => {
     canRead,
     canWrite,
     isOwner: Boolean(
-      canRead && !permissions.isFetching && user && !document.isError && !document.isFetching &&
+      authenticated && canRead && !permissions.isFetching && user && !document.isError && !document.isFetching &&
       document.data?.id === documentId && document.data.ownerId === user.id
     ),
     isPending: permissions.isPending,

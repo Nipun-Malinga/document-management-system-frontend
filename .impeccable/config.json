@@ -29,6 +29,24 @@
         ],
         "createdAt": "2026-10-11T16:33:50.394Z",
         "reason": "Codex review: flagged gray text only applies with matching disabled gray backgrounds; preserve the existing Stage 1 interface."
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "src/pages/SignIn.tsx"
+        ],
+        "createdAt": "2026-10-11T17:12:26.103Z",
+        "reason": "Codex review: existing gray disabled text is paired with disabled gray backgrounds, not the active blue background; preserve the interface during Stage 2."
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "src/pages/admin/AdminSignin.tsx"
+        ],
+        "createdAt": "2026-10-11T17:12:26.195Z",
+        "reason": "Codex review: existing gray disabled text is paired with disabled gray backgrounds, not the active blue background; preserve the interface during Stage 2."
       }
     ]
   }

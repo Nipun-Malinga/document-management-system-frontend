@@ -1,3 +1,4 @@
+import { initializeSession } from '@/states/sessionStore';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -26,7 +27,7 @@ const version = {
 };
 
 beforeEach(() => {
-  localStorage.setItem('jwt-access-token', tokenFor());
+  localStorage.setItem('jwt-access-token', tokenFor()); initializeSession();
   client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   vi.spyOn(APIService.prototype, 'post').mockResolvedValue({});
   vi.spyOn(APIService.prototype, 'put').mockResolvedValue({});

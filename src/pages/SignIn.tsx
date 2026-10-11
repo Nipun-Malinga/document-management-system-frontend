@@ -1,10 +1,12 @@
+import { isAxiosError } from 'axios';
+import { useSessionStore } from '@/states/sessionStore';
 import { useSignIn, useUser } from '@/hooks/user';
 import { signInSchema, type SignInSchema } from '@/types/SignIn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import AuthContainer from '../components/common/AuthContainer';
 import Button from '../components/common/Button';
 import Error from '../components/common/Error';
@@ -26,6 +28,7 @@ const Signin = () => {
   const [apiError, setApiError] = useState<string | null>(null);
   const { mutate, isPending } = useSignIn();
   const user = useUser();
+  const status = useSessionStore((state) => state.status);
 
   const {
     register,
@@ -42,15 +45,15 @@ const Signin = () => {
       onSuccess: () => {
         navigate('/dashboard/home');
       },
-      onError: (error: any) => {
-        const status = error.response?.status;
+      onError: (error) => {
+        const status = isAxiosError(error) ? error.response?.status : undefined;
         if (status === 401) setApiError('Invalid email or password.');
         else setApiError('Something went wrong please try again.');
       },
     });
   };
 
-  if (user) navigate('/dashboard/home');
+  if (user && status === 'authenticated') return <Navigate to='/dashboard/home' replace />;
 
   return (
     <AuthContainer>

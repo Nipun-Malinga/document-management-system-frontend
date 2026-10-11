@@ -2,6 +2,7 @@ import User from '@/features/users/components/User';
 import type { Collaborator } from '@/models/Collaborator';
 import WebSocketService from '@/services/websocketService';
 import type { IMessage } from '@stomp/stompjs';
+import { useSessionStore } from '@/states/sessionStore';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -11,45 +12,28 @@ interface Props {
 const CollaboratorCard = ({ collaborator }: Props) => {
   const [status, setStatus] = useState<boolean>(false);
 
-  const ws = WebSocketService.getInstance();
-  const client = ws.getClient();
+  const epoch = useSessionStore((state) => state.epoch);
+  const userId = collaborator.userId;
 
   useEffect(() => {
-    if (!client) return;
-
-    const initialStatus = () => {
-      const subscription = ws.subscribe(
-        `/app/user/${collaborator.userId}/status`,
-        (payload: IMessage) => {
-          try {
-            setStatus(JSON.parse(payload.body) as boolean);
-          } catch (err) {
-            console.error('Invalid message format:', payload.body);
-          }
-        }
-      );
-
-      return subscription;
+    const ws = WebSocketService.getInstance();
+    setStatus(false);
+    const receive = (payload: IMessage) => {
+      try {
+        const value: unknown = JSON.parse(payload.body);
+        if (typeof value === 'boolean') setStatus(value);
+      } catch {
+        console.error('Invalid user status message');
+      }
     };
-
-    const dynamicStatus = () => {
-      const subscription = ws.subscribe(
-        `/user/${collaborator.userId}/status`,
-        (payload: IMessage) => {
-          try {
-            setStatus(JSON.parse(payload.body) as boolean);
-          } catch (err) {
-            console.error('Invalid message format:', payload.body);
-          }
-        }
-      );
-
-      return subscription;
+    const reset = () => setStatus(false);
+    const unsubscribeUpdates = ws.subscribe(`/user/${userId}/status`, receive, reset);
+    const unsubscribeInitial = ws.subscribe(`/app/user/${userId}/status`, receive, reset);
+    return () => {
+      unsubscribeInitial();
+      unsubscribeUpdates();
     };
-
-    ws.subscribeManager(initialStatus);
-    ws.subscribeManager(dynamicStatus);
-  }, [client]);
+  }, [userId, epoch]);
 
   return (
     <div

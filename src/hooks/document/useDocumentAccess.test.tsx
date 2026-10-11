@@ -1,3 +1,4 @@
+import { initializeSession } from '@/states/sessionStore';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
@@ -11,7 +12,7 @@ const key = ['permissions', 'doc', 'main'];
 const wrapper = ({ children }: { children: ReactNode }) => <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 
 beforeEach(() => {
-  localStorage.setItem('jwt-access-token', tokenFor());
+  localStorage.setItem('jwt-access-token', tokenFor()); initializeSession();
   client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   client.setQueryData(['document', 'doc'], document);
 });

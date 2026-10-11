@@ -1,6 +1,6 @@
 import Collaboration from '@tiptap/extension-collaboration';
 import { useEditor } from '@tiptap/react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
   // import { IndexeddbPersistence } from 'y-indexeddb';
 import { useProvider } from '@/hooks/document/collaboration';
 import { useUser } from '@/hooks/user';
@@ -11,6 +11,7 @@ import {
   editorExtensions,
 } from '../configs/EditorConfigs';
 import CoreEditor from './CoreEditor';
+import Button from '@/components/common/Button';
 import Toolbar from './Toolbar';
 
 interface Props {
@@ -45,6 +46,18 @@ const CollaborativeEditor = ({
   provider,
 }: EditorProps) => {
   const user = useUser();
+  const [authenticationFailed, setAuthenticationFailed] = useState(false);
+  const canEdit = editable && !authenticationFailed;
+  useEffect(() => {
+    const failed = () => setAuthenticationFailed(true);
+    const authenticated = () => setAuthenticationFailed(false);
+    provider.on('authenticationFailed', failed);
+    provider.on('authenticated', authenticated);
+    return () => {
+      provider.off('authenticationFailed', failed);
+      provider.off('authenticated', authenticated);
+    };
+  }, [provider]);
 
   // Generate a random color for the user
   const currentUser = useMemo(
@@ -66,7 +79,7 @@ const CollaborativeEditor = ({
         user: currentUser,
       }),
     ],
-    editable: editable,
+    editable: canEdit,
     ...commonEditorConfigs,
     onContentError: ({ disableCollaboration }) => {
       disableCollaboration();
@@ -74,8 +87,8 @@ const CollaborativeEditor = ({
   });
 
   useEffect(() => {
-    editor.setEditable(editable);
-  }, [editor, editable]);
+    editor.setEditable(canEdit);
+  }, [editor, canEdit]);
 
   return (
     <CoreEditor
@@ -84,11 +97,20 @@ const CollaborativeEditor = ({
       documentId={documentId}
       branchId={branchId}
     >
+      {authenticationFailed && (
+        <div role='alert'>
+          <p>Unable to authenticate collaboration. Editing is paused; your local document is preserved.</p>
+          <Button title='Retry connection' onClick={() => {
+            provider.configuration.websocketProvider.shouldConnect = true;
+            void provider.connect().catch(() => {});
+          }} />
+        </div>
+      )}
       <Toolbar
         editor={editor}
         canRedo={false}
         canUndo={false}
-        disabled={!editable}
+        disabled={!canEdit}
       />
     </CoreEditor>
   );

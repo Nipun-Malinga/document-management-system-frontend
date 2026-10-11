@@ -1,11 +1,5 @@
-export const getAccessToken = () => {
-  return localStorage.getItem('jwt-access-token');
-};
+import { endSession, getSession, replaceAccessToken } from '@/states/sessionStore';
 
-export const updateAccessToken = (token: string) => {
-  localStorage.setItem('jwt-access-token', token);
-};
-
-export const clearAccessToken = () => {
-  localStorage.removeItem('jwt-access-token');
-};
+export const getAccessToken = () => getSession().token;
+export const updateAccessToken = replaceAccessToken;
+export const clearAccessToken = endSession;

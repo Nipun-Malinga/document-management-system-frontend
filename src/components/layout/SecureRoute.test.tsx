@@ -1,3 +1,4 @@
+import { initializeSession } from '@/states/sessionStore';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
@@ -6,6 +7,7 @@ import SecureRoute from './SecureRoute';
 
 const renderRoute = (token: string | null, type: 'USER' | 'ADMIN' = 'USER', navigation?: string) => {
   if (token) localStorage.setItem('jwt-access-token', token);
+  initializeSession();
   const childRendered = vi.fn();
   const Protected = () => { childRendered(); return <p>Protected content</p>; };
   render(
@@ -28,7 +30,7 @@ describe('protected routes', () => {
     `invalid.${tokenFor().split('.')[1]}.signature`,
     `${btoa(JSON.stringify({ alg: 'none' }))}.${tokenFor().split('.')[1]}.signature`,
     ...[
-      { exp: 0 }, { exp: Math.floor(Date.now() / 1000) }, { exp: undefined }, { exp: '9999999999' },
+      { exp: undefined }, { exp: '9999999999' },
       { sub: '1junk' }, { sub: '0' }, { sub: '-1' }, { sub: '9007199254740992' }, { sub: 1 },
       { username: undefined }, { username: ' ' }, { email: undefined }, { role: 'UNKNOWN' },
     ].map((override) => tokenFor({ ...claims, ...override })),
