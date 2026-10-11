@@ -1,18 +1,18 @@
-import type { PageResponse } from './PageResponse';
-import type { Document } from './Document';
-import type { Branch } from './Branch';
+import type { Branch } from "./Branch";
+import type { Document } from "./Document";
+import type { PageResponse } from "./PageResponse";
 
 interface Trash {
-  id: number;
-  addedDate: string;
+	id: number;
+	addedDate: string;
 }
 
 export interface TrashDocument extends Trash {
-  document: Document;
+	document: Document;
 }
 
 export interface TrashBranch extends Trash {
-  branch: Branch;
+	branch: Branch;
 }
 
 export type TrashDocumentResponse = PageResponse<TrashDocument>;
@@ -20,4 +20,6 @@ export type TrashDocumentResponse = PageResponse<TrashDocument>;
 export type TrashBranchResponse = PageResponse<TrashBranch>;
 
 // The branch-trash endpoint alone uses snake_case on the wire.
-export type TrashBranchWire = Omit<TrashBranch, 'addedDate'> & { added_date: string };
+export type TrashBranchWire = Omit<TrashBranch, "addedDate"> & {
+	added_date: string;
+};

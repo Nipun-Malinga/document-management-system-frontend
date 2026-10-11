@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 interface Props {
-  children: ReactNode;
+	children: ReactNode;
 }
 
 const Container = ({ children }: Props) => {
-  return <div className='w-full h-full'>{children}</div>;
+	return <div className="w-full h-full">{children}</div>;
 };
 
 export default Container;

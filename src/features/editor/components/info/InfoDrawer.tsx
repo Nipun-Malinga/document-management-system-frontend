@@ -1,12 +1,12 @@
-import { Drawer } from '@/components';
-import InfoTabs from './InfoTabs';
+import { Drawer } from "@/components";
+import InfoTabs from "./InfoTabs";
 
 const InfoDrawer = () => {
-  return (
-    <Drawer title='Advanced'>
-      <InfoTabs />
-    </Drawer>
-  );
+	return (
+		<Drawer title="Advanced">
+			<InfoTabs />
+		</Drawer>
+	);
 };
 
 export default InfoDrawer;

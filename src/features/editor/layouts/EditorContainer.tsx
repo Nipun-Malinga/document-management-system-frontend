@@ -1,25 +1,41 @@
-import { Button } from '@/components/ui/button';
-import { collectionErrorMessage } from '@/utils/collectionUtils';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import SoloEditor from './SoloEditor';
-import CollaborativeEditor from './CollaborativeEditor';
-import { useDocument } from '@/hooks/document';
-import EditorNavigationGuard from '../persistence/EditorNavigationGuard';
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useDocument } from "@/hooks/document";
+import { collectionErrorMessage } from "@/utils/collectionUtils";
+import EditorNavigationGuard from "../persistence/EditorNavigationGuard";
+import CollaborativeEditor from "./CollaborativeEditor";
+import SoloEditor from "./SoloEditor";
 
 // A metadata refresh must not replace a mounted editor with a different persistence mode.
 const EditorMode = ({ shared }: { shared: boolean }) => {
-  const [collaborative] = useState(shared);
-  return <>{collaborative ? <CollaborativeEditor /> : <SoloEditor />}</>;
+	const [collaborative] = useState(shared);
+	return <>{collaborative ? <CollaborativeEditor /> : <SoloEditor />}</>;
 };
 
 const EditorContainer = () => {
-  const { documentId, branchId } = useParams();
-  const { data, isError, error, refetch } = useDocument(documentId ?? '');
-  return <>
-    <EditorNavigationGuard />
-    {data ? <EditorMode key={`${documentId}/${branchId}`} shared={data.shared} /> :
-      isError ? <div role='alert'><p>{collectionErrorMessage(error, 'this document')}</p><Button onClick={() => { void refetch(); }}>Retry document</Button></div> : <p role='status'>Loading document…</p>}
-  </>;
+	const { documentId, branchId } = useParams();
+	const { data, isError, error, refetch } = useDocument(documentId ?? "");
+	return (
+		<>
+			<EditorNavigationGuard />
+			{data ? (
+				<EditorMode key={`${documentId}/${branchId}`} shared={data.shared} />
+			) : isError ? (
+				<div role="alert">
+					<p>{collectionErrorMessage(error, "this document")}</p>
+					<Button
+						onClick={() => {
+							void refetch();
+						}}
+					>
+						Retry document
+					</Button>
+				</div>
+			) : (
+				<p role="status">Loading document…</p>
+			)}
+		</>
+	);
 };
 export default EditorContainer;

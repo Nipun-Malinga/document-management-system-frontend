@@ -1,12 +1,12 @@
-import type { PageResponse } from './PageResponse';
+import type { PageResponse } from "./PageResponse";
 
-type permissions = 'READ_ONLY' | 'READ_WRITE';
+type permissions = "READ_ONLY" | "READ_WRITE";
 
 export interface Collaborator {
-  userId: number;
-  username: string;
-  email: string;
-  permission: permissions;
+	userId: number;
+	username: string;
+	email: string;
+	permission: permissions;
 }
 
 export type CollaboratorsResponse = PageResponse<Collaborator>;

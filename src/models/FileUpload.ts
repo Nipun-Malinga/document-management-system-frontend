@@ -1,3 +1,3 @@
 export interface FileUpload {
-  fileCloudUrl: string;
+	fileCloudUrl: string;
 }

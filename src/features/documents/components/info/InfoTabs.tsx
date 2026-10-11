@@ -1,59 +1,59 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { Document } from '@/models/Document';
-import InfoBase from './InfoBase';
-import InfoEditor from './InfoEditor';
-import { CollaboratorTabs } from '../collaborators';
-import { useUser } from '@/hooks/user';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useUser } from "@/hooks/user";
+import type { Document } from "@/models/Document";
+import { CollaboratorTabs } from "../collaborators";
+import InfoBase from "./InfoBase";
+import InfoEditor from "./InfoEditor";
 
 interface Props {
-  document: Document;
+	document: Document;
 }
 
 const InfoTabs = ({ document }: Props) => {
-  const user = useUser();
+	const user = useUser();
 
-  console.log(document.ownerId);
+	console.log(document.ownerId);
 
-  return (
-    <Tabs defaultValue='information'>
-      <div className='bg-gray-50 dark:bg-gray-900 md:px-6 p-2 pb-2 flex justify-center md:justify-start items-center rounded-2xl'>
-        <TabsList className='bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-1 rounded-lg shadow-sm space-x-1'>
-          <TabsTrigger
-            className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
-            value='information'
-          >
-            Information
-          </TabsTrigger>
-          {document.ownerId === user?.id && (
-            <TabsTrigger
-              className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
-              value='edit'
-            >
-              Edit
-            </TabsTrigger>
-          )}
-          <TabsTrigger
-            className='cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium'
-            value='Collaborators'
-          >
-            Collaborators
-          </TabsTrigger>
-        </TabsList>
-      </div>
+	return (
+		<Tabs defaultValue="information">
+			<div className="bg-gray-50 dark:bg-gray-900 md:px-6 p-2 pb-2 flex justify-center md:justify-start items-center rounded-2xl">
+				<TabsList className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-1 rounded-lg shadow-sm space-x-1">
+					<TabsTrigger
+						className="cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium"
+						value="information"
+					>
+						Information
+					</TabsTrigger>
+					{document.ownerId === user?.id && (
+						<TabsTrigger
+							className="cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium"
+							value="edit"
+						>
+							Edit
+						</TabsTrigger>
+					)}
+					<TabsTrigger
+						className="cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium"
+						value="Collaborators"
+					>
+						Collaborators
+					</TabsTrigger>
+				</TabsList>
+			</div>
 
-      <TabsContent value='information' className='mt-0'>
-        <InfoBase document={document} />
-      </TabsContent>
-      {document.ownerId === user?.id && (
-        <TabsContent value='edit' className='mt-0'>
-          <InfoEditor document={document} />
-        </TabsContent>
-      )}
-      <TabsContent value='Collaborators' className='mt-0'>
-        <CollaboratorTabs document={document} />
-      </TabsContent>
-    </Tabs>
-  );
+			<TabsContent value="information" className="mt-0">
+				<InfoBase document={document} />
+			</TabsContent>
+			{document.ownerId === user?.id && (
+				<TabsContent value="edit" className="mt-0">
+					<InfoEditor document={document} />
+				</TabsContent>
+			)}
+			<TabsContent value="Collaborators" className="mt-0">
+				<CollaboratorTabs document={document} />
+			</TabsContent>
+		</Tabs>
+	);
 };
 
 export default InfoTabs;

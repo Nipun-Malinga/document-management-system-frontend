@@ -1,11 +1,11 @@
-import type { IconType } from 'react-icons';
+import type { IconType } from "react-icons";
 
 export interface Link {
-  title: string;
-  endpoint: string;
+	title: string;
+	endpoint: string;
 }
 
 export interface SidebarLink extends Link {
-  icon: IconType;
-  count: number | null;
+	icon: IconType;
+	count: number | null;
 }

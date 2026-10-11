@@ -1,173 +1,184 @@
-import { useState } from 'react';
-import useSoloActionState from '../../../persistence/useSoloActionState';
-import { applyFormError } from '@/utils/formErrors';
-import { Button } from '@/components';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { GitBranchIcon } from "lucide-react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { Button } from "@/components";
 import {
-  FieldGroup,
-  FieldSet,
-  FieldLegend,
-  Field,
-  FieldLabel,
-  FieldError,
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { useCreateVersion } from '@/hooks/document';
-import useDocumentAccess from '@/hooks/document/useDocumentAccess';
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import {
-  createVersionSchema,
-  type TCreateVersionSchema,
-} from '@/types/Version';
-import { zodResolver } from '@hookform/resolvers/zod';
+	Field,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+	FieldLegend,
+	FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { GitBranchIcon } from 'lucide-react';
-import { Controller, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { useCreateVersion } from "@/hooks/document";
+import useDocumentAccess from "@/hooks/document/useDocumentAccess";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+	createVersionSchema,
+	type TCreateVersionSchema,
+} from "@/types/Version";
+import { applyFormError } from "@/utils/formErrors";
+import useSoloActionState from "../../../persistence/useSoloActionState";
 
 const VersionCreateForm = () => {
-  const { documentId, branchId } = useParams();
-  const [error, setError] = useState('');
-  const safety = useSoloActionState(documentId ?? '', branchId ?? '');
+	const { documentId, branchId } = useParams();
+	const [error, setError] = useState("");
+	const safety = useSoloActionState(documentId ?? "", branchId ?? "");
 
-  const { canWrite } = useDocumentAccess(documentId ?? '', branchId ?? '');
+	const { canWrite } = useDocumentAccess(documentId ?? "", branchId ?? "");
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    setError: setFieldError,
-    clearErrors,
-    formState: { isValid, errors },
-  } = useForm<TCreateVersionSchema>({
-    resolver: zodResolver(createVersionSchema),
-    mode: 'onChange',
-  });
+	const {
+		register,
+		handleSubmit,
+		control,
+		reset,
+		setError: setFieldError,
+		clearErrors,
+		formState: { isValid, errors },
+	} = useForm<TCreateVersionSchema>({
+		resolver: zodResolver(createVersionSchema),
+		mode: "onChange",
+	});
 
-  const { mutateAsync, isPending } = useCreateVersion(documentId ?? '', branchId ?? '');
+	const { mutateAsync, isPending } = useCreateVersion(
+		documentId ?? "",
+		branchId ?? "",
+	);
 
-  const onSubmit = async (data: TCreateVersionSchema) => {
-    if (!canWrite || isPending || safety.disabled) return;
-    setError(''); clearErrors();
-    try { await mutateAsync(data); reset(); }
-    catch (error) { setError(applyFormError(error, setFieldError, ['title', 'status'])); }
-  };
+	const onSubmit = async (data: TCreateVersionSchema) => {
+		if (!canWrite || isPending || safety.disabled) return;
+		setError("");
+		clearErrors();
+		try {
+			await mutateAsync(data);
+			reset();
+		} catch (error) {
+			setError(applyFormError(error, setFieldError, ["title", "status"]));
+		}
+	};
 
-  if (!canWrite) return null;
+	if (!canWrite) return null;
 
-  return (
-    <Dialog>
-      <DialogTrigger asChild className="w-full">
-        <Button disabled={safety.disabled} className="w-full">Create Version</Button>
-      </DialogTrigger>
+	return (
+		<Dialog>
+			<DialogTrigger asChild className="w-full">
+				<Button disabled={safety.disabled} className="w-full">
+					Create Version
+				</Button>
+			</DialogTrigger>
 
-      {safety.reason && <p className='text-sm text-muted-foreground'>{safety.reason}</p>}
-      <DialogContent>
-        <DialogTitle>Create a new version</DialogTitle>
-        <DialogDescription>
-          Give your version a meaningful name and set its visibility.
-        </DialogDescription>
+			{safety.reason && (
+				<p className="text-sm text-muted-foreground">{safety.reason}</p>
+			)}
+			<DialogContent>
+				<DialogTitle>Create a new version</DialogTitle>
+				<DialogDescription>
+					Give your version a meaningful name and set its visibility.
+				</DialogDescription>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <FieldGroup>
-            <FieldSet>
-              <FieldLegend>Version details</FieldLegend>
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+					<FieldGroup>
+						<FieldSet>
+							<FieldLegend>Version details</FieldLegend>
 
-              <Field>
-                <FieldLabel htmlFor='snapshot-title'>Version name</FieldLabel>
+							<Field>
+								<FieldLabel htmlFor="snapshot-title">Version name</FieldLabel>
 
-                <div className="relative">
-                  <GitBranchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id='snapshot-title'
-                    type="text"
-                    className="pl-10"
-                    placeholder="Version name"
-                    {...register('title')}
-                  />
-                </div>
+								<div className="relative">
+									<GitBranchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+									<Input
+										id="snapshot-title"
+										type="text"
+										className="pl-10"
+										placeholder="Version name"
+										{...register("title")}
+									/>
+								</div>
 
-                {errors.title && (
-                  <FieldError>{errors.title.message}</FieldError>
-                )}
-              </Field>
-            </FieldSet>
-          </FieldGroup>
+								{errors.title && (
+									<FieldError>{errors.title.message}</FieldError>
+								)}
+							</Field>
+						</FieldSet>
+					</FieldGroup>
 
-          <Field>
-            <FieldLabel htmlFor='snapshot-status'>Visibility</FieldLabel>
+					<Field>
+						<FieldLabel htmlFor="snapshot-status">Visibility</FieldLabel>
 
-            <Controller
-              name="status"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                >
-                  <SelectTrigger id='snapshot-status' className="w-full">
-                    <SelectValue placeholder="Select visibility" />
-                  </SelectTrigger>
+						<Controller
+							name="status"
+							control={control}
+							render={({ field }) => (
+								<Select onValueChange={field.onChange} value={field.value}>
+									<SelectTrigger id="snapshot-status" className="w-full">
+										<SelectValue placeholder="Select visibility" />
+									</SelectTrigger>
 
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Visibility</SelectLabel>
-                      <SelectItem value="PRIVATE">Private</SelectItem>
-                      <SelectItem value="PUBLIC">Public</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              )}
-            />
+									<SelectContent>
+										<SelectGroup>
+											<SelectLabel>Visibility</SelectLabel>
+											<SelectItem value="PRIVATE">Private</SelectItem>
+											<SelectItem value="PUBLIC">Public</SelectItem>
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+							)}
+						/>
 
-            {errors.status && (
-              <FieldError>{errors.status.message}</FieldError>
-            )}
-          </Field>
+						{errors.status && <FieldError>{errors.status.message}</FieldError>}
+					</Field>
 
-          {error && <p role='alert' className='text-sm text-destructive'>{error}</p>}
-          <DialogFooter className="mt-3">
-            <DialogClose asChild>
-              <Button type="button" disabled={isPending}>
-                Cancel
-              </Button>
-            </DialogClose>
+					{error && (
+						<p role="alert" className="text-sm text-destructive">
+							{error}
+						</p>
+					)}
+					<DialogFooter className="mt-3">
+						<DialogClose asChild>
+							<Button type="button" disabled={isPending}>
+								Cancel
+							</Button>
+						</DialogClose>
 
-            <Button
-              type="submit"
-              disabled={!isValid || isPending || safety.disabled}
-              className="flex items-center justify-center gap-2"
-            >
-              {isPending ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                'Create'
-              )}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
+						<Button
+							type="submit"
+							disabled={!isValid || isPending || safety.disabled}
+							className="flex items-center justify-center gap-2"
+						>
+							{isPending ? (
+								<>
+									<div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />
+									Creating...
+								</>
+							) : (
+								"Create"
+							)}
+						</Button>
+					</DialogFooter>
+				</form>
+			</DialogContent>
+		</Dialog>
+	);
 };
 
 export default VersionCreateForm;

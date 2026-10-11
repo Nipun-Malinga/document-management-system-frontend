@@ -1,103 +1,123 @@
-import { useState } from 'react';
-import { applyFormError } from '@/utils/formErrors';
-import { Button } from '@/components';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
+import { useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { Button } from "@/components";
 import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { useUpdateDocumentInfo } from '@/hooks/document';
-import { useUser } from '@/hooks/user';
-import type { Document } from '@/models/Document';
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+	FieldLegend,
+	FieldSeparator,
+	FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { useUpdateDocumentInfo } from "@/hooks/document";
+import { useUser } from "@/hooks/user";
+import type { Document } from "@/models/Document";
 import {
-  documentInfoEditorSchema,
-  type TDocumentInfoEditorSchema,
-} from '@/types/Document';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { LoaderCircle } from 'lucide-react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+	documentInfoEditorSchema,
+	type TDocumentInfoEditorSchema,
+} from "@/types/Document";
+import { applyFormError } from "@/utils/formErrors";
 
 interface Props {
-  document: Document;
+	document: Document;
 }
 
 const InfoEditor = ({ document }: Props) => {
-  const [error, setApiError] = useState('');
-  const {
-    handleSubmit,
-    register,
-    setError,
-    clearErrors,
-    reset,
-    formState: { isValid, errors },
-  } = useForm<TDocumentInfoEditorSchema>({
-    resolver: zodResolver(documentInfoEditorSchema),
-    mode: 'onChange',
-    defaultValues: { title: document.title },
-  });
-  const { mutateAsync, isPending } = useUpdateDocumentInfo(document.id);
-  const user = useUser();
-  const isOwner = document.ownerId === user?.id;
+	const [error, setApiError] = useState("");
+	const {
+		handleSubmit,
+		register,
+		setError,
+		clearErrors,
+		reset,
+		formState: { isValid, errors },
+	} = useForm<TDocumentInfoEditorSchema>({
+		resolver: zodResolver(documentInfoEditorSchema),
+		mode: "onChange",
+		defaultValues: { title: document.title },
+	});
+	const { mutateAsync, isPending } = useUpdateDocumentInfo(document.id);
+	const user = useUser();
+	const isOwner = document.ownerId === user?.id;
 
-  const onSubmit: SubmitHandler<TDocumentInfoEditorSchema> = async (data) => {
-    if (!isOwner || isPending) return;
-    setApiError(''); clearErrors();
-    try { await mutateAsync(data); reset(data); }
-    catch (error) { setApiError(applyFormError(error, setError, ['title'])); }
-  };
+	const onSubmit: SubmitHandler<TDocumentInfoEditorSchema> = async (data) => {
+		if (!isOwner || isPending) return;
+		setApiError("");
+		clearErrors();
+		try {
+			await mutateAsync(data);
+			reset(data);
+		} catch (error) {
+			setApiError(applyFormError(error, setError, ["title"]));
+		}
+	};
 
-  if (!isOwner) return null;
+	if (!isOwner) return null;
 
-  return (
-    <div className='bg-gray-50 dark:bg-gray-900 w-full p-5 border border-gray-200 dark:border-gray-700 rounded-2xl'>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FieldGroup>
-          <FieldSet>
-            <FieldLegend>Edit Information</FieldLegend>
-            <FieldDescription>
-              Edit all the document information
-            </FieldDescription>
-            <FieldGroup>
-              <div className='grid md:grid-cols-2 gap-2'>
-                <Field>
-                  <FieldLabel htmlFor={`document-title-${document.id}`}>
-                    Document Title
-                  </FieldLabel>
-                  <Input id={`document-title-${document.id}`} placeholder={document.title} {...register('title')} />
-                  {errors.title && (
-                    <FieldError>{errors.title.message}</FieldError>
-                  )}
-                </Field>
-              </div>
-            </FieldGroup>
-          </FieldSet>
-          {error && <p role='alert' className='text-sm text-destructive'>{error}</p>}
-          <FieldSeparator />
-          <Field orientation='horizontal'>
-            <Button type='submit' disabled={!isValid || isPending}>
-              {isPending ? (
-                <div className='flex items-center justify-center gap-2'>
-                  <LoaderCircle className='w-5 h-5 animate-spin' />
-                  <span>Updating...</span>
-                </div>
-              ) : (
-                'Update'
-              )}
-            </Button>
-            <Button type='button' disabled={isPending} onClick={() => { reset(); setApiError(''); }}>
-              Cancel
-            </Button>
-          </Field>
-        </FieldGroup>
-      </form>
-    </div>
-  );
+	return (
+		<div className="bg-gray-50 dark:bg-gray-900 w-full p-5 border border-gray-200 dark:border-gray-700 rounded-2xl">
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<FieldGroup>
+					<FieldSet>
+						<FieldLegend>Edit Information</FieldLegend>
+						<FieldDescription>
+							Edit all the document information
+						</FieldDescription>
+						<FieldGroup>
+							<div className="grid md:grid-cols-2 gap-2">
+								<Field>
+									<FieldLabel htmlFor={`document-title-${document.id}`}>
+										Document Title
+									</FieldLabel>
+									<Input
+										id={`document-title-${document.id}`}
+										placeholder={document.title}
+										{...register("title")}
+									/>
+									{errors.title && (
+										<FieldError>{errors.title.message}</FieldError>
+									)}
+								</Field>
+							</div>
+						</FieldGroup>
+					</FieldSet>
+					{error && (
+						<p role="alert" className="text-sm text-destructive">
+							{error}
+						</p>
+					)}
+					<FieldSeparator />
+					<Field orientation="horizontal">
+						<Button type="submit" disabled={!isValid || isPending}>
+							{isPending ? (
+								<div className="flex items-center justify-center gap-2">
+									<LoaderCircle className="w-5 h-5 animate-spin" />
+									<span>Updating...</span>
+								</div>
+							) : (
+								"Update"
+							)}
+						</Button>
+						<Button
+							type="button"
+							disabled={isPending}
+							onClick={() => {
+								reset();
+								setApiError("");
+							}}
+						>
+							Cancel
+						</Button>
+					</Field>
+				</FieldGroup>
+			</form>
+		</div>
+	);
 };
 
 export default InfoEditor;

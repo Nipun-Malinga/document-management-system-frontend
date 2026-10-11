@@ -1,7 +1,7 @@
 export interface ContentResponse {
-  content: string;
+	content: string;
 }
 
 export interface ContentRequest {
-  content: string;
+	content: string;
 }

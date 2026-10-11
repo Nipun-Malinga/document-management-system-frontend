@@ -1,5 +1,7 @@
-export { default as useCollaboration } from './useCollaborators';
-export { default as useProvider } from './useProvider';
-export { default as useValidatePermissions } from './useValidatePermissions';
-export { default as useShareDocument } from './useShareDocument';
-export { default as useCollaborators } from './useCollaborators';
+export {
+	default as useCollaboration,
+	default as useCollaborators,
+} from "./useCollaborators";
+export { default as useProvider } from "./useProvider";
+export { default as useShareDocument } from "./useShareDocument";
+export { default as useValidatePermissions } from "./useValidatePermissions";

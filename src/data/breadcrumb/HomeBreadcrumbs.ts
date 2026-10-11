@@ -1,40 +1,40 @@
-import type { Link } from '@/models/Link';
+import type { Link } from "@/models/Link";
 
 export const mainViewBreadcrumb: Link[] = [
-  {
-    title: 'Home',
-    endpoint: '/dashboard/home',
-  },
+	{
+		title: "Home",
+		endpoint: "/dashboard/home",
+	},
 ];
 
 export const quickAccessBreadcrumb: Link[] = [
-  ...mainViewBreadcrumb,
-  {
-    title: 'Quick Access',
-    endpoint: '/quick',
-  },
+	...mainViewBreadcrumb,
+	{
+		title: "Quick Access",
+		endpoint: "/quick",
+	},
 ];
 
 export const resentsBreadcrumb: Link[] = [
-  ...mainViewBreadcrumb,
-  {
-    title: 'Recents',
-    endpoint: '/dashboard/resents',
-  },
+	...mainViewBreadcrumb,
+	{
+		title: "Recents",
+		endpoint: "/dashboard/resents",
+	},
 ];
 
 export const sharedWithMeBreadcrumb: Link[] = [
-  ...mainViewBreadcrumb,
-  {
-    title: 'Shared With Me',
-    endpoint: '/shared',
-  },
+	...mainViewBreadcrumb,
+	{
+		title: "Shared With Me",
+		endpoint: "/shared",
+	},
 ];
 
 export const trashBreadcrumb: Link[] = [
-  ...mainViewBreadcrumb,
-  {
-    title: 'Trash',
-    endpoint: '/trash'
-  }
-]
+	...mainViewBreadcrumb,
+	{
+		title: "Trash",
+		endpoint: "/trash",
+	},
+];

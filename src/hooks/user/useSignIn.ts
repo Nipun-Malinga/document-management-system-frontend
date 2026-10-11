@@ -1,5 +1,6 @@
-import { login } from '@/services/sessionService';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/services/sessionService";
 
-const useSignIn = () => useMutation({ retry: false, mutationKey: ['signin'], mutationFn: login });
+const useSignIn = () =>
+	useMutation({ retry: false, mutationKey: ["signin"], mutationFn: login });
 export default useSignIn;

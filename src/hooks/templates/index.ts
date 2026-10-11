@@ -1,1 +1,1 @@
-export { default as useGetTemplates } from './useGetTemplates';
+export { default as useGetTemplates } from "./useGetTemplates";

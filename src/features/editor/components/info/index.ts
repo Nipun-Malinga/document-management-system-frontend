@@ -1,1 +1,1 @@
-export { default as InfoDrawer } from './InfoDrawer';
+export { default as InfoDrawer } from "./InfoDrawer";

@@ -1,23 +1,28 @@
-import type { ReactNode } from 'react';
-import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
+import type { ReactNode } from "react";
+import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
 
 interface Props {
-  children: ReactNode;
+	children: ReactNode;
 }
 
 const DocumentGrid = ({ children }: Props) => {
-  const { collapsed, toggleDocumentInfoPopup } = useDocumentInfoPopUp();
+	const { collapsed, toggleDocumentInfoPopup } = useDocumentInfoPopUp();
 
-  return (
-    <div
-      onClick={() => !collapsed && toggleDocumentInfoPopup()}
-      className='w-full'
-    >
-      <div className='pt-2.5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-1 md:gap-2 overflow-y-auto'>
-        {children}
-      </div>
-    </div>
-  );
+	return (
+		<div className="relative w-full">
+			{!collapsed && (
+				<button
+					type="button"
+					aria-label="Close document information"
+					onClick={toggleDocumentInfoPopup}
+					className="absolute inset-0 z-10 h-full w-full"
+				/>
+			)}
+			<div className="pt-2.5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-1 md:gap-2 overflow-y-auto">
+				{children}
+			</div>
+		</div>
+	);
 };
 
 export default DocumentGrid;

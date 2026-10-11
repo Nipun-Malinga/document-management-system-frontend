@@ -1,59 +1,66 @@
-import Link from '@/components/common/Link';
-import type { SidebarLink } from '@/models/Link';
-import useAside from '@/states/useAside';
-import { IoClose } from 'react-icons/io5';
-import Button from '../common/Button';
-import Logo from '../common/Logo';
+import { IoClose } from "react-icons/io5";
+import Link from "@/components/common/Link";
+import type { SidebarLink } from "@/models/Link";
+import useAside from "@/states/useAside";
+import Button from "../common/Button";
+import Logo from "../common/Logo";
 
 interface Props {
-  sidebarLink: SidebarLink[];
+	sidebarLink: SidebarLink[];
 }
 
 const SideBar = ({ sidebarLink }: Props) => {
-  const { collapsed, toggle } = useAside();
+	const { collapsed, toggle } = useAside();
 
-  return (
-    <aside
-      className={`absolute z-20 bg-white dark:bg-gray-900 w-70 md:w-full h-lvh p-2 transform transition-transform duration-300 ease-in-out ${
-        collapsed
-          ? '-translate-x-80 md:translate-x-0'
-          : 'translate-x-0 border-r'
-      } md:relative`}
-    >
-      <div className='relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2'>
-        <Logo />
-        <div className='absolute right-0 md:hidden'>
-          <Button
-            type='button'
-            icon={IoClose}
-            onClick={() => {
-              toggle();
-            }}
-          />
-        </div>
-      </div>
+	return (
+		<aside
+			className={`absolute z-20 bg-white dark:bg-gray-900 w-70 md:w-full h-lvh p-2 transform transition-transform duration-300 ease-in-out ${
+				collapsed
+					? "-translate-x-80 md:translate-x-0"
+					: "translate-x-0 border-r"
+			} md:relative`}
+		>
+			<div className="relative text-xl md:text-3xl mb-2 flex flex-row items-center gap-2">
+				<Logo />
+				<div className="absolute right-0 md:hidden">
+					<Button
+						type="button"
+						icon={IoClose}
+						onClick={() => {
+							toggle();
+						}}
+					/>
+				</div>
+			</div>
 
-      <nav className='border-b border-gray-300 dark:border-gray-600'>
-        <p className='text-gray-600 dark:text-gray-300 text-xs md:text-base px-3 mb-2'>
-          Quick Access
-        </p>
+			<nav className="border-b border-gray-300 dark:border-gray-600">
+				<p className="text-gray-600 dark:text-gray-300 text-xs md:text-base px-3 mb-2">
+					Quick Access
+				</p>
 
-        {sidebarLink.map((item, key) => (
-          <Link key={key} endpoint={`/dashboard/${item.endpoint}`}>
-            <div className='w-full px-2 py-2 md:px-4 md:py-2 flex flex-row items-center'>
-              <item.icon className='text-lg mr-4' />
-              <p className='text-sm text-gray-900 dark:text-gray-300'>
-                {item.title}
-              </p>
-              <p aria-label={item.count === null ? `${item.title} count unavailable` : undefined} className='text-sm text-gray-900 dark:text-gray-300 ml-auto'>
-                {item.count ?? '—'}
-              </p>
-            </div>
-          </Link>
-        ))}
-      </nav>
-    </aside>
-  );
+				{sidebarLink.map((item) => (
+					<Link key={item.endpoint} endpoint={`/dashboard/${item.endpoint}`}>
+						<div className="w-full px-2 py-2 md:px-4 md:py-2 flex flex-row items-center">
+							<item.icon className="text-lg mr-4" />
+							<p className="text-sm text-gray-900 dark:text-gray-300">
+								{item.title}
+							</p>
+							<p className="text-sm text-gray-900 dark:text-gray-300 ml-auto">
+								{item.count ?? (
+									<>
+										<span aria-hidden="true">—</span>
+										<span className="sr-only">
+											{item.title} count unavailable
+										</span>
+									</>
+								)}
+							</p>
+						</div>
+					</Link>
+				))}
+			</nav>
+		</aside>
+	);
 };
 
 export default SideBar;
