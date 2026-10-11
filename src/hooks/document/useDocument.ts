@@ -10,6 +10,7 @@ const useDocument = (documentId: string) => {
   return useQuery({
     queryKey: ['document', documentId],
     queryFn: data,
+    enabled: Boolean(documentId),
     staleTime: ms('1 Minutes'),
   });
 };

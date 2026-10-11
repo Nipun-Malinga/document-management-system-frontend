@@ -27,6 +27,7 @@ const AutoSaver = ({ editor, documentId, branchId }: Props) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (editor.isDestroyed || !editor.isEditable) return;
       const content = editor.getJSON();
       if (content) mutate(JSON.stringify(content));
     }, 30000);

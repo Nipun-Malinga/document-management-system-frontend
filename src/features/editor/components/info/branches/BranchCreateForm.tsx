@@ -22,18 +22,13 @@ import { createBranchSchema, type TCreateBranchSchema } from '@/types/Branch';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GitBranchIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import useDocumentAccess from '@/hooks/document/useDocumentAccess';
 
 const CreateBranchForm = () => {
   const { documentId, branchId } = useParams();
-  const navigate = useNavigate();
-
-  if (!documentId || !branchId) {
-    navigate('/dashboard/home', { replace: true });
-    return null;
-  }
-
-  const { mutate, isPending } = useCreateBranch(documentId, branchId);
+  const { canWrite } = useDocumentAccess(documentId ?? '', branchId ?? '');
+  const { mutate, isPending } = useCreateBranch(documentId ?? '', branchId ?? '');
 
   const {
     register,
@@ -46,8 +41,11 @@ const CreateBranchForm = () => {
   });
 
   const onSubmit = (data: TCreateBranchSchema) => {
+    if (!canWrite || isPending) return;
     mutate({ branchName: data.branchName }, { onSuccess: () => reset() });
   };
+
+  if (!canWrite) return null;
 
   return (
     <Dialog>
@@ -89,7 +87,7 @@ const CreateBranchForm = () => {
 
             <Button
               type='submit'
-              disabled={!isValid}
+              disabled={!isValid || isPending}
               className='flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-lg transition-all duration-150 border border-red-200 dark:border-red-800 disabled:border-gray-200 dark:disabled:border-gray-700 active:scale-95 disabled:active:scale-100'
             >
               {isPending ? (

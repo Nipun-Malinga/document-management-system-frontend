@@ -1,7 +1,6 @@
 import { FaCircleInfo } from 'react-icons/fa6';
 import { LuFileText } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
-import { OnlineUserList } from '..';
 import { Button } from '@/components';
 import type { Document } from '@/models/Document';
 import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
@@ -10,6 +9,7 @@ import useDocumentBranch from '@/states/useDocumentBranch';
 import { Toggle } from '@/components/ui/toggle';
 import { Bookmark } from 'lucide-react';
 import { useToggleFavorite } from '@/hooks/document';
+import { useUser } from '@/hooks/user';
 
 interface Props {
   document: Document;
@@ -17,6 +17,8 @@ interface Props {
 
 const DocumentCard = ({ document }: Props) => {
   const navigate = useNavigate();
+  const user = useUser();
+  const isOwner = document.ownerId === user?.id;
   const { setDocumentId, collapsed, toggleDocumentInfoPopup, setShared } =
     useDocumentInfoPopUp();
   const { resetBranchName } = useDocumentBranch();
@@ -30,16 +32,20 @@ const DocumentCard = ({ document }: Props) => {
     >
       <div className='relative aspect-4/3 p-4'>
         <div className='absolute z-10 top-2 right-2 flex flex-row items-start gap-2 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100'>
-          <Toggle
-            aria-label='Toggle bookmark'
-            size='default'
-            variant='outline'
-            pressed={document.favorite}
-            onClick={() => toggleFavorite()}
-            className='cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 data-[state=on]:bg-yellow-50 data-[state=on]:border-yellow-400 data-[state=on]:text-yellow-600 dark:data-[state=on]:bg-yellow-900/20 dark:data-[state=on]:border-yellow-500 dark:data-[state=on]:text-yellow-400'
-          >
-            <Bookmark className='h-4 w-4' />
-          </Toggle>
+          {isOwner && (
+            <Toggle
+              aria-label='Toggle bookmark'
+              size='default'
+              variant='outline'
+              pressed={document.favorite}
+              onClick={() => {
+                if (isOwner) toggleFavorite();
+              }}
+              className='cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 data-[state=on]:bg-yellow-50 data-[state=on]:border-yellow-400 data-[state=on]:text-yellow-600 dark:data-[state=on]:bg-yellow-900/20 dark:data-[state=on]:border-yellow-500 dark:data-[state=on]:text-yellow-400'
+            >
+              <Bookmark className='h-4 w-4' />
+            </Toggle>
+          )}
           <Button
             icon={FaCircleInfo}
             type='button'
@@ -66,10 +72,6 @@ const DocumentCard = ({ document }: Props) => {
           className='relative bg-gray-50 dark:bg-gray-900 w-full h-full rounded-md cursor-pointer flex justify-center items-center overflow-hidden transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-850 border border-gray-200 dark:border-gray-700'
         >
           <LuFileText className='text-7xl text-gray-400 dark:text-gray-600 transition-transform duration-200 group-hover:scale-105' />
-
-          <div className='absolute top-2 left-2'>
-            <OnlineUserList documentId={document.id} />
-          </div>
         </div>
       </div>
 

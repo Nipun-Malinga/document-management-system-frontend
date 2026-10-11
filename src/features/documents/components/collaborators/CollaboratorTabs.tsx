@@ -39,15 +39,16 @@ const CollaboratorTabs = ({ document }: Props) => {
         <Collaborators documentId={document.id} />
       </TabsContent>
 
-      {document.ownerId == user?.id && (
+      {document.ownerId === user?.id && (
         <TabsContent value='add-collaborators' className='mt-0'>
           <SearchUser
-            onClick={(userId) =>
+            onClick={(userId) => {
+              if (document.ownerId !== user?.id) return;
               mutate({
                 userId: userId,
                 permission: 'READ_WRITE',
-              })
-            }
+              });
+            }}
             userPending={isPending}
             title='Add Collaborator'
             subTitle='Invite someone to collaborate'

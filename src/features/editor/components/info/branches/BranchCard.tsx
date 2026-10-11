@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useTrashBranch } from '@/hooks/document';
+import useDocumentAccess from '@/hooks/document/useDocumentAccess';
 import type { Branch } from '@/models/Branch';
 import {
   CheckCircle,
@@ -25,6 +26,7 @@ interface Props {
 const BranchCard = ({ branch }: Props) => {
   const { branchId } = useParams();
   const navigate = useNavigate();
+  const { canWrite, isOwner } = useDocumentAccess(branch.documentId, branchId ?? '');
   const { mutate, isPending } = useTrashBranch(branch.documentId, branch.id);
   const isCurrentBranch = branch.id === branchId;
   const isMainBranch = branch.branchName.toLowerCase() === 'main';
@@ -93,7 +95,7 @@ const BranchCard = ({ branch }: Props) => {
             </Link>
           )}
 
-          {!isMainBranch && (
+          {!isMainBranch && canWrite && (
             <Alert
               className='w-full'
               trigger={
@@ -120,7 +122,7 @@ const BranchCard = ({ branch }: Props) => {
               onClick={() => {}}
             />
           )}
-          {!isMainBranch && (
+          {!isMainBranch && isOwner && (
             <Alert
               className='w-full'
               trigger={
@@ -144,7 +146,7 @@ const BranchCard = ({ branch }: Props) => {
               title='Delete Branch?'
               description={''}
               action='Delete'
-              onClick={() => mutate()}
+              onClick={() => { if (isOwner) mutate(); }}
             />
           )}
         </div>

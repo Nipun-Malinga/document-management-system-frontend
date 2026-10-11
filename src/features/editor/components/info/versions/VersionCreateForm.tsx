@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useCreateVersion } from '@/hooks/document';
+import useDocumentAccess from '@/hooks/document/useDocumentAccess';
 import {
   createVersionSchema,
   type TCreateVersionSchema,
@@ -39,9 +40,7 @@ import {
 const VersionCreateForm = () => {
   const { documentId, branchId } = useParams();
 
-  if (!documentId || !branchId) {
-    throw new Error('Missing documentId or branchId');
-  }
+  const { canWrite } = useDocumentAccess(documentId ?? '', branchId ?? '');
 
   const {
     register,
@@ -54,15 +53,18 @@ const VersionCreateForm = () => {
     mode: 'onChange',
   });
 
-  const { mutate, isPending } = useCreateVersion(documentId, branchId);
+  const { mutate, isPending } = useCreateVersion(documentId ?? '', branchId ?? '');
 
   const onSubmit = (data: TCreateVersionSchema) => {
+    if (!canWrite || isPending) return;
     mutate(data, {
       onSuccess: () => {
         reset();
       },
     });
   };
+
+  if (!canWrite) return null;
 
   return (
     <Dialog>

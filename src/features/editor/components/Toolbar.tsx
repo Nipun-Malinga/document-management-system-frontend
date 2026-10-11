@@ -84,18 +84,21 @@ const Toolbar = ({
   });
 
   const addImage = useCallback(() => {
+    if (disabled || !editor.isEditable) return;
     const url = window.prompt('Image URL');
     if (url) editor.chain().focus().setImage({ src: url }).run();
-  }, [editor]);
+  }, [editor, disabled]);
 
   const setLink = () => {
+    if (disabled || !editor.isEditable) return;
     const url = window.prompt('Enter URL');
     if (url) editor.chain().focus().setLink({ href: url }).run();
   };
 
   return (
     <div className="relative overflow-visible border-b border-gray-200 dark:border-gray-700">
-      <div
+      <fieldset
+        disabled={disabled}
         className={`
           flex items-center gap-2
           px-3 py-2
@@ -222,7 +225,7 @@ const Toolbar = ({
           <ToolButton icon={FaAlignRight} active={editorState.right} onClick={() => editor.chain().focus().setTextAlign('right').run()} />
           <ToolButton icon={FaAlignJustify} active={editorState.justify} onClick={() => editor.chain().focus().setTextAlign('justify').run()} />
         </div>
-      </div>
+      </fieldset>
     </div>
   );
 };

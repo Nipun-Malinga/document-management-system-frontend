@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useUpdateDocumentInfo } from '@/hooks/document';
+import { useUser } from '@/hooks/user';
 import type { Document } from '@/models/Document';
 import {
   documentInfoEditorSchema,
@@ -34,9 +35,14 @@ const InfoEditor = ({ document }: Props) => {
     resolver: zodResolver(documentInfoEditorSchema),
   });
   const { mutate, isPending } = useUpdateDocumentInfo(document.id);
+  const user = useUser();
+  const isOwner = document.ownerId === user?.id;
 
-  const onSubmit: SubmitHandler<TDocumentInfoEditorSchema> = (data) =>
-    mutate(data);
+  const onSubmit: SubmitHandler<TDocumentInfoEditorSchema> = (data) => {
+    if (isOwner) mutate(data);
+  };
+
+  if (!isOwner) return null;
 
   return (
     <div className='bg-gray-50 dark:bg-gray-900 w-full p-5 border border-gray-200 dark:border-gray-700 rounded-2xl'>

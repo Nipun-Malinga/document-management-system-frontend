@@ -28,7 +28,7 @@ const Trash = () => {
                 <div className='flex items-center gap-1.5 mt-1'>
                   <Clock className='w-3.5 h-3.5 text-gray-400 dark:text-gray-500' />
                   <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    Items auto-delete after 30 days
+                    Restore items or delete them permanently
                   </p>
                 </div>
               </div>

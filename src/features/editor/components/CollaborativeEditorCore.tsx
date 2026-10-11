@@ -1,6 +1,6 @@
 import Collaboration from '@tiptap/extension-collaboration';
 import { useEditor } from '@tiptap/react';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
   // import { IndexeddbPersistence } from 'y-indexeddb';
 import { useProvider } from '@/hooks/document/collaboration';
 import { useUser } from '@/hooks/user';
@@ -72,6 +72,10 @@ const CollaborativeEditor = ({
       disableCollaboration();
     },
   });
+
+  useEffect(() => {
+    editor.setEditable(editable);
+  }, [editor, editable]);
 
   return (
     <CoreEditor

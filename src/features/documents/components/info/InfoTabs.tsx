@@ -44,7 +44,7 @@ const InfoTabs = ({ document }: Props) => {
       <TabsContent value='information' className='mt-0'>
         <InfoBase document={document} />
       </TabsContent>
-      {document.ownerId == user?.id && (
+      {document.ownerId === user?.id && (
         <TabsContent value='edit' className='mt-0'>
           <InfoEditor document={document} />
         </TabsContent>

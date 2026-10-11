@@ -34,9 +34,11 @@ export const editorExtensions = (collaborative = false): AnyExtension[] => {
       allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
 
       onDrop: async (currentEditor, files, pos) => {
+        if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
         for (const file of files) {
           try {
             const imageUrl = await imageUploadHandler(file);
+            if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
             currentEditor
               .chain()
               .insertContentAt(pos, {
@@ -52,6 +54,7 @@ export const editorExtensions = (collaborative = false): AnyExtension[] => {
       },
 
       onPaste: async (currentEditor, files, htmlContent) => {
+        if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
         if (htmlContent) {
           console.log(htmlContent);
           return false;
@@ -60,6 +63,7 @@ export const editorExtensions = (collaborative = false): AnyExtension[] => {
         for (const file of files) {
           try {
             const imageUrl = await imageUploadHandler(file);
+            if (currentEditor.isDestroyed || !currentEditor.isEditable) return;
             currentEditor
               .chain()
               .insertContentAt(currentEditor.state.selection.anchor, {

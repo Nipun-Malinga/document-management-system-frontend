@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "src/features/editor/components/info/branches/BranchCreateForm.tsx"
+        ],
+        "createdAt": "2026-10-11T16:26:06.784Z",
+        "reason": "Codex review: gray text and gray background are paired disabled-state overrides; preserve existing interface per Stage 1 scope."
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "src/features/editor/components/info/branches/BranchCard.tsx"
+        ],
+        "createdAt": "2026-10-11T16:33:50.307Z",
+        "reason": "Codex review: flagged gray text only applies with matching disabled gray backgrounds; preserve the existing Stage 1 interface."
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "src/features/editor/components/info/versions/VersionCard.tsx"
+        ],
+        "createdAt": "2026-10-11T16:33:50.394Z",
+        "reason": "Codex review: flagged gray text only applies with matching disabled gray backgrounds; preserve the existing Stage 1 interface."
+      }
+    ]
+  }
+}

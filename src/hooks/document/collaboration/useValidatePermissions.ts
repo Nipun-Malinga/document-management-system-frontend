@@ -13,6 +13,7 @@ const useValidatePermissions = (documentId: string, branchId: string) => {
   return useQuery({
     queryKey: ['permissions', documentId, branchId],
     queryFn: data,
+    enabled: Boolean(documentId && branchId),
     staleTime: ms('10 Minutes'),
   });
 };
