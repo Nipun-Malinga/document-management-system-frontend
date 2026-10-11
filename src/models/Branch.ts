@@ -1,3 +1,5 @@
+import type { PageResponse } from './PageResponse';
+
 export interface Branch {
   id: string;
   documentId: string;
@@ -7,9 +9,7 @@ export interface Branch {
   trashed: boolean
 }
 
-export interface BranchResponse {
-  data: Branch[];
-}
+export type BranchResponse = PageResponse<Branch>;
 
 export interface BranchRequest {
   branchName: string

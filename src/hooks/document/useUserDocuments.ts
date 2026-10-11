@@ -1,18 +1,8 @@
-import type { DocumentsResponse } from '@/models/Document';
-import APIService from '@/services/apiService';
-import { useQuery } from '@tanstack/react-query';
-import ms from 'ms';
+import type { Document } from '@/models/Document';
+import type { DocumentParams } from '@/models/PageResponse';
+import useCollectionQuery from '@/hooks/useCollectionQuery';
 
-const useUserDocuments = () => {
-  const service = new APIService<DocumentsResponse>('/documents');
-  const data = () => service.get();
-
-  return useQuery({
-    queryKey: ['documents-own'],
-    queryFn: data,
-    staleTime: ms('1 Minutes'),
-    refetchInterval: ms('10 Minutes'),
-  });
-};
+const useUserDocuments = (params: DocumentParams = {}) =>
+  useCollectionQuery<Document, DocumentParams>(`/documents`, ['documents-own'], params, { staleTime: 60000, refetchInterval: 600000 });
 
 export default useUserDocuments;

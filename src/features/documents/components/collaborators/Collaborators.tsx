@@ -1,3 +1,9 @@
+import useCollectionParams from '@/hooks/useCollectionParams';
+import type { CollaboratorParams } from '@/models/PageResponse';
+import CollectionResults from '../collections/CollectionResults';
+import CollectionPagination from '../collections/CollectionPagination';
+import CollectionFilters from '../collections/CollectionFilters';
+import { permissionField } from '../collections/collectionFilterOptions';
 import useCollaborators from '@/hooks/document/collaboration/useCollaborators';
 import { Users } from 'lucide-react';
 import type { CollaboratorsResponse } from '@/models/Collaborator';
@@ -11,7 +17,7 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
   return (
     <div className='max-h-80 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent'>
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
-        {collaborators.data.map((collaborator) => (
+        {collaborators.content.map((collaborator) => (
           <Collaborator collaborator={collaborator} key={collaborator.userId} />
         ))}
       </div>
@@ -20,10 +26,14 @@ const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
 };
 
 const Collaborators = ({ documentId }: Props) => {
-  const { data } = useCollaborators(documentId);
+  const { params, update, setPage } = useCollectionParams<CollaboratorParams>(documentId);
+  const query = useCollaborators(documentId, params);
+  const { data } = query;
   return (
     <div className='space-y-6'>
-      {data?.data && data.data.length > 0 && (
+      <CollectionFilters key={documentId} params={params} update={update} fields={[{ name: 'username', label: 'Exact username', maxLength: 100 }, { name: 'email', label: 'Exact email', type: 'email' }, permissionField]} sorts={[['id,asc', 'Default order'], ['sharedUser.username,asc', 'Username A–Z']]} label='collaborators' />
+      <CollectionResults query={query} label='collaborators'>
+        {() => (
         <div className='bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm'>
           <div className='flex items-center justify-between mb-4'>
             <div className='flex items-center gap-3'>
@@ -40,12 +50,14 @@ const Collaborators = ({ documentId }: Props) => {
               </div>
             </div>
             <span className='px-3 py-1 text-sm font-semibold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200 dark:border-blue-800'>
-              {data.data.length}
+              {data?.totalElements}
             </span>
           </div>
-          {collaboratorRenderer(data)}
+          {data && collaboratorRenderer(data)}
         </div>
-      )}
+        )}
+      </CollectionResults>
+      <CollectionPagination data={data} pending={query.isFetching} onPage={setPage} label='collaborators' />
     </div>
   );
 };

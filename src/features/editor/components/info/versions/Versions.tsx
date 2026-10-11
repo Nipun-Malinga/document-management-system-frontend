@@ -1,3 +1,9 @@
+import useCollectionParams from '@/hooks/useCollectionParams';
+import type { VersionParams } from '@/models/PageResponse';
+import CollectionResults from '@/features/documents/components/collections/CollectionResults';
+import CollectionPagination from '@/features/documents/components/collections/CollectionPagination';
+import CollectionFilters from '@/features/documents/components/collections/CollectionFilters';
+import { versionSorts, statusField } from '@/features/documents/components/collections/collectionFilterOptions';
 import useDocumentVersions from '@/hooks/document/useDocumentVersions';
 import { useParams } from 'react-router-dom';
 import InfoDrawerBody from '../InfoDrawerBody';
@@ -12,7 +18,8 @@ import VersionCreateForm from './VersionCreateForm';
 
 const Versions = () => {
   const { documentId } = useParams();
-  const { data } = useDocumentVersions(documentId ?? '');
+  const { params, update, setPage } = useCollectionParams<VersionParams>(documentId);
+  const query = useDocumentVersions(documentId ?? '', params);
 
   return (
     <>
@@ -33,10 +40,11 @@ const Versions = () => {
       </DrawerHeader>
       <InfoDrawerBody emptyTitle='Versions' emptyDescription=''>
         <VersionCreateForm />
-        {data?.data &&
-          data.data.map((version) => (
-            <VersionCard key={version.id} version={version} />
-          ))}
+        <CollectionFilters key={documentId} params={params} update={update} fields={[{ name: 'title', label: 'Exact title' }, statusField, { name: 'branchId', label: 'Branch ID' }]} sorts={versionSorts} label='versions' />
+        <CollectionResults query={query} label='versions'>
+          {(items) => items.map((version) => <VersionCard version={version} key={version.id} />)}
+        </CollectionResults>
+        <CollectionPagination data={query.data} pending={query.isFetching} onPage={setPage} label='versions' />
       </InfoDrawerBody>
     </>
   );

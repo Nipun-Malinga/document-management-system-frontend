@@ -1,3 +1,9 @@
+import useCollectionParams from '@/hooks/useCollectionParams';
+import type { BranchParams } from '@/models/PageResponse';
+import CollectionResults from '@/features/documents/components/collections/CollectionResults';
+import CollectionPagination from '@/features/documents/components/collections/CollectionPagination';
+import CollectionFilters from '@/features/documents/components/collections/CollectionFilters';
+import { branchSorts, statusField } from '@/features/documents/components/collections/collectionFilterOptions';
 import {
   DrawerDescription,
   DrawerHeader,
@@ -12,7 +18,8 @@ import BranchCreateForm from './BranchCreateForm';
 
 const Branches = () => {
   const { documentId } = useParams();
-  const { data } = useBranches(documentId ?? '');
+  const { params, update, setPage } = useCollectionParams<BranchParams>(documentId);
+  const query = useBranches(documentId ?? '', params);
 
   return (
     <>
@@ -33,10 +40,11 @@ const Branches = () => {
       </DrawerHeader>
       <InfoDrawerBody emptyTitle='Branches' emptyDescription=''>
         <BranchCreateForm />
-        {data?.data &&
-          data.data
-            .filter((branch) => !branch.trashed)
-            .map((branch) => <BranchCard branch={branch} key={branch.id} />)}
+        <CollectionFilters key={documentId} params={params} update={update} fields={[{ name: 'branchName', label: 'Exact branch name' }, statusField]} sorts={branchSorts} label='branches' />
+        <CollectionResults query={query} label='branches'>
+          {(items) => items.map((branch) => <BranchCard branch={branch} key={branch.id} />)}
+        </CollectionResults>
+        <CollectionPagination data={query.data} pending={query.isFetching} onPage={setPage} label='branches' />
       </InfoDrawerBody>
     </>
   );

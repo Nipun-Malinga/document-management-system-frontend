@@ -1,3 +1,5 @@
+import type { PageResponse } from './PageResponse';
+
 type permissions = 'READ_ONLY' | 'READ_WRITE';
 
 export interface Collaborator {
@@ -7,6 +9,4 @@ export interface Collaborator {
   permission: permissions;
 }
 
-export interface CollaboratorsResponse {
-  data: Collaborator[];
-}
+export type CollaboratorsResponse = PageResponse<Collaborator>;

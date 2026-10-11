@@ -1,4 +1,4 @@
-import type { PageRequest } from './PageRequest';
+import type { PageResponse } from './PageResponse';
 import type { User } from './User';
 
 export type Status = 'PUBLIC' | 'PRIVATE';
@@ -10,9 +10,9 @@ export interface Version {
   createdBy: User;
   title: string;
   status: Status;
-  created_at: string;
+  createdAt: string;
 }
 
-export interface VersionResponse extends PageRequest<Version> {}
+export type VersionResponse = PageResponse<Version>;
 
-export interface VersionRequest extends Pick<Version, 'title' | 'status'> {}
+export type VersionRequest = Pick<Version, 'title' | 'status'>;

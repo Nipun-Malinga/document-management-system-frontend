@@ -1,4 +1,4 @@
-import type { PageRequest } from './PageRequest';
+import type { PageResponse } from './PageResponse';
 
 type status = 'PUBLIC' | 'PRIVATE';
 
@@ -16,8 +16,8 @@ export interface Document {
   favorite: boolean;
 }
 
-export interface DocumentsResponse extends PageRequest<Document> {}
+export type DocumentsResponse = PageResponse<Document>;
 export interface DocumentRequest extends Pick<Document, 'title' | 'status'> {
   templateId: number;
 }
-export interface UpdateDocumentRequest extends Pick<Document, 'title'> {}
+export type UpdateDocumentRequest = Pick<Document, 'title'>;

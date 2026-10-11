@@ -1,19 +1,8 @@
-import type { TrashDocumentResponse } from '@/models/Trash';
-import APIService from '@/services/apiService';
-import { useQuery } from '@tanstack/react-query';
-import ms from 'ms';
+import type { TrashDocument } from '@/models/Trash';
+import type { DocumentParams } from '@/models/PageResponse';
+import useCollectionQuery from '@/hooks/useCollectionQuery';
 
-const useTrashedDocuments = () => {
-  const service = new APIService<TrashDocumentResponse>('/documents/trash');
-
-  const data = () => service.get();
-
-  return useQuery({
-    queryKey: ['trashed_documents_own'],
-    queryFn: data,
-    staleTime: ms('1 Minutes'),
-    refetchInterval: ms('10 Minutes'),
-  });
-};
+const useTrashedDocuments = (params: Omit<DocumentParams, 'favorite'> = {}) =>
+  useCollectionQuery<TrashDocument, Omit<DocumentParams, 'favorite'>>(`/documents/trash`, ['trashed_documents_own'], params, { staleTime: 60000, refetchInterval: 600000 });
 
 export default useTrashedDocuments;

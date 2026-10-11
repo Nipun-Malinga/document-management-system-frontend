@@ -23,7 +23,7 @@ let client: QueryClient;
 const branch = { id: 'other', documentId: 'doc', branchName: 'other', createdAt: '', updatedAt: '', trashed: false };
 const version = {
   id: 'version', branchId: 'other', documentId: 'doc', title: 'Snapshot', status: 'PRIVATE' as const,
-  created_at: '', createdBy: { id: 1, username: 'owner', firstname: 'First', lastname: 'Last', email: 'owner@example.com', role: 'USER' as const },
+  createdAt: '2026-10-10', createdBy: { id: 1, username: 'owner', firstname: 'First', lastname: 'Last', email: 'owner@example.com', role: 'USER' as const },
 };
 
 beforeEach(() => {
@@ -74,6 +74,7 @@ describe('Stage 1 action containment', () => {
 
   it('allows writers to create/merge but keeps owner-only actions hidden', () => {
     renderControls('READ_WRITE');
+    expect(screen.getByText('Created 2026-10-10')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Create Branch' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Create Version' })).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: 'Merge' })).toHaveLength(2);

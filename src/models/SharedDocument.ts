@@ -5,6 +5,6 @@ export interface ShareDocumentRequest {
   permission: 'READ_ONLY' | 'READ_WRITE';
 }
 
-export interface SharedDocument extends Document {}
+export type SharedDocument = Document;
 
-export interface SharedDocumentsResponse extends DocumentsResponse {}
+export type SharedDocumentsResponse = DocumentsResponse;

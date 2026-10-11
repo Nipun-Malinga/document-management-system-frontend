@@ -63,7 +63,7 @@ const VersionCard = ({ version }: Props) => {
         {/* Created At */}
         <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700'>
           <Clock className='w-4 h-4 shrink-0' />
-          <span className='text-xs'>Created {version.created_at}</span>
+          <span className='text-xs'>Created {version.createdAt}</span>
         </div>
       </CardContent>
 

@@ -1,15 +1,8 @@
-import type {  TemplateResponse } from '@/models/Template';
-import APIService from '@/services/apiService';
-import { useQuery } from '@tanstack/react-query';
+import type { TemplateResponse } from '@/models/Template';
+import type { TemplateParams } from '@/models/PageResponse';
+import useCollectionQuery from '@/hooks/useCollectionQuery';
 
-const useGetTemplates = () => {
-  const service = new APIService<TemplateResponse[]>('/documents/templates');
-  const data = () => service.get();
-
-  return useQuery({
-    queryKey: ['templates'],
-    queryFn: data,
-  });
-};
+const useGetTemplates = (params: TemplateParams = {}) =>
+  useCollectionQuery<TemplateResponse, TemplateParams>(`/documents/templates`, ['templates'], params, {  });
 
 export default useGetTemplates;

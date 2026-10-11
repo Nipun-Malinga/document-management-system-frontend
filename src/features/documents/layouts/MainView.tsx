@@ -1,4 +1,10 @@
-import { Breadcrumb, SearchInput } from '@/components';
+import useCollectionParams from '@/hooks/useCollectionParams';
+import type { DocumentParams } from '@/models/PageResponse';
+import CollectionResults from '../components/collections/CollectionResults';
+import CollectionPagination from '../components/collections/CollectionPagination';
+import CollectionFilters from '../components/collections/CollectionFilters';
+import { documentSorts, statusField } from '../components/collections/collectionFilterOptions';
+import { Breadcrumb } from '@/components';
 import {
   Empty,
   EmptyDescription,
@@ -14,10 +20,8 @@ import DocumentGrid from '../components/DocumentGrid';
 import Templates from '../components/Templates';
 
 const MainView = () => {
-  const { data } = useUserDocuments();
-
-  const filtered = data?.data ? data.data.filter((item) => !item.trashed) : [];
-  const hasDocuments = filtered.length > 0;
+  const { params, update, setPage } = useCollectionParams<DocumentParams>();
+  const query = useUserDocuments(params);
 
   return (
     <>
@@ -29,20 +33,8 @@ const MainView = () => {
 
       <p className='font-bold text-sm mt-6'>All Documents</p>
 
-      <div className='flex-1 max-w-3xl mx-auto'>
-        <SearchInput
-          output={(value) => {
-            console.log(value);
-          }}
-        />
-      </div>
-      {hasDocuments ? (
-        <DocumentGrid>
-          {filtered.map((document, index) => (
-            <DocumentCard document={document} key={index} />
-          ))}
-        </DocumentGrid>
-      ) : (
+      <CollectionFilters params={params} update={update} fields={[{ name: 'title', label: 'Title' }, statusField, { name: 'favorite', label: 'Favorite', options: [['true', 'Yes'], ['false', 'No']] }]} sorts={documentSorts} label='documents' />
+      <CollectionResults query={query} label='documents' empty={Object.entries(params).some(([key, value]) => !['page', 'size', 'sort'].includes(key) && value !== undefined && value !== '') ? undefined : (
         <Empty className='mt-5 md:mt-10 lg:mt-20'>
           <EmptyHeader>
             <EmptyMedia variant='icon'>
@@ -55,7 +47,16 @@ const MainView = () => {
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
-      )}
+      )}>
+        {(items) => (
+          <DocumentGrid>
+            {items.map((document) => (
+              <DocumentCard document={document} key={document.id} />
+            ))}
+          </DocumentGrid>
+        )}
+      </CollectionResults>
+      <CollectionPagination data={query.data} pending={query.isFetching} onPage={setPage} label='documents' />
     </>
   );
 };

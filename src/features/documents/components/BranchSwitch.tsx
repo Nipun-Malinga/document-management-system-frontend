@@ -1,7 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import useCollectionParams from '@/hooks/useCollectionParams';
+import type { BranchParams } from '@/models/PageResponse';
+import CollectionResults from './collections/CollectionResults';
+import CollectionPagination from './collections/CollectionPagination';
+import CollectionFilters from './collections/CollectionFilters';
+import { branchSorts } from './collections/collectionFilterOptions';
+import { useEffect, useId, useRef, useState } from 'react';
 import { FaCodeBranch } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../../components';
+import { Button } from '@/components/ui/button';
 import useDocumentBranch from '../../../states/useDocumentBranch';
 import { useBranches } from '@/hooks/document';
 
@@ -11,9 +17,11 @@ interface Props {
 
 const BranchSwitch = ({ documentId }: Props) => {
   const [open, setOpen] = useState(false);
+  const dropdownId = useId();
   const { setBranchName, branchName } = useDocumentBranch();
   const navigate = useNavigate();
-  const { data } = useBranches(documentId);
+  const { params, update, setPage } = useCollectionParams<BranchParams>(documentId);
+  const query = useBranches(documentId, params);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -53,28 +61,30 @@ const BranchSwitch = ({ documentId }: Props) => {
     };
   }, [open]);
 
-  if (!data) return null;
-
-  const branches = data.data;
-
   return (
     <div className='relative inline-block' ref={dropdownRef}>
       <Button
-        icon={FaCodeBranch}
-        title={`Branches: ${branches.length}`}
+        variant='outline'
+        aria-expanded={open}
+        aria-controls={dropdownId}
         type='button'
         onClick={() => setOpen(!open)}
         className='h-7.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-800'
-      />
+      >
+        <FaCodeBranch className='text-base text-gray-700 dark:text-gray-300' />
+        <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>Branches: {query.data?.totalElements ?? '…'}</span>
+      </Button>
 
       <div
-        className={`absolute top-full left-0 bg-white dark:bg-slate-800 w-64 mt-2 py-2 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden z-50 transition-all duration-200 ease-out ${
+        id={dropdownId}
+        hidden={!open}
+        className={`absolute top-full left-0 bg-white dark:bg-slate-800 w-80 max-w-[calc(100vw-2rem)] mt-2 py-2 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden z-50 transition-all duration-200 ease-out ${
           open
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 pointer-events-none'
         }`}
-        role='menu'
-        aria-label='Branch selection menu'
+        aria-label='Branch selection'
+        role='region'
       >
         <div className='px-3 py-2 border-b border-slate-200 dark:border-slate-700'>
           <p className='text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide'>
@@ -83,14 +93,10 @@ const BranchSwitch = ({ documentId }: Props) => {
         </div>
 
         <div className='max-h-80 overflow-y-auto px-2 py-1'>
-          {branches.length === 0 ? (
-            <p className='text-sm text-slate-500 dark:text-slate-400 px-3 py-2'>
-              No branches available
-            </p>
-          ) : (
-            branches
-              .filter((branch) => !branch.trashed)
-              .map((branch) => {
+          {open && (<>
+          <CollectionFilters key={documentId} params={params} update={update} fields={[{ name: 'branchName', label: 'Exact branch name' }]} sorts={branchSorts} label='branch selection' />
+          <CollectionResults query={query} label='branches'>
+          {(branches) => branches.map((branch) => {
                 const isActive = branchName === branch.branchName;
 
                 return (
@@ -124,8 +130,10 @@ const BranchSwitch = ({ documentId }: Props) => {
                     </div>
                   </button>
                 );
-              })
-          )}
+              })}
+          </CollectionResults>
+          <CollectionPagination data={query.data} pending={query.isFetching} onPage={setPage} label='branch selection' />
+          </>)}
         </div>
       </div>
     </div>

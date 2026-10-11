@@ -1,4 +1,4 @@
-import type { PageRequest } from './PageRequest';
+import type { PageResponse } from './PageResponse';
 import type { Document } from './Document';
 import type { Branch } from './Branch';
 
@@ -15,6 +15,9 @@ export interface TrashBranch extends Trash {
   branch: Branch;
 }
 
-export interface TrashDocumentResponse extends PageRequest<TrashDocument> {}
+export type TrashDocumentResponse = PageResponse<TrashDocument>;
 
-export interface TrashBranchResponse extends PageRequest<TrashBranch> {}
+export type TrashBranchResponse = PageResponse<TrashBranch>;
+
+// The branch-trash endpoint alone uses snake_case on the wire.
+export type TrashBranchWire = Omit<TrashBranch, 'addedDate'> & { added_date: string };
