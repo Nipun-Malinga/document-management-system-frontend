@@ -1,4 +1,5 @@
-import { Alert, Button } from '@/components';
+import MergeControl from '../MergeControl';
+import { Button } from '@/components';
 import {
   Card,
   CardContent,
@@ -6,10 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useDocumentAccess from '@/hooks/document/useDocumentAccess';
 import type { Version } from '@/models/Version';
-import { CheckCircle, Clock, Eye, History, User } from 'lucide-react';
+import { Clock, Eye, History, User } from 'lucide-react';
 
 interface Props {
   version: Version;
@@ -17,6 +18,7 @@ interface Props {
 
 const VersionCard = ({ version }: Props) => {
   const { branchId } = useParams();
+  const navigate = useNavigate();
   const { canWrite } = useDocumentAccess(version.documentId, branchId ?? '');
 
   return (
@@ -71,7 +73,7 @@ const VersionCard = ({ version }: Props) => {
       <CardFooter className='pt-4 border-t-2 border-gray-200 dark:border-gray-700'>
         <div className='flex flex-wrap gap-2 w-full'>
           <Button
-            onClick={() => {}}
+            onClick={() => navigate(`/document/${version.documentId}/version/${version.id}/view`)}
             className='flex-1 min-w-[100px] flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-all duration-150 active:scale-95'
           >
             <Eye className='w-4 h-4' />
@@ -79,23 +81,7 @@ const VersionCard = ({ version }: Props) => {
           </Button>
 
           {/* MERGE */}
-          {canWrite && (
-            <Alert
-              className='w-full'
-              trigger={
-                <Button
-                  className='w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-lg transition-all duration-150 border border-blue-200 dark:border-blue-800 disabled:border-gray-200 dark:disabled:border-gray-700 active:scale-95 disabled:active:scale-100'
-                >
-                  <CheckCircle className='w-4 h-4' />
-                  Merge
-                </Button>
-              }
-              title='Merge Version?'
-              description=''
-              action='Merge'
-              onClick={() => {}}
-            />
-          )}
+          {canWrite && <MergeControl documentId={version.documentId} targetBranchId={branchId ?? ''} source={{ kind: 'version', id: version.id, name: version.title }} />}
         </div>
       </CardFooter>
     </Card>

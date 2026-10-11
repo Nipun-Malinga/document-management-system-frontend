@@ -1,3 +1,5 @@
+import { getSession } from '@/states/sessionStore';
+import { registerPersistence } from '../persistence/persistenceRegistry';
 import Collaboration from '@tiptap/extension-collaboration';
 import { useEditor } from '@tiptap/react';
 import { useEffect, useMemo, useState } from 'react';
@@ -46,6 +48,7 @@ const CollaborativeEditor = ({
   provider,
 }: EditorProps) => {
   const user = useUser();
+  useEffect(() => registerPersistence({ documentId, branchId, epoch: getSession().epoch, mode: 'collaborative', coordinator: null }), [documentId, branchId]);
   const [authenticationFailed, setAuthenticationFailed] = useState(false);
   const canEdit = editable && !authenticationFailed;
   useEffect(() => {

@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import useSoloActionState from '../../../persistence/useSoloActionState';
+import { actionError } from '../../../persistence/actionError';
 import { Button } from '@/components';
 import {
   Dialog,
@@ -27,8 +30,10 @@ import useDocumentAccess from '@/hooks/document/useDocumentAccess';
 
 const CreateBranchForm = () => {
   const { documentId, branchId } = useParams();
+  const [error, setError] = useState('');
+  const safety = useSoloActionState(documentId ?? '', branchId ?? '');
   const { canWrite } = useDocumentAccess(documentId ?? '', branchId ?? '');
-  const { mutate, isPending } = useCreateBranch(documentId ?? '', branchId ?? '');
+  const { mutateAsync, isPending } = useCreateBranch(documentId ?? '', branchId ?? '');
 
   const {
     register,
@@ -40,9 +45,11 @@ const CreateBranchForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: TCreateBranchSchema) => {
-    if (!canWrite || isPending) return;
-    mutate({ branchName: data.branchName }, { onSuccess: () => reset() });
+  const onSubmit = async (data: TCreateBranchSchema) => {
+    if (!canWrite || isPending || safety.disabled) return;
+    setError('');
+    try { await mutateAsync(data); reset(); }
+    catch (error) { setError(actionError(error)); }
   };
 
   if (!canWrite) return null;
@@ -50,9 +57,10 @@ const CreateBranchForm = () => {
   return (
     <Dialog>
       <DialogTrigger asChild className='w-full'>
-        <Button className='w-full'>Create Branch</Button>
+        <Button disabled={safety.disabled} className='w-full'>Create Branch</Button>
       </DialogTrigger>
 
+      {safety.reason && <p className='text-sm text-muted-foreground'>{safety.reason}</p>}
       <DialogContent>
         <DialogTitle>Create a new branch</DialogTitle>
         <DialogDescription>Enter a name for the new branch.</DialogDescription>
@@ -80,14 +88,15 @@ const CreateBranchForm = () => {
             </FieldSet>
           </FieldGroup>
 
+          {error && <p role='alert' className='text-sm text-destructive'>{error}</p>}
           <DialogFooter className='mt-3'>
             <DialogClose asChild>
-              <Button type='button'>Cancel</Button>
+              <Button type='button' disabled={isPending}>Cancel</Button>
             </DialogClose>
 
             <Button
               type='submit'
-              disabled={!isValid || isPending}
+              disabled={!isValid || isPending || safety.disabled}
               className='flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-lg transition-all duration-150 border border-red-200 dark:border-red-800 disabled:border-gray-200 dark:disabled:border-gray-700 active:scale-95 disabled:active:scale-100'
             >
               {isPending ? (

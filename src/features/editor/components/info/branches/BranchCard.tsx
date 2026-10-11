@@ -1,3 +1,4 @@
+import MergeControl from '../MergeControl';
 import { Alert, Button } from '@/components';
 import {
   Card,
@@ -12,12 +13,11 @@ import type { Branch } from '@/models/Branch';
 import {
   CheckCircle,
   Clock,
-  ExternalLink,
   Eye,
   GitBranch,
   Trash2,
 } from 'lucide-react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Props {
   branch: Branch;
@@ -84,44 +84,14 @@ const BranchCard = ({ branch }: Props) => {
           </Button>
 
           {!isCurrentBranch && (
-            <Link
-              to={`/document/${branch.documentId}/branch/${branch.id}/edit`}
-              target='_blank'
-              rel='noopener noreferrer'
+            <button type='button' onClick={() => navigate(`/document/${branch.documentId}/branch/${branch.id}/edit`)}
               className='flex-1 min-w-[100px] flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-150 shadow-sm hover:shadow-md active:scale-95'
             >
-              <ExternalLink className='w-4 h-4' />
               Switch
-            </Link>
+            </button>
           )}
 
-          {!isMainBranch && canWrite && (
-            <Alert
-              className='w-full'
-              trigger={
-                <Button
-                  disabled={isPending}
-                  className='w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-lg transition-all duration-150 border border-blue-200 dark:border-blue-800 disabled:border-gray-200 dark:disabled:border-gray-700 active:scale-95 disabled:active:scale-100'
-                >
-                  {isPending ? (
-                    <>
-                      <div className='w-4 h-4 border-2 border-blue-300 border-t-white rounded-full animate-spin' />
-                      Merging...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle className='w-4 h-4' />
-                      Merge
-                    </>
-                  )}
-                </Button>
-              }
-              title='Merge Branch?'
-              description={''}
-              action='Merge'
-              onClick={() => {}}
-            />
-          )}
+          {canWrite && <MergeControl documentId={branch.documentId} targetBranchId={branchId ?? ''} source={{ kind: 'branch', id: branch.id, name: branch.branchName }} />}
           {!isMainBranch && isOwner && (
             <Alert
               className='w-full'

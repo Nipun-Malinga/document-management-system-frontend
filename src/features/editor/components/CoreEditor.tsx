@@ -29,7 +29,6 @@ const CoreEditor = ({
         <TopToolBar
           documentTitle={data?.title ?? 'Untitled Document'}
           enableAutoSaver={enableAutoSaver}
-          editor={editor}
           documentId={documentId}
           branchId={branchId}
         />

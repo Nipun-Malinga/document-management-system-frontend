@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { actionError } from '@/features/editor/persistence/actionError';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Collaborators from './Collaborators';
 import { SearchUser } from '@/features/users';
@@ -10,7 +12,8 @@ interface Props {
 }
 
 const CollaboratorTabs = ({ document }: Props) => {
-  const { mutate, isPending } = useShareDocument(document.id);
+  const [error, setError] = useState('');
+  const { mutateAsync, isPending } = useShareDocument(document.id);
   const user = useUser();
 
   return (
@@ -41,18 +44,17 @@ const CollaboratorTabs = ({ document }: Props) => {
 
       {document.ownerId === user?.id && (
         <TabsContent value='add-collaborators' className='mt-0'>
-          <SearchUser
+          {!document.shared ? <p role='status' className='p-3 text-sm text-muted-foreground'>First sharing is paused until collaborative room initialization from saved content is verified.</p> : <SearchUser
             onClick={(userId) => {
               if (document.ownerId !== user?.id) return;
-              mutate({
-                userId: userId,
-                permission: 'READ_WRITE',
-              });
+              setError('');
+              void mutateAsync({ userId, permission: 'READ_WRITE' }).catch((error: unknown) => setError(actionError(error)));
             }}
             userPending={isPending}
             title='Add Collaborator'
             subTitle='Invite someone to collaborate'
-          />
+          />}
+          {error && <p role='alert' className='p-3 text-sm text-destructive'>{error}</p>}
         </TabsContent>
       )}
     </Tabs>

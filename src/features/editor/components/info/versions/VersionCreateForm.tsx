@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import useSoloActionState from '../../../persistence/useSoloActionState';
+import { actionError } from '../../../persistence/actionError';
 import { Button } from '@/components';
 import {
   FieldGroup,
@@ -39,6 +42,8 @@ import {
 
 const VersionCreateForm = () => {
   const { documentId, branchId } = useParams();
+  const [error, setError] = useState('');
+  const safety = useSoloActionState(documentId ?? '', branchId ?? '');
 
   const { canWrite } = useDocumentAccess(documentId ?? '', branchId ?? '');
 
@@ -53,15 +58,13 @@ const VersionCreateForm = () => {
     mode: 'onChange',
   });
 
-  const { mutate, isPending } = useCreateVersion(documentId ?? '', branchId ?? '');
+  const { mutateAsync, isPending } = useCreateVersion(documentId ?? '', branchId ?? '');
 
-  const onSubmit = (data: TCreateVersionSchema) => {
-    if (!canWrite || isPending) return;
-    mutate(data, {
-      onSuccess: () => {
-        reset();
-      },
-    });
+  const onSubmit = async (data: TCreateVersionSchema) => {
+    if (!canWrite || isPending || safety.disabled) return;
+    setError('');
+    try { await mutateAsync(data); reset(); }
+    catch (error) { setError(actionError(error)); }
   };
 
   if (!canWrite) return null;
@@ -69,9 +72,10 @@ const VersionCreateForm = () => {
   return (
     <Dialog>
       <DialogTrigger asChild className="w-full">
-        <Button className="w-full">Create Version</Button>
+        <Button disabled={safety.disabled} className="w-full">Create Version</Button>
       </DialogTrigger>
 
+      {safety.reason && <p className='text-sm text-muted-foreground'>{safety.reason}</p>}
       <DialogContent>
         <DialogTitle>Create a new version</DialogTitle>
         <DialogDescription>
@@ -134,16 +138,17 @@ const VersionCreateForm = () => {
             )}
           </Field>
 
+          {error && <p role='alert' className='text-sm text-destructive'>{error}</p>}
           <DialogFooter className="mt-3">
             <DialogClose asChild>
-              <Button type="button">
+              <Button type="button" disabled={isPending}>
                 Cancel
               </Button>
             </DialogClose>
 
             <Button
               type="submit"
-              disabled={!isValid || isPending}
+              disabled={!isValid || isPending || safety.disabled}
               className="flex items-center justify-center gap-2"
             >
               {isPending ? (

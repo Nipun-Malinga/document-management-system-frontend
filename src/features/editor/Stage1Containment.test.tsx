@@ -35,8 +35,8 @@ beforeEach(() => {
 });
 afterEach(() => { client.clear(); vi.restoreAllMocks(); });
 
-const renderControls = (value: Permission['permission'], ownerId = 2) => {
-  const doc = { ...document, ownerId };
+const renderControls = (value: Permission['permission'], ownerId = 2, shared = false) => {
+  const doc = { ...document, ownerId, shared };
   client.setQueryData(['document', 'doc'], doc);
   client.setQueryData(['permissions', 'doc', 'main'], { ...permission, permission: value });
   return render(
@@ -80,6 +80,14 @@ describe('Stage 1 action containment', () => {
     expect(screen.getAllByRole('button', { name: 'Merge' })).toHaveLength(2);
     expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Toggle bookmark' })).not.toBeInTheDocument();
+    expectNoWrites();
+  });
+
+  it('keeps collaborative snapshots and merges disabled', () => {
+    renderControls('ADMIN', 1, true);
+    expect(screen.getByRole('button', { name: 'Create Branch' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Create Version' })).toBeDisabled();
+    for (const button of screen.getAllByRole('button', { name: 'Merge' })) expect(button).toBeDisabled();
     expectNoWrites();
   });
 

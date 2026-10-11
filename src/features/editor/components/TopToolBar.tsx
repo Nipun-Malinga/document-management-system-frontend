@@ -1,5 +1,4 @@
 import DarkThemeButton from '@/components/common/DarkThemeButton';
-import type { Editor } from '@tiptap/react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components';
 import AutoSaver from './AutoSaver';
@@ -8,7 +7,6 @@ import { InfoDrawer } from './info';
 interface Props {
   documentTitle: string;
   enableAutoSaver: boolean;
-  editor: Editor;
   documentId: string;
   branchId: string;
 }
@@ -16,7 +14,6 @@ interface Props {
 const TopToolBar = ({
   documentTitle,
   enableAutoSaver,
-  editor,
   documentId,
   branchId,
 }: Props) => {
@@ -35,13 +32,7 @@ const TopToolBar = ({
       </h1>
 
       <div className='order-2 md:order-3 md:ml-auto flex items-center gap-2 shrink-0'>
-        {enableAutoSaver && (
-          <AutoSaver
-            editor={editor}
-            documentId={documentId}
-            branchId={branchId}
-          />
-        )}
+        {enableAutoSaver && <AutoSaver />}
 
         <Button
           title='Preview'

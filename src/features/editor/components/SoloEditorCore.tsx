@@ -1,3 +1,4 @@
+import useSoloPersistence from '../persistence/useSoloPersistence';
 import { useEditor, type Content } from '@tiptap/react';
 import {
   commonEditorConfigs,
@@ -22,13 +23,15 @@ const SoloEditorCore = ({ content, documentId, branchId, editable }: Props) => {
     ...commonEditorConfigs,
   });
 
+  const { state } = useSoloPersistence(editor, documentId, branchId, editable);
+  const canEdit = editable && !state.locked;
   useEffect(() => {
-    editor.setEditable(editable);
-  }, [editor, editable]);
+    editor.setEditable(canEdit, false);
+  }, [editor, canEdit]);
 
   return (
     <CoreEditor
-      enableAutoSaver={editable}
+      enableAutoSaver={true}
       editor={editor}
       documentId={documentId}
       branchId={branchId}
@@ -37,9 +40,9 @@ const SoloEditorCore = ({ content, documentId, branchId, editable }: Props) => {
         editor={editor}
         canRedo={true}
         canUndo={true}
-        onRedo={editor.chain().focus().redo().run}
-        onUndo={editor.chain().focus().undo().run}
-        disabled={!editable}
+        onRedo={() => { editor.chain().focus().redo().run(); }}
+        onUndo={() => { editor.chain().focus().undo().run(); }}
+        disabled={!canEdit}
       />
     </CoreEditor>
   );

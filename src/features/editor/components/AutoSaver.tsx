@@ -1,65 +1,21 @@
-import { useState, useEffect } from 'react';
-import type { Editor } from '@tiptap/react';
-import { useSaveDocumentContent } from '@/hooks/document';
+import { Button } from '@/components/ui/button';
+import { usePersistenceRegistry } from '../persistence/persistenceRegistry';
+import useSaveState from '../persistence/useSaveState';
 
-interface Props {
-  editor: Editor;
-  documentId: string;
-  branchId: string;
-}
-
-const AutoSaver = ({ editor, documentId, branchId }: Props) => {
-  const { mutate, isPending, isSuccess } = useSaveDocumentContent(
-    documentId,
-    branchId
-  );
-
-  const [status, setStatus] = useState<'idle' | 'pending' | 'success'>('idle');
-
-  useEffect(() => {
-    if (isPending) setStatus('pending');
-    else if (isSuccess) {
-      setStatus('success');
-      const timer = setTimeout(() => setStatus('idle'), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isPending, isSuccess]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (editor.isDestroyed || !editor.isEditable) return;
-      const content = editor.getJSON();
-      if (content) mutate(JSON.stringify(content));
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [editor, mutate]);
-
+const AutoSaver = () => {
+  const coordinator = usePersistenceRegistry((state) => state.active?.coordinator ?? null);
+  const state = useSaveState(coordinator);
+  if (!coordinator) return null;
   return (
-    <div>
-      {/* Pending (saving) indicator */}
-      {status === 'idle' && (
-        <span className='relative flex size-3'>
-          <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-75'></span>
-          <span className='relative inline-flex size-3 rounded-full bg-slate-500'></span>
-        </span>
-      )}
-
-      {/* Pending (saving) indicator */}
-      {status === 'pending' && (
-        <span className='relative flex size-3'>
-          <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75'></span>
-          <span className='relative inline-flex size-3 rounded-full bg-sky-500'></span>
-        </span>
-      )}
-
-      {/* Success (saved) indicator */}
-      {status === 'success' && (
-        <span className='relative flex size-3'>
-          <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75'></span>
-          <span className='relative inline-flex size-3 rounded-full bg-green-500'></span>
-        </span>
-      )}
+    <div className='flex flex-wrap items-center gap-2 text-sm text-foreground'>
+      <span role={state.status === 'error' ? 'alert' : 'status'}>
+        {state.replacementPending ? state.error || 'Reloading merged branch…' :
+          state.status === 'error' ? 'Save failed. Changes remain unsaved.' :
+          state.status === 'saving' ? 'Saving…' : coordinator.dirty ? 'Unsaved changes' : 'Saved'}
+      </span>
+      {state.status === 'error' && <Button size='sm' variant='outline' onClick={() => {
+        void (state.replacementPending ? coordinator.retryReplacement() : coordinator.flush()).catch(() => {});
+      }}>{state.replacementPending ? 'Retry reload' : 'Retry saving'}</Button>}
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { tokenFor } from '@/test/fixtures';
 import SoloEditorCore from './SoloEditorCore';
 import CollaborativeEditorCore from './CollaborativeEditorCore';
 import AutoSaver from './AutoSaver';
+import useSoloPersistence from '../persistence/useSoloPersistence';
 
 const state = vi.hoisted(() => ({
   editor: null as Editor | null,
@@ -36,7 +37,9 @@ afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); state.editor = null;
 describe('editor permission changes', () => {
   it('updates solo editability and autosave without recreating content', () => {
     const props = { documentId: 'doc', branchId: 'main', content: '<p>Preserved text</p>' };
-    const { rerender } = render(<SoloEditorCore {...props} editable />);
+    const client = new QueryClient();
+    const wrap = ({ children }: { children: ReactNode }) => <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+    const { rerender, unmount } = render(<SoloEditorCore {...props} editable />, { wrapper: wrap });
     const editor = state.editor!;
     expect(editor.isEditable).toBe(true);
     expect(screen.getByTestId('core')).toHaveAttribute('data-autosave', 'true');
@@ -45,9 +48,11 @@ describe('editor permission changes', () => {
     expect(editor.isEditable).toBe(false);
     expect(editor.getText()).toBe('Preserved text');
     expect(screen.getByRole('button', { name: 'Format' })).toBeDisabled();
-    expect(screen.getByTestId('core')).toHaveAttribute('data-autosave', 'false');
+    expect(screen.getByTestId('core')).toHaveAttribute('data-autosave', 'true');
     rerender(<SoloEditorCore {...props} editable />);
     expect(editor.isEditable).toBe(true);
+    unmount();
+    client.clear();
   });
 
   it('updates collaborative editability with the same Y.Doc and no REST autosave', () => {
@@ -96,20 +101,31 @@ describe('editor permission changes', () => {
     ydoc.destroy();
   });
 
-  it('skips the 30-second REST write if the mounted editor loses write access', async () => {
+  it('writes only dirty content at 30 seconds and stops after permission loss or unmount', async () => {
     vi.useFakeTimers();
     const put = vi.spyOn(APIService.prototype, 'put').mockResolvedValue({});
     const client = new QueryClient();
     const { Editor: TiptapEditor } = await import('@tiptap/react');
     const { default: StarterKit } = await import('@tiptap/starter-kit');
     const editor = new TiptapEditor({ extensions: [StarterKit], content: '<p>Text</p>' });
-    const { unmount } = render(<QueryClientProvider client={client}><AutoSaver editor={editor} documentId='doc' branchId='main' /></QueryClientProvider>);
+    const Persistence = () => { useSoloPersistence(editor, 'doc', 'main', true); return <AutoSaver />; };
+    const { unmount } = render(<QueryClientProvider client={client}><Persistence /></QueryClientProvider>);
+    await act(async () => { await vi.advanceTimersByTimeAsync(30000); });
+    expect(put).not.toHaveBeenCalled();
+    act(() => { editor.commands.setContent('<p>Changed</p>'); });
     await act(async () => { await vi.advanceTimersByTimeAsync(30000); });
     expect(put).toHaveBeenCalledTimes(1);
-    editor.setEditable(false);
+    await act(async () => { await vi.advanceTimersByTimeAsync(30000); });
+    expect(put).toHaveBeenCalledTimes(1);
+    act(() => {
+      editor.commands.setContent('<p>Pending</p>');
+      editor.setEditable(false, false);
+    });
     await act(async () => { await vi.advanceTimersByTimeAsync(30000); });
     expect(put).toHaveBeenCalledTimes(1);
     unmount();
+    await act(async () => { await vi.advanceTimersByTimeAsync(30000); });
+    expect(put).toHaveBeenCalledTimes(1);
     editor.destroy();
     client.clear();
   });

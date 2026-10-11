@@ -82,6 +82,10 @@ const router = createBrowserRouter([
         element: <ContentView />,
       },
       {
+        path: ':documentId/version/:versionId/view',
+        element: <ContentView />,
+      },
+      {
         path: ':documentId/branch/:branchId/edit',
         element: <EditorContainer />,
       },
