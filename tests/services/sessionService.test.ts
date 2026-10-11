@@ -1,11 +1,11 @@
 import { QueryClient } from '@tanstack/react-query';
 import { afterEach, expect, it, vi } from 'vitest';
-import { axiosInstance } from './apiService';
-import { startSessionRuntime } from './sessionService';
+import { axiosInstance } from '@/services/apiService';
+import { startSessionRuntime } from '@/services/sessionService';
 import { ACCESS_TOKEN_KEY, endSession, getSession, replaceAccessToken } from '@/states/sessionStore';
 import useDocumentInfoPopUp from '@/states/useDocumentInfoPopup';
 import useAutoSave from '@/states/useAutoSave';
-import { claims, tokenFor } from '@/test/fixtures';
+import { claims, tokenFor } from '../fixtures';
 
 let stop: (() => void) | undefined;
 const originalAdapter = axiosInstance.defaults.adapter;

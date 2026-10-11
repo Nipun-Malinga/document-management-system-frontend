@@ -1,10 +1,10 @@
 import { AxiosError, type AxiosAdapter, type InternalAxiosRequestConfig } from 'axios';
 import { QueryClient } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import APIService, { axiosInstance, refreshSession } from './apiService';
-import { bindSessionQueryClient, login } from './sessionService';
+import APIService, { axiosInstance, refreshSession } from '@/services/apiService';
+import { bindSessionQueryClient, login } from '@/services/sessionService';
 import { endSession, getSession, initializeSession, replaceAccessToken, useSessionStore } from '@/states/sessionStore';
-import { claims, tokenFor } from '@/test/fixtures';
+import { claims, tokenFor } from '../fixtures';
 
 const originalAdapter = axiosInstance.defaults.adapter;
 const refreshed = () => tokenFor({ ...claims, exp: Math.floor(Date.now() / 1000) + 7200 });

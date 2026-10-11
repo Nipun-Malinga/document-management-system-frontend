@@ -1,8 +1,8 @@
 import type { Client, StompConfig, IFrame, IMessage } from '@stomp/stompjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { commitRefresh, endSession, getSession, markRecovering, replaceAccessToken } from '@/states/sessionStore';
-import { claims, tokenFor } from '@/test/fixtures';
-import WebSocketService from './websocketService';
+import { claims, tokenFor } from '../fixtures';
+import WebSocketService from '@/services/websocketService';
 
 const mocks = vi.hoisted(() => ({ clients: [] as FakeClient[] }));
 class FakeClient {

@@ -3,8 +3,8 @@ import type { HocuspocusProviderConfiguration } from '@hocuspocus/provider';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { axiosInstance } from '@/services/apiService';
 import { commitRefresh, endSession, getSession, markRecovering, replaceAccessToken } from '@/states/sessionStore';
-import { claims, tokenFor } from '@/test/fixtures';
-import useProvider from './useProvider';
+import { claims, tokenFor } from '../../../fixtures';
+import useProvider from '@/hooks/document/collaboration/useProvider';
 
 const mocks = vi.hoisted(() => ({ providers: [] as FakeProvider[] }));
 class FakeProvider {

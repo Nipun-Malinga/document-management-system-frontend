@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { expect, it, vi } from 'vitest';
-import Toolbar from './Toolbar';
+import Toolbar from '@/features/editor/components/Toolbar';
 
 it('disables every toolbar control for keyboard as well as pointer input', async () => {
   const editor = new Editor({ extensions: [StarterKit], editable: false });

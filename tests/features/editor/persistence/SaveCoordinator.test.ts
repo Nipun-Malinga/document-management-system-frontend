@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getSession, replaceAccessToken, endSession } from '@/states/sessionStore';
-import { tokenFor } from '@/test/fixtures';
-import { SaveCoordinator } from './SaveCoordinator';
+import { tokenFor } from '../../../fixtures';
+import { SaveCoordinator } from '@/features/editor/persistence/SaveCoordinator';
 
 const deferred = <T,>() => {
   let resolve!: (value: T) => void;

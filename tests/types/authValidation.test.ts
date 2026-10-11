@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { AxiosError } from 'axios';
-import { registerSchema } from './Register';
-import { signInSchema } from './SignIn';
+import { registerSchema } from '@/types/Register';
+import { signInSchema } from '@/types/SignIn';
 import { applyFormError } from '@/utils/formErrors';
 const valid = { firstname: 'Tom', lastname: 'Cruise', username: 'user', email: 'owner@example.com', password: 'password', confirmPassword: 'password', acceptTerms: true };
 const problem = (status: number, data: unknown) => new AxiosError('Rejected', undefined, undefined, undefined, { data, status, statusText: '', headers: {}, config: { headers: {} } } as never);

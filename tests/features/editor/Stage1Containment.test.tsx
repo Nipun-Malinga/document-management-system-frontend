@@ -5,14 +5,14 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import APIService from '@/services/apiService';
-import { document, permission, tokenFor } from '@/test/fixtures';
+import { document, permission, tokenFor } from '../../fixtures';
 import type { Permission } from '@/models/Permission';
 import DocumentCard from '@/features/documents/components/DocumentCard';
 import InfoButtons from '@/features/documents/components/info/InfoButtons';
-import BranchCard from './components/info/branches/BranchCard';
-import BranchCreateForm from './components/info/branches/BranchCreateForm';
-import VersionCard from './components/info/versions/VersionCard';
-import VersionCreateForm from './components/info/versions/VersionCreateForm';
+import BranchCard from '@/features/editor/components/info/branches/BranchCard';
+import BranchCreateForm from '@/features/editor/components/info/branches/BranchCreateForm';
+import VersionCard from '@/features/editor/components/info/versions/VersionCard';
+import VersionCreateForm from '@/features/editor/components/info/versions/VersionCreateForm';
 
 // Isolate containment from the existing Alert wrapper's nested-button markup.
 vi.mock('@/components/common/Alert', () => ({

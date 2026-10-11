@@ -8,24 +8,24 @@ import { Doc } from 'yjs';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import APIService from '@/services/apiService';
-import { tokenFor } from '@/test/fixtures';
-import SoloEditorCore from './SoloEditorCore';
-import CollaborativeEditorCore from './CollaborativeEditorCore';
-import AutoSaver from './AutoSaver';
-import useSoloPersistence from '../persistence/useSoloPersistence';
+import { tokenFor } from '../../../fixtures';
+import SoloEditorCore from '@/features/editor/components/SoloEditorCore';
+import CollaborativeEditorCore from '@/features/editor/components/CollaborativeEditorCore';
+import AutoSaver from '@/features/editor/components/AutoSaver';
+import useSoloPersistence from '@/features/editor/persistence/useSoloPersistence';
 
 const state = vi.hoisted(() => ({
   editor: null as Editor | null,
   provider: null as HocuspocusProvider | null,
 }));
 
-vi.mock('./CoreEditor', () => ({
+vi.mock('@/features/editor/components/CoreEditor', () => ({
   default: ({ editor, enableAutoSaver, children }: { editor: Editor; enableAutoSaver: boolean; children: ReactNode }) => {
     state.editor = editor;
     return <div data-testid='core' data-autosave={enableAutoSaver}><EditorContent editor={editor} />{children}</div>;
   },
 }));
-vi.mock('./Toolbar', () => ({ default: ({ disabled }: { disabled: boolean }) => <button disabled={disabled}>Format</button> }));
+vi.mock('@/features/editor/components/Toolbar', () => ({ default: ({ disabled }: { disabled: boolean }) => <button disabled={disabled}>Format</button> }));
 vi.mock('@/hooks/document/collaboration', () => ({ useProvider: () => state.provider }));
 vi.mock('@tiptap/extension-collaboration-caret', () => ({
   CollaborationCaret: { configure: () => Extension.create({ name: 'testCaret' }) },

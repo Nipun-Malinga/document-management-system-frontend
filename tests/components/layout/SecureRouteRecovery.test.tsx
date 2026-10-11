@@ -3,10 +3,10 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { afterEach, expect, it, vi } from 'vitest';
-import { claims, tokenFor } from '@/test/fixtures';
+import { claims, tokenFor } from '../../fixtures';
 import { initializeSession, replaceAccessToken } from '@/states/sessionStore';
 import { axiosInstance, refreshSession } from '@/services/apiService';
-import SecureRoute from './SecureRoute';
+import SecureRoute from '@/components/layout/SecureRoute';
 
 const originalAdapter = axiosInstance.defaults.adapter;
 afterEach(() => { axiosInstance.defaults.adapter = originalAdapter; });

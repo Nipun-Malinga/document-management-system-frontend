@@ -2,8 +2,8 @@ import { initializeSession } from '@/states/sessionStore';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
-import { claims, tokenFor } from '@/test/fixtures';
-import SecureRoute from './SecureRoute';
+import { claims, tokenFor } from '../../fixtures';
+import SecureRoute from '@/components/layout/SecureRoute';
 
 const renderRoute = (token: string | null, type: 'USER' | 'ADMIN' = 'USER', navigation?: string) => {
   if (token) localStorage.setItem('jwt-access-token', token);

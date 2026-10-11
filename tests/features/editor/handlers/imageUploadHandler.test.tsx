@@ -6,10 +6,10 @@ import Image from '@tiptap/extension-image';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { axiosInstance } from '@/services/apiService';
 import { endSession, replaceAccessToken } from '@/states/sessionStore';
-import { tokenFor } from '@/test/fixtures';
-import { imageUploadHandler, insertUploadedImages } from './imageUploadHandler';
-import UploadFeedback from '../components/UploadFeedback';
-import { editorExtensions } from '../configs/EditorConfigs';
+import { tokenFor } from '../../../fixtures';
+import { imageUploadHandler, insertUploadedImages } from '@/features/editor/handlers/imageUploadHandler';
+import UploadFeedback from '@/features/editor/components/UploadFeedback';
+import { editorExtensions } from '@/features/editor/configs/EditorConfigs';
 
 const adapter = axiosInstance.defaults.adapter;
 let editor: Editor;

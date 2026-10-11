@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import type { IMessage } from '@stomp/stompjs';
 import { expect, it, vi } from 'vitest';
-import CollaboratorCard from './CollaboratorCard';
+import CollaboratorCard from '@/features/documents/components/collaborators/CollaboratorCard';
 
 const mocks = vi.hoisted(() => ({ listeners: new Map<string, (message: IMessage) => void>(), cleanups: [] as (() => void)[] }));
 vi.mock('@/services/websocketService', () => ({ default: {

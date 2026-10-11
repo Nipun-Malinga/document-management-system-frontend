@@ -8,11 +8,11 @@ import type { ReactNode } from 'react';
 import { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { axiosInstance } from '@/services/apiService';
-import { document, permission, tokenFor } from '@/test/fixtures';
+import { document, permission, tokenFor } from '../../../fixtures';
 import { getSession, replaceAccessToken } from '@/states/sessionStore';
-import EditorContainer from '../layouts/EditorContainer';
-import AutoSaver from '../components/AutoSaver';
-import { usePersistenceRegistry } from './persistenceRegistry';
+import EditorContainer from '@/features/editor/layouts/EditorContainer';
+import AutoSaver from '@/features/editor/components/AutoSaver';
+import { usePersistenceRegistry } from '@/features/editor/persistence/persistenceRegistry';
 import UserDropdown from '@/components/common/UserDropdown';
 import ContentView from '@/pages/ContentView';
 import useMergeBranch from '@/hooks/document/useMergeBranch';
@@ -20,17 +20,17 @@ import useMergeVersion from '@/hooks/document/useMergeVersion';
 import useCreateBranch from '@/hooks/document/useCreateBranch';
 import useCreateVersion from '@/hooks/document/useCreateVersion';
 import useShareDocument from '@/hooks/document/collaboration/useShareDocument';
-import { actionError } from './actionError';
+import { actionError } from '@/features/editor/persistence/actionError';
 import { useState } from 'react';
 
 const editors = vi.hoisted(() => ({ current: null as Editor | null }));
-vi.mock('../components/CoreEditor', () => ({
+vi.mock('@/features/editor/components/CoreEditor', () => ({
   default: ({ editor, children }: { editor: Editor; children: ReactNode }) => {
     editors.current = editor;
     return <><AutoSaver /><EditorContent editor={editor} aria-label='Document editor' role='textbox' />{children}</>;
   },
 }));
-vi.mock('../components/Toolbar', () => ({ default: ({ disabled }: { disabled: boolean }) => <button disabled={disabled}>Format</button> }));
+vi.mock('@/features/editor/components/Toolbar', () => ({ default: ({ disabled }: { disabled: boolean }) => <button disabled={disabled}>Format</button> }));
 vi.mock('@/features/editor', () => ({ ContentRenderer: ({ content }: { content: Content }) => <pre data-testid='preview'>{JSON.stringify(content)}</pre> }));
 
 const json = (text: string) => JSON.stringify({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text }] }] });

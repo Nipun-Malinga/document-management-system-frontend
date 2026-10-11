@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import APIService from '@/services/apiService';
-import { document, permission, tokenFor } from '@/test/fixtures';
-import useDocumentAccess from './useDocumentAccess';
+import { document, permission, tokenFor } from '../../fixtures';
+import useDocumentAccess from '@/hooks/document/useDocumentAccess';
 
 let client: QueryClient;
 const key = ['permissions', 'doc', 'main'];
