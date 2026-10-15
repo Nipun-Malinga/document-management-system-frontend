@@ -11,6 +11,7 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { DialogBody } from "@/components/ui/dialog";
 import useMergeBranch from "@/hooks/document/useMergeBranch";
 import useMergeVersion from "@/hooks/document/useMergeVersion";
 import { actionError } from "../../persistence/actionError";
@@ -32,7 +33,7 @@ const MergeControl = ({ documentId, targetBranchId, source }: Props) => {
 	const self = source.kind === "branch" && source.id === targetBranchId;
 	const disabled = safety.disabled || self || !targetBranchId;
 	return (
-		<div className="w-full space-y-2">
+		<div className="flex w-full flex-col gap-2">
 			<AlertDialog
 				open={open}
 				onOpenChange={(next) => {
@@ -44,27 +45,29 @@ const MergeControl = ({ documentId, targetBranchId, source }: Props) => {
 			>
 				<AlertDialogTrigger asChild>
 					<Button variant="outline" disabled={disabled} className="w-full">
-						<CheckCircle className="w-4 h-4" />
+						<CheckCircle aria-hidden="true" data-icon="inline-start" />
 						Merge
 					</Button>
 				</AlertDialogTrigger>
 				<AlertDialogContent>
 					<AlertDialogHeader>
 						<AlertDialogTitle>Replace the active branch?</AlertDialogTitle>
+					</AlertDialogHeader>
+					<DialogBody className="flex flex-col gap-4">
 						<AlertDialogDescription>
 							The selected {source.kind} “{source.name}” is the source. Its
 							content will overwrite the active branch ({targetBranchId}). Your
 							current solo edits will be saved first. This does not combine
 							changes.
 						</AlertDialogDescription>
-					</AlertDialogHeader>
-					{error && (
-						<p role="alert" className="text-sm text-destructive">
-							{safety.replacementPending
-								? "The merge completed, but reloading failed. Close this dialog and use Retry reload. Editing is paused."
-								: error}
-						</p>
-					)}
+						{error && (
+							<p role="alert" className="text-sm text-destructive">
+								{safety.replacementPending
+									? "The merge completed, but reloading failed. Close this dialog and use Retry reload. Editing is paused."
+									: error}
+							</p>
+						)}
+					</DialogBody>
 					<AlertDialogFooter>
 						<AlertDialogCancel disabled={mutation.isPending}>
 							Cancel

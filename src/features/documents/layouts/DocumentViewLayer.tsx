@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import { Container } from "@/components";
 import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
 import { InfoPopup } from "../components/info";
 
@@ -7,10 +6,10 @@ const DocumentViewLayer = () => {
 	const { documentId } = useDocumentInfoPopUp();
 
 	return (
-		<Container>
+		<div className="flex min-h-0 min-w-0 flex-1 flex-col">
 			<InfoPopup documentId={documentId} />
 			<Outlet />
-		</Container>
+		</div>
 	);
 };
 

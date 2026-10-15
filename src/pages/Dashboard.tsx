@@ -1,53 +1,40 @@
 import { Outlet } from "react-router-dom";
-import { LayoutDarker, SideBar, TopBar } from "@/components";
+import { SideBar, TopBar } from "@/components";
 import { sidebarData } from "@/data/Sidebar";
 import ProfilePopup from "@/features/users/components/ProfilePopup";
 import { useSidebarData } from "@/hooks/sidebar";
-import useAside from "@/states/useAside";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
-import useUserProfilePopup from "@/states/useUserProfilePopup";
 
-const Home = () => {
-	const { collapsed: asideCollapsed } = useAside();
-	const { collapsed: documentInfoCollapsed, toggleDocumentInfoPopup } =
-		useDocumentInfoPopUp();
-	const { collapsed: userProfileCollapsed, toggleProfilePopup } =
-		useUserProfilePopup();
+const Dashboard = () => {
 	const sidebarInfo = useSidebarData();
 
 	return (
-		<main className="h-svh flex md:grid md:grid-cols-[15rem_1fr] lg:grid-cols-[18rem_1fr] overflow-hidden bg-gray-50 dark:bg-gray-950">
-			<div className="hidden md:block border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-				<SideBar sidebarLink={sidebarData(sidebarInfo)} />
-			</div>
+		<main className="workspace-page grid h-svh grid-cols-[minmax(0,1fr)] overflow-hidden bg-background text-foreground md:grid-cols-[15rem_minmax(0,1fr)]">
+			<a
+				href="#workspace-content"
+				className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-card focus:p-4"
+			>
+				Skip to documents
+			</a>
+			<SideBar sidebarLink={sidebarData(sidebarInfo)} />
 
-			{/* Mobile Sidebar */}
-			<div className="md:hidden">
-				<SideBar sidebarLink={sidebarData(sidebarInfo)} />
-			</div>
-
-			<div className="relative flex-1 bg-gray-50 dark:bg-gray-950 flex flex-col overflow-hidden">
-				<LayoutDarker
-					collapsed={
-						asideCollapsed && documentInfoCollapsed && userProfileCollapsed
-					}
-					onClick={() => {
-						if (!documentInfoCollapsed) toggleDocumentInfoPopup();
-						if (!userProfileCollapsed) toggleProfilePopup();
-					}}
-				/>
-
-				<div className="p-4 shrink-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+			<div className="relative flex min-w-0 flex-col overflow-hidden">
+				<header className="shrink-0 border-b bg-card px-4 py-3 sm:px-6 lg:px-8">
 					<TopBar />
-				</div>
+				</header>
 
-				<div className="flex-1 p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500 scrollbar-track-transparent dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500">
+				<div
+					id="workspace-content"
+					tabIndex={-1}
+					className="flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable] px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
+				>
 					<ProfilePopup />
-					<Outlet />
+					<div className="mx-auto flex w-full min-h-0 min-w-0 max-w-7xl flex-1 flex-col">
+						<Outlet />
+					</div>
 				</div>
 			</div>
 		</main>
 	);
 };
 
-export default Home;
+export default Dashboard;

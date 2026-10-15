@@ -1,44 +1,66 @@
-import { UserStar } from "lucide-react";
-import { IoMenu } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { Menu, UserStar } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/user";
 import useAside from "@/states/useAside";
-import Button from "../common/Button";
 import DarkThemeButton from "../common/DarkThemeButton";
 import Notification from "../common/Notification";
 import UserDropdown from "../common/UserDropdown";
 
+const titles: Record<string, string> = {
+	home: "Home",
+	quick: "Quick Access",
+	resents: "Recents",
+	shared: "Shared With Me",
+	trash: "Trash",
+};
 const TopBar = () => {
-	const { toggle } = useAside();
+	const { toggle, collapsed } = useAside();
 	const navigate = useNavigate();
+	const { pathname } = useLocation();
 	const user = useUser();
-
 	return (
-		<div className="w-full flex flex-row justify-end items-center gap-3 md:gap-4">
-			<div className="md:hidden shrink-0">
+		<div className="flex min-h-10 min-w-0 items-center justify-between gap-3">
+			<div className="flex min-w-0 items-center gap-3">
 				<Button
+					id="workspace-menu"
 					type="button"
-					icon={IoMenu}
+					variant="ghost"
+					size="icon"
+					className="shrink-0 md:hidden"
+					aria-label="Open workspace navigation"
+					aria-expanded={!collapsed}
 					onClick={toggle}
-					className="hover:bg-gray-100 dark:hover:bg-gray-800"
-				/>
+				>
+					<Menu aria-hidden="true" />
+				</Button>
+				<span className="hidden text-sm text-muted-foreground sm:inline">
+					Workspace
+				</span>
+				<span aria-hidden="true" className="hidden text-border sm:inline">
+					/
+				</span>
+				<span className="hidden truncate text-sm font-medium sm:inline">
+					{titles[pathname.split("/").at(-1) ?? ""] ?? "Workspace"}
+				</span>
 			</div>
-
-			<div className="flex items-center gap-2 shrink-0">
+			<div className="flex shrink-0 items-center gap-1 sm:gap-2">
 				<Notification />
 				<DarkThemeButton />
 				<UserDropdown />
 				{user?.role === "ADMIN" && (
 					<Button
 						type="button"
-						icon={UserStar}
+						variant="ghost"
+						size="icon"
+						aria-label="Open admin dashboard"
 						onClick={() => navigate("/admin/dashboard")}
-						className="hover:bg-gray-100 dark:hover:bg-gray-800"
-					/>
+					>
+						<UserStar aria-hidden="true" />
+					</Button>
 				)}
 			</div>
 		</div>
 	);
 };
-
 export default TopBar;

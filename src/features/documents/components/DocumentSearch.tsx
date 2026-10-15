@@ -23,7 +23,7 @@ const DocumentSearch = ({
 		return () => clearTimeout(timer);
 	}, [input, title]);
 	return (
-		<div className="my-3 space-y-1">
+		<div className="flex flex-col gap-2">
 			<SearchInput value={input} output={setInput} />
 			<p className="text-sm text-muted-foreground">
 				Matches the full document title.

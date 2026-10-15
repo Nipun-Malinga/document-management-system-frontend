@@ -3,28 +3,26 @@ import type { Document } from "@/models/Document";
 interface Props {
 	document: Document;
 }
-
-const InfoBase = ({ document }: Props) => {
-	return (
-		<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-			<div className="flex flex-col gap-1 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-				<span className="font-semibold text-gray-700 dark:text-gray-300 text-xs uppercase tracking-wide">
-					Created
-				</span>
-				<span className="text-gray-900 dark:text-gray-100 font-medium">
-					{document.createdAt}
-				</span>
+const InfoBase = ({ document }: Props) => (
+	<dl className="grid gap-x-8 gap-y-5 py-2 text-sm sm:grid-cols-2">
+		{[
+			["Created", document.createdAt],
+			["Updated", document.updatedAt],
+			[
+				"Visibility",
+				document.status === "PRIVATE"
+					? "Private"
+					: document.status === "PUBLIC"
+						? "Public"
+						: "Unknown",
+			],
+			["Branches", String(document.branchCount)],
+		].map(([label, value]) => (
+			<div key={label} className="flex min-w-0 flex-col gap-1.5">
+				<dt className="text-muted-foreground">{label}</dt>
+				<dd className="break-words font-medium">{value}</dd>
 			</div>
-			<div className="flex flex-col gap-1 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-				<span className="font-semibold text-gray-700 dark:text-gray-300 text-xs uppercase tracking-wide">
-					Updated
-				</span>
-				<span className="text-gray-900 dark:text-gray-100 font-medium">
-					{document.updatedAt}
-				</span>
-			</div>
-		</div>
-	);
-};
-
+		))}
+	</dl>
+);
 export default InfoBase;

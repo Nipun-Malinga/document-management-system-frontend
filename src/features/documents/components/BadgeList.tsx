@@ -1,20 +1,16 @@
-import { Badge } from "../../../components";
-import type { Document } from "../../../models/Document";
+import { Badge } from "@/components/ui/badge";
+import type { Document } from "@/models/Document";
 
-interface Props {
-	document: Document;
-}
-
-const BadgeList = ({ document }: Props) => {
-	return (
-		<div className="flex flex-row justify-end gap-0.5">
-			{document.shared && <Badge text="SHARED" theme="dark" />}
-			<Badge
-				text={document.status ?? "UNKNOWN"}
-				theme={document.status === "PRIVATE" ? "secondary" : "primary"}
-			/>
-		</div>
-	);
-};
-
+const BadgeList = ({ document }: { document: Document }) => (
+	<div className="flex flex-wrap items-center gap-2">
+		<Badge variant="secondary">
+			{document.status === "PRIVATE"
+				? "Private"
+				: document.status === "PUBLIC"
+					? "Public"
+					: "Unknown"}
+		</Badge>
+		{document.shared && <Badge variant="outline">Shared</Badge>}
+	</div>
+);
 export default BadgeList;

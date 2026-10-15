@@ -20,4 +20,4 @@ export type DocumentsResponse = PageResponse<Document>;
 export interface DocumentRequest extends Pick<Document, "title" | "status"> {
 	templateId: number;
 }
-export type UpdateDocumentRequest = Pick<Document, "title">;
+export type UpdateDocumentRequest = Pick<Document, "title" | "status">;

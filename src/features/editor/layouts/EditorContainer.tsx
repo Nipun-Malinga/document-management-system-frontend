@@ -7,10 +7,14 @@ import EditorNavigationGuard from "../persistence/EditorNavigationGuard";
 import CollaborativeEditor from "./CollaborativeEditor";
 import SoloEditor from "./SoloEditor";
 
-// A metadata refresh must not replace a mounted editor with a different persistence mode.
+// Keep the mounted mode until saved edits are safe and the user chooses to switch.
 const EditorMode = ({ shared }: { shared: boolean }) => {
-	const [collaborative] = useState(shared);
-	return <>{collaborative ? <CollaborativeEditor /> : <SoloEditor />}</>;
+	const [collaborative, setCollaborative] = useState(shared);
+	return collaborative ? (
+		<CollaborativeEditor />
+	) : (
+		<SoloEditor onOpenCollaboration={() => setCollaborative(true)} />
+	);
 };
 
 const EditorContainer = () => {

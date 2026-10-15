@@ -3,7 +3,7 @@ import { usePersistenceRegistry } from "@/features/editor/persistence/persistenc
 import type { Document } from "@/models/Document";
 import type { ShareDocumentRequest } from "@/models/SharedDocument";
 import APIService from "@/services/apiService";
-import { getSession } from "@/states/sessionStore";
+import { assertSession, getSession } from "@/states/sessionStore";
 import { refreshDocumentMutation } from "../documentMutationCache";
 
 const useShareDocument = (documentId: string) => {
@@ -18,22 +18,36 @@ const useShareDocument = (documentId: string) => {
 		retry: false,
 		mutationFn: async (request: ShareDocumentRequest) => {
 			const document = await metadata.get();
+			assertSession(epoch);
+			if (document.ownerId !== getSession().user?.id)
+				throw new Error("Only the document owner can grant access.");
+			const share = async () => {
+				const result = await service.post(request);
+				assertSession(epoch);
+				// Pause a mounted solo editor even if a subsequent metadata refresh fails.
+				queryClient.setQueryData<Document>(["document", documentId], {
+					...document,
+					shared: true,
+				});
+				await refreshDocumentMutation(queryClient, "share", documentId, epoch);
+				return result;
+			};
 			const active = usePersistenceRegistry.getState().active;
 			if (
-				!document.shared ||
-				(active?.documentId === documentId && active.mode === "solo")
+				active?.epoch === epoch &&
+				active.documentId === documentId &&
+				active.mode === "solo"
 			) {
-				// Never switch a mounted REST editor to an unverified CRDT room.
-				if (active?.documentId === documentId)
-					await active.coordinator?.prepareToLeave();
-				throw new Error(
-					"First sharing is paused until collaborative room initialization from saved content is verified.",
-				);
+				if (!active.coordinator)
+					throw new Error("The document editor is still preparing. Try again.");
+				const coordinator = active.coordinator;
+				return coordinator.exclusive(async () => {
+					await coordinator.flush();
+					coordinator.assertWritable();
+					return share();
+				});
 			}
-			return service.post(request);
-		},
-		onSuccess: async () => {
-			await refreshDocumentMutation(queryClient, "share", documentId, epoch);
+			return share();
 		},
 	});
 };

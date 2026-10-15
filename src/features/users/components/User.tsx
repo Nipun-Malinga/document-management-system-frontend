@@ -1,28 +1,9 @@
-interface Props {
-	username: string;
-}
-
-const User = ({ username }: Props) => {
-	return (
-		<div
-			style={generateRandomRgbColor()}
-			className=" w-6 h-6 rounded-full border border-gray- dark:border-gray-300 flex justify-center items-center"
-		>
-			<p className="text-xs text-white font-medium pt-0.5">
-				{username.charAt(0)}
-			</p>
-		</div>
-	);
-};
-
-function generateRandomRgbColor(): React.CSSProperties {
-	const r = Math.floor(Math.random() * 256);
-	const g = Math.floor(Math.random() * 256);
-	const b = Math.floor(Math.random() * 256);
-
-	return {
-		background: `rgb(${r}, ${g}, ${b})`,
-	};
-}
-
+const User = ({ username }: { username: string }) => (
+	<span
+		aria-hidden="true"
+		className="flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground"
+	>
+		{username.charAt(0).toUpperCase()}
+	</span>
+);
 export default User;

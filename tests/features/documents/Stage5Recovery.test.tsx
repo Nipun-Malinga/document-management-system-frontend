@@ -168,7 +168,9 @@ describe("Stage 5 search, recents and recovery", () => {
 		await screen.findByText("Record 1");
 		expect(requests[0].url).toBe("/documents");
 		expect(requests[0].params.sort).toBe("updatedAt,desc");
-		expect(screen.getByText(/This is not view history/)).toBeInTheDocument();
+		expect(
+			screen.getByText("Your documents, ordered by their latest update."),
+		).toBeInTheDocument();
 		const nav = screen.getByRole("navigation", {
 			name: "recent documents pagination",
 		});

@@ -1,5 +1,4 @@
 import { FolderOpen } from "lucide-react";
-import { Breadcrumb } from "@/components";
 import {
 	Empty,
 	EmptyDescription,
@@ -7,11 +6,10 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
-import { mainViewBreadcrumb } from "@/data/breadcrumb/HomeBreadcrumbs";
 import { useUserDocuments } from "@/hooks/document";
 import useCollectionParams from "@/hooks/useCollectionParams";
 import type { DocumentParams } from "@/models/PageResponse";
-import CollectionFilters from "../components/collections/CollectionFilters";
+import CollectionFilter from "../components/collections/CollectionFilter";
 import CollectionPagination from "../components/collections/CollectionPagination";
 import CollectionResults from "../components/collections/CollectionResults";
 import {
@@ -22,26 +20,24 @@ import DocumentCard from "../components/DocumentCard";
 import DocumentGrid from "../components/DocumentGrid";
 import DocumentSearch from "../components/DocumentSearch";
 import Templates from "../components/Templates";
+import WorkspaceHome from "../components/WorkspaceHome";
 
 const MainView = () => {
 	const { params, update, setPage } = useCollectionParams<DocumentParams>();
 	const query = useUserDocuments(params);
 
 	return (
-		<>
-			<Breadcrumb links={mainViewBreadcrumb} />
-
-			<p className="font-bold text-sm mt-6">Templates</p>
-
-			<Templates />
-
-			<p className="font-bold text-sm mt-6">All Documents</p>
-
-			<DocumentSearch
-				title={params.title}
-				onSearch={(title) => update({ title })}
-			/>
-			<CollectionFilters
+		<WorkspaceHome
+			templates={<Templates />}
+			resultCount={query.data?.totalElements}
+		>
+			<CollectionFilter
+				toolbar={
+					<DocumentSearch
+						title={params.title}
+						onSearch={(title) => update({ title })}
+					/>
+				}
 				params={params}
 				update={update}
 				fields={[
@@ -60,6 +56,7 @@ const MainView = () => {
 				label="documents"
 			/>
 			<CollectionResults
+				fill
 				query={query}
 				label="documents"
 				empty={
@@ -69,15 +66,15 @@ const MainView = () => {
 							value !== undefined &&
 							value !== "",
 					) ? undefined : (
-						<Empty className="mt-5 md:mt-10 lg:mt-20">
+						<Empty className="min-h-0 rounded-xl border p-4 md:p-4">
 							<EmptyHeader>
 								<EmptyMedia variant="icon">
 									<FolderOpen />
 								</EmptyMedia>
 								<EmptyTitle>No Documents Yet</EmptyTitle>
 								<EmptyDescription>
-									You haven't created any documents yet. Start by creating your
-									first document.
+									Choose a template above to create your first document. Your
+									work will appear here.
 								</EmptyDescription>
 							</EmptyHeader>
 						</Empty>
@@ -93,12 +90,13 @@ const MainView = () => {
 				)}
 			</CollectionResults>
 			<CollectionPagination
+				className="mt-0"
 				data={query.data}
 				pending={query.isFetching}
 				onPage={setPage}
 				label="documents"
 			/>
-		</>
+		</WorkspaceHome>
 	);
 };
 

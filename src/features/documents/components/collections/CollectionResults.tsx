@@ -15,50 +15,68 @@ export interface CollectionQuery<T> {
 interface Props<T> {
 	query: CollectionQuery<T>;
 	label: string;
+	fill?: boolean;
 	empty?: ReactNode;
 	children: (items: T[]) => ReactNode;
 }
 
-const CollectionResults = <T,>({ query, label, empty, children }: Props<T>) => {
-	if (query.isError)
+const CollectionResults = <T,>({
+	query,
+	label,
+	empty,
+	children,
+	fill = false,
+}: Props<T>) => {
+	const render = () => {
+		if (query.isError)
+			return (
+				<div role="alert" className="my-4 space-y-2 text-sm text-foreground">
+					<p>{collectionErrorMessage(query.error, label)}</p>
+					<Button
+						type="button"
+						variant="outline"
+						onClick={() => {
+							void query.refetch();
+						}}
+						disabled={query.isFetching}
+					>
+						Try again
+					</Button>
+				</div>
+			);
+		if (query.isPending || !query.data)
+			return (
+				<p role="status" className="my-4 text-sm text-muted-foreground">
+					Loading {label}…
+				</p>
+			);
+		if (!query.data.content.length && query.data.page > 0)
+			return (
+				<p role="status" className="my-4 text-sm text-muted-foreground">
+					No {label} on this page. Use Previous to return to earlier results.
+				</p>
+			);
+		if (!query.data.content.length)
+			return (
+				<>
+					{empty ?? (
+						<p role="status" className="my-4 text-sm text-muted-foreground">
+							No {label} match these filters.
+						</p>
+					)}
+				</>
+			);
 		return (
-			<div role="alert" className="my-4 space-y-2 text-sm text-foreground">
-				<p>{collectionErrorMessage(query.error, label)}</p>
-				<Button
-					type="button"
-					variant="outline"
-					onClick={() => {
-						void query.refetch();
-					}}
-					disabled={query.isFetching}
-				>
-					Try again
-				</Button>
-			</div>
+			<div aria-busy={query.isFetching}>{children(query.data.content)}</div>
 		);
-	if (query.isPending || !query.data)
-		return (
-			<p role="status" className="my-4 text-sm text-muted-foreground">
-				Loading {label}…
-			</p>
-		);
-	if (!query.data.content.length && query.data.page > 0)
-		return (
-			<p role="status" className="my-4 text-sm text-muted-foreground">
-				No {label} on this page. Use Previous to return to earlier results.
-			</p>
-		);
-	if (!query.data.content.length)
-		return (
-			<>
-				{empty ?? (
-					<p role="status" className="my-4 text-sm text-muted-foreground">
-						No {label} match these filters.
-					</p>
-				)}
-			</>
-		);
-	return <div aria-busy={query.isFetching}>{children(query.data.content)}</div>;
+	};
+	return fill ? (
+		<div className="flex min-h-40 min-w-0 flex-1 flex-col overflow-y-auto">
+			{render()}
+		</div>
+	) : (
+		render()
+	);
 };
 
 export default CollectionResults;

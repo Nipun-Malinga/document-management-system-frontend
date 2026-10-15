@@ -1,4 +1,5 @@
 export { default as useBranches } from "./useBranches";
+export { default as useBranchOptions } from "./useBranchOptions";
 export { default as useCreateDocument } from "./useCreateDocument";
 export { default as useCreateVersion } from "./useCreateVersion";
 export { default as useDeleteBranch } from "./useDeleteBranch";

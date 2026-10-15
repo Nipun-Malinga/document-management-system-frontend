@@ -2,14 +2,6 @@ import type { Content } from "@tiptap/core";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from "@/components/ui/carousel";
-import { ContentRenderer } from "@/features/editor";
 import { convertToTiptapContent } from "@/features/editor/utils";
 import { useCreateDocument } from "@/hooks/document";
 import { useGetTemplates } from "@/hooks/templates";
@@ -20,6 +12,7 @@ import useEditorTemplate from "@/states/useEditorTemplate";
 import CollectionFilters from "./collections/CollectionFilters";
 import CollectionPagination from "./collections/CollectionPagination";
 import CollectionResults from "./collections/CollectionResults";
+import TemplateTile from "./TemplateTile";
 
 const Templates = () => {
 	const { params, update, setPage } = useCollectionParams<TemplateParams>();
@@ -62,18 +55,6 @@ const Templates = () => {
 
 	return (
 		<>
-			<CollectionFilters
-				params={params}
-				update={update}
-				fields={[
-					{ name: "title", label: "Exact template title", maxLength: 30 },
-				]}
-				sorts={[
-					["id,asc", "Default order"],
-					["title,asc", "Title A–Z"],
-				]}
-				label="templates"
-			/>
 			{creationError && (
 				<p role="alert" className="my-3 text-sm text-destructive">
 					{creationError}
@@ -86,75 +67,52 @@ const Templates = () => {
 			)}
 			<CollectionResults query={query} label="templates">
 				{(templates) => (
-					<div className="relative px-12 sm:px-20">
-						<Carousel
-							key={JSON.stringify(params)}
-							opts={{
-								align: "start",
-							}}
-							className="w-full"
-						>
-							<CarouselContent className="-ml-4 py-2">
-								{templates.map((template) => (
-									<CarouselItem
-										key={template.id}
-										className="pl-4 select-none basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/6"
-									>
-										<div className="group relative">
-											<div className="relative h-72 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 overflow-hidden">
-												{/* Template preview */}
-												<div
-													inert
-													aria-hidden="true"
-													className="absolute inset-0 flex flex-col p-0.5 overflow-hidden"
-												>
-													<div className=" text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 pb-4 overflow-hidden">
-														<ContentRenderer
-															type="secondary"
-															content={convertToTiptapContent(
-																template.template,
-															)}
-														/>
-													</div>
-												</div>
-											</div>
-
-											{/* Template name */}
-											<div className="mt-3 px-2">
-												<h3 className="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 truncate">
-													{template.title}
-												</h3>
-											</div>
-											<button
-												type="button"
-												aria-label={`Create document from ${template.title}`}
-												disabled={isPending}
-												onClick={() => {
-													void createDocument(
-														template.id,
-														template.title,
-														convertToTiptapContent(template.template),
-													);
-												}}
-												className="absolute inset-0 w-full cursor-pointer rounded-xl disabled:cursor-wait focus-visible:outline-2 focus-visible:outline-ring"
-											/>
-										</div>
-									</CarouselItem>
-								))}
-							</CarouselContent>
-
-							<CarouselPrevious className="-translate-x-1/2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-110 transition-all duration-200" />
-							<CarouselNext className="translate-x-1/2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-110 transition-all duration-200" />
-						</Carousel>
-					</div>
+					<ul className="flex gap-3 overflow-x-auto pb-2">
+						{templates.map((template) => (
+							<li key={template.id} className="w-56 shrink-0">
+								<TemplateTile
+									type="button"
+									title={template.title}
+									aria-label={`Create document from ${template.title}`}
+									disabled={isPending}
+									onClick={() => {
+										void createDocument(
+											template.id,
+											template.title,
+											convertToTiptapContent(template.template),
+										);
+									}}
+								/>
+							</li>
+						))}
+					</ul>
 				)}
 			</CollectionResults>
-			<CollectionPagination
-				data={query.data}
-				pending={query.isFetching}
-				onPage={setPage}
-				label="templates"
-			/>
+			<details className="text-sm">
+				<summary className="w-fit cursor-pointer rounded-sm text-muted-foreground underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring">
+					Template options
+				</summary>
+				<CollectionFilters
+					params={params}
+					update={update}
+					fields={[
+						{ name: "title", label: "Exact template title", maxLength: 30 },
+					]}
+					sorts={[
+						["id,asc", "Default order"],
+						["title,asc", "Title A–Z"],
+					]}
+					label="templates"
+				/>
+			</details>
+			{query.data && (query.data.totalPages > 1 || query.data.page > 0) && (
+				<CollectionPagination
+					data={query.data}
+					pending={query.isFetching}
+					onPage={setPage}
+					label="templates"
+				/>
+			)}
 		</>
 	);
 };

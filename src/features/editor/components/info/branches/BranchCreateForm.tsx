@@ -1,15 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GitBranchIcon } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { Button } from "@/components";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogBody,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
+	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
@@ -18,8 +20,6 @@ import {
 	FieldError,
 	FieldGroup,
 	FieldLabel,
-	FieldLegend,
-	FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import useCreateBranch from "@/hooks/document/useCreateBranch";
@@ -66,70 +66,66 @@ const CreateBranchForm = () => {
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild className="w-full">
+			<DialogTrigger asChild>
 				<Button disabled={safety.disabled} className="w-full">
 					Create Branch
 				</Button>
 			</DialogTrigger>
-
 			{safety.reason && (
 				<p className="text-sm text-muted-foreground">{safety.reason}</p>
 			)}
 			<DialogContent>
-				<DialogTitle>Create a new branch</DialogTitle>
-				<DialogDescription>Enter a name for the new branch.</DialogDescription>
-
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<FieldGroup>
-						<FieldSet>
-							<FieldLegend>Create a new branch</FieldLegend>
-
-							<Field>
+				<DialogHeader>
+					<DialogTitle>Create a new branch</DialogTitle>
+					<DialogDescription>
+						Enter a name for the new branch.
+					</DialogDescription>
+				</DialogHeader>
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="flex min-h-0 flex-1 flex-col gap-5"
+				>
+					<DialogBody className="flex flex-col gap-5">
+						<FieldGroup>
+							<Field data-invalid={!!errors.branchName}>
 								<FieldLabel htmlFor="snapshot-branchName">
 									Branch name
 								</FieldLabel>
-								<div className="relative">
-									<GitBranchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-									<Input
-										id="snapshot-branchName"
-										type="text"
-										className="pl-10"
-										{...register("branchName")}
-									/>
-								</div>
-
+								<Input
+									id="snapshot-branchName"
+									type="text"
+									aria-invalid={!!errors.branchName}
+									{...register("branchName")}
+								/>
 								{errors.branchName && (
 									<FieldError>{errors.branchName.message}</FieldError>
 								)}
 							</Field>
-						</FieldSet>
-					</FieldGroup>
-
-					{error && (
-						<p role="alert" className="text-sm text-destructive">
-							{error}
-						</p>
-					)}
-					<DialogFooter className="mt-3">
+						</FieldGroup>
+						{error && (
+							<p role="alert" className="text-sm text-destructive">
+								{error}
+							</p>
+						)}
+					</DialogBody>
+					<DialogFooter>
 						<DialogClose asChild>
-							<Button type="button" disabled={isPending}>
+							<Button type="button" variant="outline" disabled={isPending}>
 								Cancel
 							</Button>
 						</DialogClose>
-
 						<Button
 							type="submit"
 							disabled={!isValid || isPending || safety.disabled}
-							className="flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-lg transition-all duration-150 border border-red-200 dark:border-red-800 disabled:border-gray-200 dark:disabled:border-gray-700 active:scale-95 disabled:active:scale-100"
 						>
-							{isPending ? (
-								<>
-									<div className="w-4 h-4 border-2 border-red-300 border-t-red-600 rounded-full animate-spin" />
-									Creating...
-								</>
-							) : (
-								<>Create</>
+							{isPending && (
+								<LoaderCircle
+									aria-hidden="true"
+									data-icon="inline-start"
+									className="animate-spin motion-reduce:animate-none"
+								/>
 							)}
+							{isPending ? "Creating..." : "Create"}
 						</Button>
 					</DialogFooter>
 				</form>
@@ -137,5 +133,4 @@ const CreateBranchForm = () => {
 		</Dialog>
 	);
 };
-
 export default CreateBranchForm;

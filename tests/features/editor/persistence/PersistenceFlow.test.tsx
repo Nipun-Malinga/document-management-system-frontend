@@ -36,6 +36,9 @@ import { requireValue } from "../../../assertions";
 import { document, permission, tokenFor } from "../../../fixtures";
 
 const editors = vi.hoisted(() => ({ current: null as Editor | null }));
+vi.mock("@/features/editor/layouts/CollaborativeEditor", () => ({
+	default: () => <p>Collaborative editor opened</p>,
+}));
 vi.mock("@/features/editor/components/CoreEditor", () => ({
 	default: ({ editor, children }: { editor: Editor; children: ReactNode }) => {
 		editors.current = editor;
@@ -240,6 +243,7 @@ beforeEach(() => {
 		if (config.method === "post") {
 			writeRequests.push(config);
 			if (failPost) throw reject(config);
+			if (url.endsWith("/share")) shared = true;
 			if (url.includes("/merge/")) {
 				saved = json("Replacement");
 				merged = true;
@@ -510,24 +514,91 @@ describe("Stage 4 editor persistence flows", () => {
 		await act(async () => {
 			await client.invalidateQueries({ queryKey: ["document", "doc"] });
 		});
-		await screen.findByText(/Sharing changed while this solo editor was open/);
+		await screen.findByText(/This document is now shared/);
 		expect(editors.current).toBe(editor);
 		expect(requireValue(editor).getText()).toBe("Latest draft");
 		expect(requireValue(editor).isEditable).toBe(false);
 		expect(usePersistenceRegistry.getState().active?.mode).toBe("solo");
 		expect(writeRequests).toHaveLength(0);
+		fireEvent.click(
+			screen.getByRole("button", { name: "Open collaborative editor" }),
+		);
+		await screen.findByText(/Editing permission is unavailable/);
+		expect(editors.current).toBe(editor);
+		expect(requireValue(editor).getText()).toBe("Latest draft");
 	});
 
-	it("flushes but blocks first share without switching editor mode", async () => {
+	it("saves before first sharing and preserves the solo editor until an explicit switch", async () => {
 		await open();
 		edit();
 		const editor = editors.current;
 		fireEvent.click(screen.getByRole("button", { name: "Share" }));
-		await screen.findByText(
-			"First sharing is paused until collaborative room initialization from saved content is verified.",
-		);
-		expect(writeRequests.map((request) => request.method)).toEqual(["put"]);
+		await screen.findByText(/This document is now shared/);
+		expect(writeRequests.map((request) => request.method)).toEqual([
+			"put",
+			"post",
+		]);
 		expect(editors.current).toBe(editor);
 		expect(JSON.parse(saved)).toMatchObject(JSON.parse(json("Latest draft")));
+		await waitFor(() => expect(requireValue(editor).isEditable).toBe(false));
+		expect(shared).toBe(true);
+		fireEvent.click(
+			screen.getByRole("button", { name: "Open collaborative editor" }),
+		);
+		await screen.findByText("Collaborative editor opened");
+		await waitFor(() => expect(requireValue(editor).isDestroyed).toBe(true));
+		expect(writeRequests).toHaveLength(2);
+	});
+
+	it("does not grant access if saving fails, and retries with the latest content", async () => {
+		await open();
+		edit();
+		failSave = true;
+		fireEvent.click(screen.getByRole("button", { name: "Share" }));
+		await screen.findByRole("alert");
+		expect(writeRequests.map((request) => request.method)).toEqual(["put"]);
+		expect(shared).toBe(false);
+		expect(requireValue(editors.current).isEditable).toBe(true);
+		expect(requireValue(editors.current).getText()).toBe("Latest draft");
+		failSave = false;
+		fireEvent.click(screen.getByRole("button", { name: "Share" }));
+		await screen.findByText(/This document is now shared/);
+		expect(JSON.parse(saved)).toMatchObject(JSON.parse(json("Latest draft")));
+		expect(writeRequests.map((request) => request.method)).toEqual([
+			"put",
+			"put",
+			"post",
+		]);
+	});
+
+	it("unlocks the solo editor if granting access fails", async () => {
+		await open();
+		edit();
+		failPost = true;
+		fireEvent.click(screen.getByRole("button", { name: "Share" }));
+		await screen.findByRole("alert");
+		expect(shared).toBe(false);
+		expect(requireValue(editors.current).isEditable).toBe(true);
+		expect(JSON.parse(saved)).toMatchObject(JSON.parse(json("Latest draft")));
+		expect(screen.queryByText(/This document is now shared/)).toBeNull();
+	});
+
+	it("keeps editing locked while the save before sharing is in flight", async () => {
+		await open();
+		edit();
+		let releaseSave = () => {};
+		writeGate = new Promise<void>((resolve) => {
+			releaseSave = resolve;
+		});
+		fireEvent.click(screen.getByRole("button", { name: "Share" }));
+		await waitFor(() => expect(writeRequests).toHaveLength(1));
+		expect(requireValue(editors.current).isEditable).toBe(false);
+		expect(shared).toBe(false);
+		await act(async () => releaseSave());
+		await screen.findByText(/This document is now shared/);
+		expect(writeRequests.map((request) => request.method)).toEqual([
+			"put",
+			"post",
+		]);
 	});
 });

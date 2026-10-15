@@ -1,163 +1,97 @@
-import { useEffect, useId, useRef, useState } from "react";
-import { FaCodeBranch } from "react-icons/fa6";
+import { Check, ChevronDown, GitBranch } from "lucide-react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useBranches } from "@/hooks/document";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { BranchParams } from "@/models/PageResponse";
-import useDocumentBranch from "../../../states/useDocumentBranch";
-import CollectionFilters from "./collections/CollectionFilters";
-import CollectionPagination from "./collections/CollectionPagination";
-import CollectionResults from "./collections/CollectionResults";
-import { branchSorts } from "./collections/collectionFilterOptions";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useBranchOptions } from "@/hooks/document";
+import useDocumentBranch from "@/states/useDocumentBranch";
+import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
+import { collectionErrorMessage } from "@/utils/collectionUtils";
 
-interface Props {
-	documentId: string;
-}
-
-const BranchSwitch = ({ documentId }: Props) => {
+const BranchSwitch = ({ documentId }: { documentId: string }) => {
 	const [open, setOpen] = useState(false);
-	const dropdownId = useId();
 	const { branchName } = useDocumentBranch();
 	const navigate = useNavigate();
 	const { branchId: currentBranchId } = useParams();
-	const { params, update, setPage } =
-		useCollectionParams<BranchParams>(documentId);
-	const query = useBranches(documentId, params);
-	const dropdownRef = useRef<HTMLDivElement>(null);
-
-	// Close dropdown when clicking outside
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				dropdownRef.current &&
-				!dropdownRef.current.contains(event.target as Node)
-			) {
-				setOpen(false);
-			}
-		};
-
-		if (open) {
-			document.addEventListener("mousedown", handleClickOutside);
-		}
-
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
-		};
-	}, [open]);
-
-	// Close on Escape key
-	useEffect(() => {
-		const handleEscape = (event: KeyboardEvent) => {
-			if (event.key === "Escape") {
-				setOpen(false);
-			}
-		};
-
-		if (open) {
-			document.addEventListener("keydown", handleEscape);
-		}
-
-		return () => {
-			document.removeEventListener("keydown", handleEscape);
-		};
-	}, [open]);
-
+	const query = useBranchOptions(documentId);
 	return (
-		<div className="relative inline-block" ref={dropdownRef}>
-			<Button
-				variant="outline"
-				aria-expanded={open}
-				aria-controls={dropdownId}
-				type="button"
-				onClick={() => setOpen(!open)}
-				className="h-7.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-800"
-			>
-				<FaCodeBranch className="text-base text-gray-700 dark:text-gray-300" />
-				<span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-					Branches: {query.data?.totalElements ?? "…"}
-				</span>
-			</Button>
-
-			<section
-				id={dropdownId}
-				hidden={!open}
-				className={`absolute top-full left-0 bg-white dark:bg-slate-800 w-80 max-w-[calc(100vw-2rem)] mt-2 py-2 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden z-50 transition-all duration-200 ease-out ${
-					open
-						? "opacity-100 translate-y-0 pointer-events-auto"
-						: "opacity-0 -translate-y-2 pointer-events-none"
-				}`}
+		<DropdownMenu open={open} onOpenChange={setOpen}>
+			<DropdownMenuTrigger asChild>
+				<Button variant="outline" size="sm" type="button">
+					<GitBranch aria-hidden="true" data-icon="inline-start" />
+					Branches: {query.data?.length ?? "…"}
+					<ChevronDown aria-hidden="true" data-icon="inline-end" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent
+				align="end"
 				aria-label="Branch selection"
+				aria-labelledby={undefined}
+				className="w-72 max-w-[calc(100vw-2rem)] max-h-[min(20rem,var(--radix-dropdown-menu-content-available-height))]"
 			>
-				<div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700">
-					<p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-						Switch Branch
+				<DropdownMenuLabel>Switch branch</DropdownMenuLabel>
+				<DropdownMenuSeparator />
+				{query.isPending ? (
+					<p role="status" className="px-2 py-3 text-sm text-muted-foreground">
+						Loading branches…
 					</p>
-				</div>
-
-				<div className="max-h-80 overflow-y-auto px-2 py-1">
-					{open && (
-						<>
-							<CollectionFilters
-								key={documentId}
-								params={params}
-								update={update}
-								fields={[{ name: "branchName", label: "Exact branch name" }]}
-								sorts={branchSorts}
-								label="branch selection"
-							/>
-							<CollectionResults query={query} label="branches">
-								{(branches) =>
-									branches.map((branch) => {
-										const isActive = currentBranchId
-											? currentBranchId === branch.id
-											: branchName === branch.branchName;
-
-										return (
-											<button
-												onClick={() => {
-													setOpen(false);
-													navigate(
-														`/document/${branch.documentId}/branch/${branch.id}/edit`,
-													);
-												}}
-												className={`w-full text-left px-3 py-2 my-0.5 rounded-md transition-colors ${
-													isActive
-														? "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100"
-														: "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
-												}`}
-												key={branch.id}
-												type="button"
-											>
-												<div className="w-full flex flex-row justify-between items-center gap-2 cursor-pointer">
-													<span
-														className={`text-sm truncate ${
-															isActive ? "font-semibold" : "font-normal"
-														}`}
-													>
-														{branch.branchName}
-													</span>
-													{isActive && (
-														<span className="shrink-0 w-2 h-2 rounded-full bg-emerald-500" />
-													)}
-												</div>
-											</button>
+				) : query.isError ? (
+					<>
+						<p role="alert" className="px-2 py-3 text-sm text-destructive">
+							{collectionErrorMessage(query.error, "branches")}
+						</p>
+						<DropdownMenuGroup>
+							<DropdownMenuItem
+								disabled={query.isFetching}
+								onSelect={(event) => {
+									event.preventDefault();
+									void query.refetch();
+								}}
+							>
+								Try again
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+					</>
+				) : query.data?.length ? (
+					<DropdownMenuGroup>
+						{query.data.map((branch) => {
+							const isActive = currentBranchId
+								? currentBranchId === branch.id
+								: branchName === branch.branchName;
+							return (
+								<DropdownMenuItem
+									key={branch.id}
+									aria-current={isActive ? "true" : undefined}
+									onSelect={() => {
+										setOpen(false);
+										const info = useDocumentInfoPopUp.getState();
+										if (!info.collapsed) info.toggleDocumentInfoPopup();
+										navigate(
+											`/document/${branch.documentId}/branch/${branch.id}/edit`,
 										);
-									})
-								}
-							</CollectionResults>
-							<CollectionPagination
-								data={query.data}
-								pending={query.isFetching}
-								onPage={setPage}
-								label="branch selection"
-							/>
-						</>
-					)}
-				</div>
-			</section>
-		</div>
+									}}
+								>
+									<span className="flex-1 truncate">{branch.branchName}</span>
+									{isActive && <Check aria-hidden="true" />}
+								</DropdownMenuItem>
+							);
+						})}
+					</DropdownMenuGroup>
+				) : (
+					<p role="status" className="px-2 py-3 text-sm text-muted-foreground">
+						No branches available.
+					</p>
+				)}
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 };
-
 export default BranchSwitch;

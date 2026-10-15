@@ -1,17 +1,10 @@
-import { FolderOpen } from "lucide-react";
-import { Breadcrumb, Container } from "@/components";
-import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyMedia,
-	EmptyTitle,
-} from "@/components/ui/empty";
-import { sharedWithMeBreadcrumb } from "@/data/breadcrumb/HomeBreadcrumbs";
+import { Users } from "lucide-react";
 import { useUserSharedDocuments } from "@/hooks/document";
 import useCollectionParams from "@/hooks/useCollectionParams";
 import type { SharedDocumentParams } from "@/models/PageResponse";
+import CollectionEmpty from "../components/collections/CollectionEmpty";
 import CollectionFilters from "../components/collections/CollectionFilters";
+import CollectionPage from "../components/collections/CollectionPage";
 import CollectionPagination from "../components/collections/CollectionPagination";
 import CollectionResults from "../components/collections/CollectionResults";
 import {
@@ -19,6 +12,7 @@ import {
 	permissionField,
 	statusField,
 } from "../components/collections/collectionFilterOptions";
+import hasCollectionFilters from "../components/collections/hasCollectionFilters";
 import DocumentCard from "../components/DocumentCard";
 import DocumentGrid from "../components/DocumentGrid";
 
@@ -28,40 +22,36 @@ const Shared = () => {
 	const query = useUserSharedDocuments(params);
 
 	return (
-		<Container>
-			<Breadcrumb links={sharedWithMeBreadcrumb} />
-			<CollectionFilters
-				params={params}
-				update={update}
-				fields={[
-					{ name: "title", label: "Exact title" },
-					statusField,
-					permissionField,
-				]}
-				sorts={documentSorts}
-				label="shared documents"
-			/>
+		<CollectionPage
+			title="Shared With Me"
+			description="Documents shared with you. Find the right work by title, visibility, or your permission."
+			count={query.data?.totalElements}
+			filters={
+				<CollectionFilters
+					className="my-0"
+					params={params}
+					update={update}
+					fields={[
+						{ name: "title", label: "Exact title" },
+						statusField,
+						permissionField,
+					]}
+					sorts={documentSorts}
+					label="shared documents"
+				/>
+			}
+		>
 			<CollectionResults
+				fill
 				query={query}
 				label="shared documents"
 				empty={
-					Object.entries(params).some(
-						([key, value]) =>
-							!["page", "size", "sort"].includes(key) &&
-							value !== undefined &&
-							value !== "",
-					) ? undefined : (
-						<Empty className="mt-5 md:mt-10 lg:mt-20">
-							<EmptyHeader>
-								<EmptyMedia variant="icon">
-									<FolderOpen />
-								</EmptyMedia>
-								<EmptyTitle>No Documents Shared With You Yet</EmptyTitle>
-								<EmptyDescription>
-									You don't have any shared documents yet
-								</EmptyDescription>
-							</EmptyHeader>
-						</Empty>
+					hasCollectionFilters(params) ? undefined : (
+						<CollectionEmpty
+							icon={Users}
+							title="Nothing shared with you yet"
+							description="When someone gives you access to a document, it will appear here."
+						/>
 					)
 				}
 			>
@@ -74,12 +64,13 @@ const Shared = () => {
 				)}
 			</CollectionResults>
 			<CollectionPagination
+				className="mt-0"
 				data={query.data}
 				pending={query.isFetching}
 				onPage={setPage}
 				label="shared documents"
 			/>
-		</Container>
+		</CollectionPage>
 	);
 };
 

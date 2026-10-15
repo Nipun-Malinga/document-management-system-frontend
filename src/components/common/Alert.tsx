@@ -1,4 +1,5 @@
 import { isValidElement, type ReactNode, useRef, useState } from "react";
+import { DialogBody } from "@/components/ui/dialog";
 import { actionError } from "@/features/editor/persistence/actionError";
 import {
 	AlertDialog,
@@ -64,13 +65,15 @@ const Alert = ({
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>{title}</AlertDialogTitle>
-					<AlertDialogDescription>{description}</AlertDialogDescription>
 				</AlertDialogHeader>
-				{error && (
-					<p role="alert" className="text-sm text-destructive">
-						{error}
-					</p>
-				)}
+				<DialogBody className="flex flex-col gap-4">
+					<AlertDialogDescription>{description}</AlertDialogDescription>
+					{error && (
+						<p role="alert" className="text-sm text-destructive">
+							{error}
+						</p>
+					)}
+				</DialogBody>
 				<AlertDialogFooter>
 					<AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
 					<Button

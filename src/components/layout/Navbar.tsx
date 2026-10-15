@@ -1,37 +1,44 @@
-import { Menu } from "lucide-react";
-import Link from "@/components/common/Link";
-import { navbarData } from "@/data/Navbar";
-import Logo from "../common/Logo";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import DarkThemeButton from "@/components/common/DarkThemeButton";
+import FlowDocsBrand from "@/components/common/FlowDocsBrand";
+import { Button } from "@/components/ui/button";
 
-const Navbar = () => {
-	return (
-		<header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700 shadow-sm">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex items-center justify-between h-16">
-					<div className="shrink-0">
-						<Logo />
-					</div>
+interface Props {
+	showSectionLinks?: boolean;
+}
 
-					<nav className="hidden md:flex items-center justify-center space-x-1">
-						{navbarData.map((item) => (
-							<Link
-								key={item.url}
-								title={item.title}
-								endpoint={item.url}
-								className="  text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-150"
-							/>
-						))}
-					</nav>
-
-					<div className="md:hidden">
-						<button type="button" aria-label="Open menu">
-							<Menu />
-						</button>
-					</div>
-				</div>
+const Navbar = ({ showSectionLinks = true }: Props) => (
+	<header className="shrink-0 border-b border-border">
+		<div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
+			<FlowDocsBrand />
+			{showSectionLinks && (
+				<nav
+					aria-label="Main navigation"
+					className="hidden items-center gap-8 md:flex"
+				>
+					<Link className="home-text-link" to="/#features">
+						Features
+					</Link>
+					<Link className="home-text-link" to="/#workspace">
+						How it works
+					</Link>
+				</nav>
+			)}
+			<div className="flex items-center gap-1 sm:gap-3">
+				<DarkThemeButton />
+				<Button asChild variant="ghost">
+					<Link to="/auth/signin">Sign in</Link>
+				</Button>
+				<Button asChild className="hidden sm:inline-flex">
+					<Link to="/auth/registration">
+						Get started
+						<ArrowRight aria-hidden="true" data-icon="inline-end" />
+					</Link>
+				</Button>
 			</div>
-		</header>
-	);
-};
+		</div>
+	</header>
+);
 
 export default Navbar;

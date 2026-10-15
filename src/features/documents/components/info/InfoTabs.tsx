@@ -1,3 +1,4 @@
+import { Info, Pencil, Users } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUser } from "@/hooks/user";
 import type { Document } from "@/models/Document";
@@ -5,55 +6,46 @@ import { CollaboratorTabs } from "../collaborators";
 import InfoBase from "./InfoBase";
 import InfoEditor from "./InfoEditor";
 
-interface Props {
-	document: Document;
-}
-
-const InfoTabs = ({ document }: Props) => {
+const InfoTabs = ({ document }: { document: Document }) => {
 	const user = useUser();
-
-	console.log(document.ownerId);
-
+	const isOwner = document.ownerId === user?.id;
 	return (
-		<Tabs defaultValue="information">
-			<div className="bg-gray-50 dark:bg-gray-900 md:px-6 p-2 pb-2 flex justify-center md:justify-start items-center rounded-2xl">
-				<TabsList className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-1 rounded-lg shadow-sm space-x-1">
-					<TabsTrigger
-						className="cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium"
-						value="information"
-					>
-						Information
+		<Tabs
+			key={isOwner ? "owner" : "viewer"}
+			defaultValue="information"
+			className="min-w-0 gap-5"
+		>
+			<TabsList
+				className="h-auto min-h-11 w-full flex-wrap gap-1 p-1"
+				aria-label="Document details"
+			>
+				<TabsTrigger value="information" className="min-h-9">
+					<Info aria-hidden="true" />
+					Information
+				</TabsTrigger>
+				{isOwner && (
+					<TabsTrigger value="edit" className="min-h-9">
+						<Pencil aria-hidden="true" />
+						Edit
 					</TabsTrigger>
-					{document.ownerId === user?.id && (
-						<TabsTrigger
-							className="cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium"
-							value="edit"
-						>
-							Edit
-						</TabsTrigger>
-					)}
-					<TabsTrigger
-						className="cursor-pointer data-[state=active]:bg-gray-900 data-[state=active]:text-white dark:data-[state=active]:bg-gray-100 dark:data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all duration-200 font-medium"
-						value="Collaborators"
-					>
-						Collaborators
-					</TabsTrigger>
-				</TabsList>
-			</div>
-
-			<TabsContent value="information" className="mt-0">
+				)}
+				<TabsTrigger value="collaborators" className="min-h-9">
+					<Users aria-hidden="true" />
+					Collaborators
+				</TabsTrigger>
+			</TabsList>
+			<TabsContent value="information">
 				<InfoBase document={document} />
 			</TabsContent>
-			{document.ownerId === user?.id && (
-				<TabsContent value="edit" className="mt-0">
+			{isOwner && (
+				<TabsContent value="edit">
 					<InfoEditor document={document} />
 				</TabsContent>
 			)}
-			<TabsContent value="Collaborators" className="mt-0">
+			<TabsContent value="collaborators">
 				<CollaboratorTabs document={document} />
 			</TabsContent>
 		</Tabs>
 	);
 };
-
 export default InfoTabs;

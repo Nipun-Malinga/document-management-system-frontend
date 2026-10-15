@@ -124,6 +124,9 @@ describe("Stage 1 action containment", () => {
 			expect(
 				screen.queryByRole("button", { name: "Merge" }),
 			).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole("button", { name: "Move to Trash" }),
+			).not.toBeInTheDocument();
 			expectNoWrites();
 		},
 	);
@@ -143,6 +146,9 @@ describe("Stage 1 action containment", () => {
 		).not.toBeInTheDocument();
 		expect(
 			screen.queryByRole("button", { name: "Toggle bookmark" }),
+		).not.toBeInTheDocument();
+		expect(
+			screen.queryByRole("button", { name: "Move to Trash" }),
 		).not.toBeInTheDocument();
 		expectNoWrites();
 	});
@@ -193,7 +199,10 @@ describe("Stage 1 action containment", () => {
 		);
 		// Favorite now refreshes metadata; document-presence subscriptions stay removed.
 		await waitFor(() => expect(get).toHaveBeenCalledTimes(1));
-		// Only document and branch Delete remain; versions have no Delete action.
-		expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(2);
+		// Owners can trash documents and branches; versions have no Delete action.
+		expect(
+			screen.getByRole("button", { name: "Move to Trash" }),
+		).toBeInTheDocument();
+		expect(screen.getAllByRole("button", { name: "Delete" })).toHaveLength(1);
 	});
 });

@@ -1,23 +1,19 @@
-import { BookmarkCheck } from "lucide-react";
-import { Breadcrumb, Container } from "@/components";
-import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyMedia,
-	EmptyTitle,
-} from "@/components/ui/empty";
-import { quickAccessBreadcrumb } from "@/data/breadcrumb/HomeBreadcrumbs";
+import { Bookmark } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useUserDocuments } from "@/hooks/document";
 import useCollectionParams from "@/hooks/useCollectionParams";
 import type { DocumentParams } from "@/models/PageResponse";
+import CollectionEmpty from "../components/collections/CollectionEmpty";
 import CollectionFilters from "../components/collections/CollectionFilters";
+import CollectionPage from "../components/collections/CollectionPage";
 import CollectionPagination from "../components/collections/CollectionPagination";
 import CollectionResults from "../components/collections/CollectionResults";
 import {
 	documentSorts,
 	statusField,
 } from "../components/collections/collectionFilterOptions";
+import hasCollectionFilters from "../components/collections/hasCollectionFilters";
 import DocumentCard from "../components/DocumentCard";
 import DocumentGrid from "../components/DocumentGrid";
 
@@ -28,37 +24,37 @@ const Quick = () => {
 	const query = useUserDocuments(params);
 
 	return (
-		<Container>
-			<Breadcrumb links={quickAccessBreadcrumb} />
-
-			<CollectionFilters
-				params={params}
-				update={update}
-				fields={[{ name: "title", label: "Exact title" }, statusField]}
-				sorts={documentSorts}
-				label="favorites"
-			/>
+		<CollectionPage
+			title="Quick Access"
+			description="Keep your most useful documents close. Your bookmarked documents appear here."
+			count={query.data?.totalElements}
+			filters={
+				<CollectionFilters
+					className="my-0"
+					params={params}
+					update={update}
+					fields={[{ name: "title", label: "Exact title" }, statusField]}
+					sorts={documentSorts}
+					label="favorites"
+				/>
+			}
+		>
 			<CollectionResults
+				fill
 				query={query}
 				label="favorites"
 				empty={
-					Object.entries(params).some(
-						([key, value]) =>
-							!["page", "size", "sort", "favorite"].includes(key) &&
-							value !== undefined &&
-							value !== "",
-					) ? undefined : (
-						<Empty className="mt-20">
-							<EmptyHeader>
-								<EmptyMedia variant="icon">
-									<BookmarkCheck />
-								</EmptyMedia>
-								<EmptyTitle>No Favorites Yet.</EmptyTitle>
-								<EmptyDescription>
-									You don't have any favorites yet.
-								</EmptyDescription>
-							</EmptyHeader>
-						</Empty>
+					hasCollectionFilters(params, ["favorite"]) ? undefined : (
+						<CollectionEmpty
+							icon={Bookmark}
+							title="No bookmarks yet"
+							description="Bookmark a document from Home to find it here whenever you need it."
+							action={
+								<Button asChild variant="outline">
+									<Link to="/dashboard/home">Browse documents</Link>
+								</Button>
+							}
+						/>
 					)
 				}
 			>
@@ -71,12 +67,13 @@ const Quick = () => {
 				)}
 			</CollectionResults>
 			<CollectionPagination
+				className="mt-0"
 				data={query.data}
 				pending={query.isFetching}
 				onPage={setPage}
 				label="favorites"
 			/>
-		</Container>
+		</CollectionPage>
 	);
 };
 

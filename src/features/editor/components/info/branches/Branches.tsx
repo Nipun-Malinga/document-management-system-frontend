@@ -5,7 +5,7 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from "@/components/ui/drawer";
-import CollectionFilters from "@/features/documents/components/collections/CollectionFilters";
+import CollectionFilter from "@/features/documents/components/collections/CollectionFilter";
 import CollectionPagination from "@/features/documents/components/collections/CollectionPagination";
 import CollectionResults from "@/features/documents/components/collections/CollectionResults";
 import {
@@ -27,24 +27,22 @@ const Branches = () => {
 
 	return (
 		<>
-			<DrawerHeader className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-				<div className="flex items-center gap-3 mb-2">
-					<div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-						<GitBranch className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-					</div>
-					<div>
-						<DrawerTitle className="text-xl font-bold text-gray-900 dark:text-gray-100">
-							Branches
-						</DrawerTitle>
-					</div>
-				</div>
-				<DrawerDescription className="text-gray-600 dark:text-gray-400">
-					Branch Description
-				</DrawerDescription>
-			</DrawerHeader>
+			<div className="flex shrink-0 items-start gap-3 border-y bg-secondary px-5 py-4">
+				<GitBranch
+					aria-hidden="true"
+					className="mt-0.5 size-5 shrink-0 text-primary"
+				/>
+				<DrawerHeader className="p-0">
+					<DrawerTitle>Branches</DrawerTitle>
+					<DrawerDescription>
+						Explore document branches or create a new direction from your
+						current work.
+					</DrawerDescription>
+				</DrawerHeader>
+			</div>
 			<InfoDrawerBody emptyTitle="Branches" emptyDescription="">
 				<BranchCreateForm />
-				<CollectionFilters
+				<CollectionFilter
 					key={documentId}
 					params={params}
 					update={update}
@@ -56,11 +54,15 @@ const Branches = () => {
 					label="branches"
 				/>
 				<CollectionResults query={query} label="branches">
-					{(items) =>
-						items.map((branch) => (
-							<BranchCard branch={branch} key={branch.id} />
-						))
-					}
+					{(items) => (
+						<ul className="flex flex-col gap-3">
+							{items.map((branch) => (
+								<li key={branch.id}>
+									<BranchCard branch={branch} />
+								</li>
+							))}
+						</ul>
+					)}
 				</CollectionResults>
 				<CollectionPagination
 					data={query.data}

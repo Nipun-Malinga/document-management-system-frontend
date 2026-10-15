@@ -1,5 +1,6 @@
-import { Calendar, FileText, GitBranch, RotateCcw, Trash2 } from "lucide-react";
+import { FileText, GitBranch, RotateCcw, Trash2 } from "lucide-react";
 import { Alert } from "@/components";
+import { Button } from "@/components/ui/button";
 import {
 	useDeleteBranch,
 	useDeleteDocument,
@@ -43,71 +44,66 @@ const TrashTableRow = ({ trash }: Props) => {
 		return isBranch ? deleteBranch() : deleteDocument();
 	};
 
+	const Icon = isBranch ? GitBranch : FileText;
 	return (
-		<tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
-			<td className="px-6 py-4">
-				<div className="flex items-center gap-3">
-					<div
-						className={`p-2 rounded-lg shrink-0 ${
-							isBranch
-								? "bg-purple-50 dark:bg-purple-900/20"
-								: "bg-blue-50 dark:bg-blue-900/20"
-						}`}
+		<tr className="transition-colors hover:bg-muted/40 focus-within:bg-muted/40">
+			<th scope="row" className="px-4 py-4 text-left font-normal">
+				<div className="flex min-w-0 items-start gap-3">
+					<span
+						aria-hidden="true"
+						className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary"
 					>
-						{isBranch ? (
-							<GitBranch className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-						) : (
-							<FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-						)}
-					</div>
-					<div className="flex flex-col min-w-0">
-						<span className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+						<Icon className="size-4" strokeWidth={1.5} />
+					</span>
+					<div className="flex min-w-0 flex-col gap-1">
+						<span className="max-w-96 wrap-anywhere text-sm font-medium">
 							{itemName}
 						</span>
-						<span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-							{itemType}
-						</span>
+						<span className="text-xs text-muted-foreground">{itemType}</span>
 					</div>
 				</div>
+			</th>
+			<td className="px-4 py-4 text-xs text-muted-foreground tabular-nums">
+				<span className="whitespace-nowrap">{trash.addedDate}</span>
 			</td>
-
-			<td className="px-6 py-4 whitespace-nowrap">
-				<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-					<Calendar className="w-4 h-4" />
-					<span>{trash.addedDate}</span>
-				</div>
-			</td>
-
-			<td className="px-6 py-4 whitespace-nowrap text-right">
+			<td className="px-4 py-4 text-right">
 				<div className="flex items-center justify-end gap-2">
 					<Alert
 						trigger={
-							<button
+							<Button
 								type="button"
-								className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg transition-all duration-150 border border-emerald-200 dark:border-emerald-800"
+								variant="outline"
+								aria-label={`Restore ${itemType.toLowerCase()} ${itemName}`}
+								title={`Restore ${itemName}`}
 							>
-								<RotateCcw className="w-4 h-4" />
-								Restore
-							</button>
+								<RotateCcw aria-hidden="true" data-icon="inline-start" />
+								<span className="sr-only @min-[40rem]/trash:not-sr-only">
+									Restore
+								</span>
+							</Button>
 						}
 						title="Restore Item?"
-						description={`Do you want to restore this ${itemType.toLowerCase()}? It will be moved back to your active items.`}
+						description={`Restore “${itemName}” to your active ${isBranch ? "branches" : "documents"}?`}
 						action="Restore"
 						onClick={handleRestore}
 					/>
-
 					<Alert
 						trigger={
-							<button
+							<Button
 								type="button"
-								className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-all duration-150 border border-red-200 dark:border-red-800"
+								variant="ghost"
+								className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+								aria-label={`Permanently delete ${itemType.toLowerCase()} ${itemName}`}
+								title={`Permanently delete ${itemName}`}
 							>
-								<Trash2 className="w-4 h-4" />
-								Delete
-							</button>
+								<Trash2 aria-hidden="true" data-icon="inline-start" />
+								<span className="sr-only @min-[40rem]/trash:not-sr-only">
+									Delete
+								</span>
+							</Button>
 						}
 						title="Permanently Delete?"
-						description={`This action cannot be undone. This will permanently delete your ${itemType.toLowerCase()} and remove all data from our servers.`}
+						description={`Permanently delete “${itemName}”? This action cannot be undone.`}
 						action="Delete Permanently"
 						onClick={handleDelete}
 					/>

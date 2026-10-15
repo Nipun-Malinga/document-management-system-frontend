@@ -1,15 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GitBranchIcon } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { Button } from "@/components";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogBody,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
+	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
@@ -18,8 +20,6 @@ import {
 	FieldError,
 	FieldGroup,
 	FieldLabel,
-	FieldLegend,
-	FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -81,98 +81,92 @@ const VersionCreateForm = () => {
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild className="w-full">
+			<DialogTrigger asChild>
 				<Button disabled={safety.disabled} className="w-full">
 					Create Version
 				</Button>
 			</DialogTrigger>
-
 			{safety.reason && (
 				<p className="text-sm text-muted-foreground">{safety.reason}</p>
 			)}
 			<DialogContent>
-				<DialogTitle>Create a new version</DialogTitle>
-				<DialogDescription>
-					Give your version a meaningful name and set its visibility.
-				</DialogDescription>
-
-				<form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-					<FieldGroup>
-						<FieldSet>
-							<FieldLegend>Version details</FieldLegend>
-
-							<Field>
+				<DialogHeader>
+					<DialogTitle>Create a new version</DialogTitle>
+					<DialogDescription>
+						Give your version a meaningful name and set its visibility.
+					</DialogDescription>
+				</DialogHeader>
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="flex min-h-0 flex-1 flex-col gap-5"
+				>
+					<DialogBody className="flex flex-col gap-5">
+						<FieldGroup>
+							<Field data-invalid={!!errors.title}>
 								<FieldLabel htmlFor="snapshot-title">Version name</FieldLabel>
-
-								<div className="relative">
-									<GitBranchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-									<Input
-										id="snapshot-title"
-										type="text"
-										className="pl-10"
-										placeholder="Version name"
-										{...register("title")}
-									/>
-								</div>
-
+								<Input
+									id="snapshot-title"
+									type="text"
+									aria-invalid={!!errors.title}
+									{...register("title")}
+								/>
 								{errors.title && (
 									<FieldError>{errors.title.message}</FieldError>
 								)}
 							</Field>
-						</FieldSet>
-					</FieldGroup>
-
-					<Field>
-						<FieldLabel htmlFor="snapshot-status">Visibility</FieldLabel>
-
-						<Controller
-							name="status"
-							control={control}
-							render={({ field }) => (
-								<Select onValueChange={field.onChange} value={field.value}>
-									<SelectTrigger id="snapshot-status" className="w-full">
-										<SelectValue placeholder="Select visibility" />
-									</SelectTrigger>
-
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Visibility</SelectLabel>
-											<SelectItem value="PRIVATE">Private</SelectItem>
-											<SelectItem value="PUBLIC">Public</SelectItem>
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-							)}
-						/>
-
-						{errors.status && <FieldError>{errors.status.message}</FieldError>}
-					</Field>
-
-					{error && (
-						<p role="alert" className="text-sm text-destructive">
-							{error}
-						</p>
-					)}
-					<DialogFooter className="mt-3">
+							<Field data-invalid={!!errors.status}>
+								<FieldLabel htmlFor="snapshot-status">Visibility</FieldLabel>
+								<Controller
+									name="status"
+									control={control}
+									render={({ field }) => (
+										<Select onValueChange={field.onChange} value={field.value}>
+											<SelectTrigger
+												id="snapshot-status"
+												aria-invalid={!!errors.status}
+												className="w-full"
+											>
+												<SelectValue placeholder="Select visibility" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													<SelectLabel>Visibility</SelectLabel>
+													<SelectItem value="PRIVATE">Private</SelectItem>
+													<SelectItem value="PUBLIC">Public</SelectItem>
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+									)}
+								/>
+								{errors.status && (
+									<FieldError>{errors.status.message}</FieldError>
+								)}
+							</Field>
+						</FieldGroup>
+						{error && (
+							<p role="alert" className="text-sm text-destructive">
+								{error}
+							</p>
+						)}
+					</DialogBody>
+					<DialogFooter>
 						<DialogClose asChild>
-							<Button type="button" disabled={isPending}>
+							<Button type="button" variant="outline" disabled={isPending}>
 								Cancel
 							</Button>
 						</DialogClose>
-
 						<Button
 							type="submit"
 							disabled={!isValid || isPending || safety.disabled}
-							className="flex items-center justify-center gap-2"
 						>
-							{isPending ? (
-								<>
-									<div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />
-									Creating...
-								</>
-							) : (
-								"Create"
+							{isPending && (
+								<LoaderCircle
+									aria-hidden="true"
+									data-icon="inline-start"
+									className="animate-spin motion-reduce:animate-none"
+								/>
 							)}
+							{isPending ? "Creating..." : "Create"}
 						</Button>
 					</DialogFooter>
 				</form>
@@ -180,5 +174,4 @@ const VersionCreateForm = () => {
 		</Dialog>
 	);
 };
-
 export default VersionCreateForm;

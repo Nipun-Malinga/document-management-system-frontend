@@ -1,5 +1,7 @@
 import type { IMessage } from "@stomp/stompjs";
+import { Eye, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import User from "@/features/users/components/User";
 import type { Collaborator } from "@/models/Collaborator";
 import WebSocketService from "@/services/websocketService";
@@ -44,33 +46,28 @@ const CollaboratorCard = ({ collaborator }: Props) => {
 		};
 	}, [userId, epoch]);
 
+	const canEdit = collaborator.permission === "READ_WRITE";
+	const PermissionIcon = canEdit ? Pencil : Eye;
 	return (
-		<div
-			key={collaborator.userId}
-			className="flex items-center gap-3 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl p-3 transition-all duration-150 border border-gray-200 dark:border-gray-700"
-		>
+		<div className="flex min-w-0 flex-wrap items-start gap-3 p-4">
 			<User username={collaborator.username} />
-			<div className="flex-1 min-w-0">
-				<div className="flex items-center gap-2 mb-0.5">
-					<p className="font-semibold text-sm text-gray-900 dark:text-gray-100 capitalize truncate">
+			<div className="flex min-w-0 flex-1 flex-col gap-1.5">
+				<div className="flex flex-wrap items-center gap-2">
+					<p className="wrap-anywhere text-sm font-medium">
 						{collaborator.username}
 					</p>
-					{status ? (
-						<span className="flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-							<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-							online
-						</span>
-					) : (
-						<span className="flex items-center gap-1 text-xs font-medium text-gray-600 dark:text-gray-400">
-							<span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-pulse" />
-							offline
-						</span>
-					)}
+					<span className="text-xs text-muted-foreground">
+						{status ? "Online" : "Offline"}
+					</span>
 				</div>
-				<p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+				<p className="wrap-anywhere text-xs leading-relaxed text-muted-foreground">
 					{collaborator.email}
 				</p>
 			</div>
+			<Badge variant={canEdit ? "secondary" : "outline"} className="shrink-0">
+				<PermissionIcon aria-hidden="true" />
+				{canEdit ? "Can edit" : "Can view"}
+			</Badge>
 		</div>
 	);
 };

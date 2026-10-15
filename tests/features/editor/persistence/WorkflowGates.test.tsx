@@ -98,7 +98,7 @@ describe("backend-gated workflows", () => {
 		expect(request).not.toHaveBeenCalled();
 	});
 
-	it("blocks first share outside an editor without posting", async () => {
+	it("allows first sharing from the dashboard and updates document metadata", async () => {
 		const request = vi.fn();
 		axiosInstance.defaults.adapter = async (config) => {
 			request(config.method);
@@ -112,9 +112,31 @@ describe("backend-gated workflows", () => {
 		};
 		const { result } = renderHook(() => useShareDocument("doc"), { wrapper });
 		await act(async () => {
+			await result.current.mutateAsync({ userId: 2, permission: "READ_WRITE" });
+		});
+		expect(request.mock.calls).toEqual([["get"], ["post"]]);
+		expect(client.getQueryData(["document", "doc"])).toMatchObject({
+			shared: true,
+		});
+	});
+
+	it("rejects sharing by a non-owner without posting", async () => {
+		const request = vi.fn();
+		axiosInstance.defaults.adapter = async (config) => {
+			request(config.method);
+			return {
+				config,
+				data: { ...document, ownerId: 2 },
+				status: 200,
+				statusText: "OK",
+				headers: {},
+			};
+		};
+		const { result } = renderHook(() => useShareDocument("doc"), { wrapper });
+		await act(async () => {
 			await expect(
-				result.current.mutateAsync({ userId: 2, permission: "READ_WRITE" }),
-			).rejects.toThrow("First sharing is paused");
+				result.current.mutateAsync({ userId: 3, permission: "READ_WRITE" }),
+			).rejects.toThrow("Only the document owner");
 		});
 		expect(request.mock.calls).toEqual([["get"]]);
 	});

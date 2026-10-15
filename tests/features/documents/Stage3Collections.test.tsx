@@ -7,6 +7,7 @@ import {
 	waitFor,
 	within,
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import {
 	type AxiosAdapter,
 	AxiosError,
@@ -279,7 +280,7 @@ describe("Stage 3 collection flows", () => {
 		await screen.findByText(
 			"No favorites on this page. Use Previous to return to earlier results.",
 		);
-		expect(screen.queryByText("No Favorites Yet.")).not.toBeInTheDocument();
+		expect(screen.queryByText("No bookmarks yet")).not.toBeInTheDocument();
 		fireEvent.click(
 			within(
 				screen.getByRole("navigation", { name: "favorites pagination" }),
@@ -288,22 +289,82 @@ describe("Stage 3 collection flows", () => {
 		await screen.findByText("Record 1");
 	});
 
-	it("switches to a branch beyond page one and cleans up the closed selector", async () => {
+	it("switches branches from a dropdown without filters or paging controls", async () => {
+		axiosInstance.defaults.adapter = async (config) => {
+			requests.push(config);
+			const all = Array.from({ length: 51 }, (_, index) =>
+				itemFor("/documents/doc/branches", index),
+			);
+			const { page, size } = config.params;
+			return success(
+				config,
+				pageOf(
+					all.slice(page * size, (page + 1) * size),
+					page,
+					all.length,
+					size,
+				),
+			);
+		};
 		renderCollection(<BranchSwitch documentId="doc" />);
-		fireEvent.click(
-			await screen.findByRole("button", { name: "Branches: 21" }),
+		await userEvent.click(
+			await screen.findByRole("button", { name: "Branches: 51" }),
 		);
-		const nav = screen.getByRole("navigation", {
-			name: "branch selection pagination",
-		});
-		fireEvent.click(within(nav).getByRole("button", { name: "Next" }));
-		fireEvent.click(await screen.findByRole("button", { name: "Record 21" }));
+		const menu = screen.getByRole("menu", { name: "Branch selection" });
+		expect(within(menu).queryByRole("form")).not.toBeInTheDocument();
+		expect(within(menu).queryByRole("navigation")).not.toBeInTheDocument();
+		await userEvent.click(
+			within(menu).getByRole("menuitem", { name: "Record 51" }),
+		);
 		expect(screen.getByLabelText("Current route")).toHaveTextContent(
-			"/document/doc/branch/branch-20/edit",
+			"/document/doc/branch/branch-50/edit",
 		);
 		expect(
-			screen.queryByRole("region", { name: "Branch selection" }),
+			screen.queryByRole("menu", { name: "Branch selection" }),
 		).not.toBeInTheDocument();
+		expect(requests.map((config) => config.params.page)).toEqual([0, 1]);
+	});
+
+	it("keeps an incomplete branch list hidden and retries a later-page failure explicitly", async () => {
+		let fail = true;
+		axiosInstance.defaults.adapter = async (config) => {
+			requests.push(config);
+			const { page, size } = config.params;
+			if (page === 1 && fail)
+				throw new AxiosError("Unavailable", undefined, config, undefined, {
+					config,
+					status: 500,
+					statusText: "Error",
+					data: { detail: "Branch service unavailable" },
+					headers: {},
+				});
+			const all = Array.from({ length: 51 }, (_, index) =>
+				itemFor("/documents/doc/branches", index),
+			);
+			return success(
+				config,
+				pageOf(
+					all.slice(page * size, (page + 1) * size),
+					page,
+					all.length,
+					size,
+				),
+			);
+		};
+		renderCollection(<BranchSwitch documentId="doc" />);
+		await userEvent.click(screen.getByRole("button", { name: /^Branches:/ }));
+		expect(await screen.findByRole("alert")).toHaveTextContent(
+			"Branch service unavailable",
+		);
+		expect(
+			screen.queryByRole("menuitem", { name: "Record 1" }),
+		).not.toBeInTheDocument();
+		fail = false;
+		await userEvent.click(screen.getByRole("menuitem", { name: "Try again" }));
+		expect(
+			await screen.findByRole("menuitem", { name: "Record 51" }),
+		).toBeInTheDocument();
+		expect(requests.map((config) => config.params.page)).toEqual([0, 1, 0, 1]);
 	});
 
 	it("resets pagination on filter, sorting, and page-size changes and sends filters to the server", async () => {
@@ -400,7 +461,7 @@ describe("Stage 3 collection flows", () => {
 		renderCollection(<Shared key="Shared" />);
 		expect(screen.getByText("Loading shared documents…")).toBeInTheDocument();
 		expect(
-			screen.queryByText("No Documents Shared With You Yet"),
+			screen.queryByText("Nothing shared with you yet"),
 		).not.toBeInTheDocument();
 		await waitFor(() => expect(reject).toBeDefined());
 		await act(async () => reject(new Error()));
@@ -408,12 +469,12 @@ describe("Stage 3 collection flows", () => {
 			"You do not have permission to view shared documents.",
 		);
 		expect(
-			screen.queryByText("No Documents Shared With You Yet"),
+			screen.queryByText("Nothing shared with you yet"),
 		).not.toBeInTheDocument();
 		axiosInstance.defaults.adapter = async (config) =>
 			success(config, pageOf([]));
 		fireEvent.click(screen.getByRole("button", { name: "Try again" }));
-		await screen.findByText("No Documents Shared With You Yet");
+		await screen.findByText("Nothing shared with you yet");
 		expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 	});
 

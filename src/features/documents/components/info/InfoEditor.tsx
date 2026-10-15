@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "@/components";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
 	Field,
 	FieldDescription,
@@ -14,6 +14,14 @@ import {
 	FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { useUpdateDocumentInfo } from "@/hooks/document";
 import { useUser } from "@/hooks/user";
 import type { Document } from "@/models/Document";
@@ -32,6 +40,7 @@ const InfoEditor = ({ document }: Props) => {
 	const {
 		handleSubmit,
 		register,
+		control,
 		setError,
 		clearErrors,
 		reset,
@@ -39,7 +48,7 @@ const InfoEditor = ({ document }: Props) => {
 	} = useForm<TDocumentInfoEditorSchema>({
 		resolver: zodResolver(documentInfoEditorSchema),
 		mode: "onChange",
-		defaultValues: { title: document.title },
+		defaultValues: { title: document.title, status: document.status },
 	});
 	const { mutateAsync, isPending } = useUpdateDocumentInfo(document.id);
 	const user = useUser();
@@ -53,37 +62,80 @@ const InfoEditor = ({ document }: Props) => {
 			await mutateAsync(data);
 			reset(data);
 		} catch (error) {
-			setApiError(applyFormError(error, setError, ["title"]));
+			setApiError(applyFormError(error, setError, ["title", "status"]));
 		}
 	};
 
 	if (!isOwner) return null;
 
 	return (
-		<div className="bg-gray-50 dark:bg-gray-900 w-full p-5 border border-gray-200 dark:border-gray-700 rounded-2xl">
+		<div className="min-w-0">
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<FieldGroup>
 					<FieldSet>
 						<FieldLegend>Edit Information</FieldLegend>
 						<FieldDescription>
-							Edit all the document information
+							Change the document title and visibility.
 						</FieldDescription>
 						<FieldGroup>
-							<div className="grid md:grid-cols-2 gap-2">
-								<Field>
-									<FieldLabel htmlFor={`document-title-${document.id}`}>
-										Document Title
-									</FieldLabel>
-									<Input
-										id={`document-title-${document.id}`}
-										placeholder={document.title}
-										{...register("title")}
-									/>
-									{errors.title && (
-										<FieldError>{errors.title.message}</FieldError>
+							<Field data-invalid={!!errors.title}>
+								<FieldLabel htmlFor={`document-title-${document.id}`}>
+									Document Title
+								</FieldLabel>
+								<Input
+									id={`document-title-${document.id}`}
+									placeholder={document.title}
+									aria-invalid={!!errors.title}
+									disabled={isPending}
+									{...register("title")}
+								/>
+								{errors.title && (
+									<FieldError>{errors.title.message}</FieldError>
+								)}
+							</Field>
+							<Field data-invalid={!!errors.status}>
+								<FieldLabel htmlFor={`document-status-${document.id}`}>
+									Visibility
+								</FieldLabel>
+								<Controller
+									name="status"
+									control={control}
+									render={({ field }) => (
+										<Select
+											name={field.name}
+											value={field.value}
+											onValueChange={field.onChange}
+											disabled={isPending}
+										>
+											<SelectTrigger
+												id={`document-status-${document.id}`}
+												ref={field.ref}
+												onBlur={field.onBlur}
+												aria-invalid={!!errors.status}
+												aria-describedby={
+													errors.status
+														? `document-status-error-${document.id}`
+														: undefined
+												}
+												className="w-full"
+											>
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													<SelectItem value="PRIVATE">Private</SelectItem>
+													<SelectItem value="PUBLIC">Public</SelectItem>
+												</SelectGroup>
+											</SelectContent>
+										</Select>
 									)}
-								</Field>
-							</div>
+								/>
+								{errors.status && (
+									<FieldError id={`document-status-error-${document.id}`}>
+										{errors.status.message}
+									</FieldError>
+								)}
+							</Field>
 						</FieldGroup>
 					</FieldSet>
 					{error && (
@@ -95,10 +147,14 @@ const InfoEditor = ({ document }: Props) => {
 					<Field orientation="horizontal">
 						<Button type="submit" disabled={!isValid || isPending}>
 							{isPending ? (
-								<div className="flex items-center justify-center gap-2">
-									<LoaderCircle className="w-5 h-5 animate-spin" />
-									<span>Updating...</span>
-								</div>
+								<>
+									<LoaderCircle
+										aria-hidden="true"
+										data-icon="inline-start"
+										className="animate-spin motion-reduce:animate-none"
+									/>
+									Updating...
+								</>
 							) : (
 								"Update"
 							)}
@@ -106,6 +162,7 @@ const InfoEditor = ({ document }: Props) => {
 						<Button
 							type="button"
 							disabled={isPending}
+							variant="outline"
 							onClick={() => {
 								reset();
 								setApiError("");

@@ -3,35 +3,36 @@ import { Button } from "../ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "../ui/empty";
 
-//TODO: IMPLEMENT NOTIFICATIONS INDICATOR
-
-const Notification = () => {
-	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant={"outline"}>
-					<Bell />
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent
-				align="center"
-				className="flex flex-col items-center"
-			>
-				<DropdownMenuLabel>Notifications</DropdownMenuLabel>
-				<DropdownMenuGroup className="w-full">
-					<DropdownMenuSeparator />
-					<DropdownMenuItem></DropdownMenuItem>
-				</DropdownMenuGroup>
-			</DropdownMenuContent>
-		</DropdownMenu>
-	);
-};
-
+const Notification = () => (
+	<DropdownMenu>
+		<DropdownMenuTrigger asChild>
+			<Button variant="ghost" size="icon" aria-label="Notifications">
+				<Bell aria-hidden="true" />
+			</Button>
+		</DropdownMenuTrigger>
+		<DropdownMenuContent align="end" className="w-72 max-w-[calc(100vw-2rem)]">
+			<Empty className="p-5">
+				<EmptyHeader>
+					<EmptyMedia variant="icon">
+						<Bell aria-hidden="true" />
+					</EmptyMedia>
+					<EmptyTitle>Notifications</EmptyTitle>
+					<EmptyDescription>
+						Notifications are not available yet.
+					</EmptyDescription>
+				</EmptyHeader>
+			</Empty>
+		</DropdownMenuContent>
+	</DropdownMenu>
+);
 export default Notification;

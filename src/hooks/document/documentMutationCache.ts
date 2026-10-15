@@ -81,7 +81,11 @@ export const mutationQueryKeys = (
 			["permissions", documentId],
 		);
 	if (action === "rename")
-		keys.push(["trashed_documents_own"], ["trashed_branches_own"]);
+		keys.push(
+			["trashed_documents_own"],
+			["trashed_branches_own"],
+			["permissions", documentId],
+		);
 	return keys;
 };
 

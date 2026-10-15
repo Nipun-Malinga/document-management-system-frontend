@@ -1,19 +1,33 @@
-import { useId } from "react";
+import { RotateCcw, SlidersHorizontal } from "lucide-react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import type { PageParams } from "@/models/PageResponse";
-
 import type { FilterField } from "./collectionFilterOptions";
 
-interface Props<P extends PageParams> {
+export interface CollectionFiltersProps<P extends PageParams> {
 	params: P;
 	update: (patch: Partial<P>) => void;
 	fields: readonly FilterField[];
 	sorts: readonly (readonly [string, string])[];
 	label: string;
+	className?: string;
 }
 
-const inputClass =
-	"h-9 min-w-0 max-w-full rounded-md border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-ring";
+const allValues = "__collection_all__";
+const controlClass =
+	"w-full min-w-0 bg-background shadow-none data-[size=default]:h-10";
+const labelClass = "text-xs font-medium text-muted-foreground";
 
 const CollectionFilters = <P extends PageParams>({
 	params,
@@ -21,117 +35,168 @@ const CollectionFilters = <P extends PageParams>({
 	fields,
 	sorts,
 	label,
-}: Props<P>) => {
+	className,
+}: CollectionFiltersProps<P>) => {
 	const filterId = useId();
+	const [resetCount, setResetCount] = useState(0);
 	const values = params as Record<string, unknown>;
 	const filterKey = JSON.stringify(fields.map(({ name }) => values[name]));
+
 	return (
-		<div className="my-3 flex flex-wrap items-end gap-3">
+		<div
+			className={cn(
+				"my-3 flex w-full min-w-0 flex-wrap items-end gap-4",
+				className,
+			)}
+		>
 			<form
-				key={filterKey}
 				aria-label={`${label} filters`}
-				className="flex min-w-0 flex-wrap items-end gap-2"
+				className="flex min-w-0 flex-[3_1_32rem] flex-wrap items-end gap-3"
 				onSubmit={(event) => {
 					event.preventDefault();
 					const data = new FormData(event.currentTarget);
 					const patch: Record<string, string | boolean | undefined> = {};
 					for (const field of fields) {
 						const value = String(data.get(field.name) ?? "").trim();
-						patch[field.name] = value
-							? field.name === "favorite"
-								? value === "true"
-								: value
-							: undefined;
+						patch[field.name] =
+							!value || (field.options && value === allValues)
+								? undefined
+								: field.name === "favorite"
+									? value === "true"
+									: value;
 					}
 					update(patch as Partial<P>);
 				}}
 			>
-				{fields.map((field) => (
-					<label
-						key={field.name}
-						htmlFor={`${filterId}-${field.name}`}
-						className="flex min-w-0 flex-col gap-1 text-sm text-foreground"
-					>
-						{field.label}
-						{field.options ? (
-							<select
-								id={`${filterId}-${field.name}`}
-								name={field.name}
-								defaultValue={String(values[field.name] ?? "")}
-								className={inputClass}
+				<FieldGroup
+					key={`${filterKey}:${resetCount}`}
+					className="min-w-0 flex-1 basis-80 flex-row flex-wrap items-end gap-3"
+				>
+					{fields.map((field) => (
+						<Field key={field.name} className="min-w-0 flex-1 basis-36 gap-2">
+							<FieldLabel
+								htmlFor={`${filterId}-${field.name}`}
+								className={labelClass}
 							>
-								<option value="">All</option>
-								{field.options.map(([value, text]) => (
-									<option key={value} value={value}>
-										{text}
-									</option>
-								))}
-							</select>
-						) : (
-							<input
-								id={`${filterId}-${field.name}`}
-								name={field.name}
-								type={field.type ?? "text"}
-								defaultValue={String(values[field.name] ?? "")}
-								maxLength={field.maxLength ?? 255}
-								placeholder="Title"
-								className={`${inputClass} w-44`}
-							/>
-						)}
-					</label>
-				))}
-				<Button type="submit" variant="outline">
-					Apply filters
-				</Button>
-				<Button
-					type="button"
-					variant="ghost"
-					onClick={(event) => {
-						event.currentTarget.form?.reset();
-						update(
-							Object.fromEntries(
-								fields.map(({ name }) => [name, undefined]),
-							) as Partial<P>,
-						);
-					}}
-				>
-					Clear filters
-				</Button>
+								{field.label}
+							</FieldLabel>
+							{field.options ? (
+								<Select
+									name={field.name}
+									defaultValue={String(values[field.name] ?? "") || allValues}
+								>
+									<SelectTrigger
+										id={`${filterId}-${field.name}`}
+										className={controlClass}
+									>
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent align="start">
+										<SelectGroup>
+											<SelectItem value={allValues}>All</SelectItem>
+											{field.options.map(([value, text]) => (
+												<SelectItem key={value} value={value}>
+													{text}
+												</SelectItem>
+											))}
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+							) : (
+								<Input
+									id={`${filterId}-${field.name}`}
+									name={field.name}
+									type={field.type ?? "text"}
+									defaultValue={String(values[field.name] ?? "")}
+									maxLength={field.maxLength ?? 255}
+									placeholder={field.label}
+									className="h-10 bg-background shadow-none"
+								/>
+							)}
+						</Field>
+					))}
+				</FieldGroup>
+				<div className="ml-auto flex shrink-0 items-center gap-2">
+					<Button type="submit" className="h-10">
+						<SlidersHorizontal aria-hidden="true" data-icon="inline-start" />
+						Apply filters
+					</Button>
+					<Button
+						type="button"
+						variant="ghost"
+						className="h-10"
+						onClick={(event) => {
+							event.currentTarget.form?.reset();
+							// Remount the uncontrolled selects even when no filters were applied.
+							setResetCount((count) => count + 1);
+							update(
+								Object.fromEntries(
+									fields.map(({ name }) => [name, undefined]),
+								) as Partial<P>,
+							);
+						}}
+					>
+						<RotateCcw aria-hidden="true" data-icon="inline-start" />
+						Clear filters
+					</Button>
+				</div>
 			</form>
-			<label className="flex flex-col gap-1 text-sm text-foreground">
-				Sort
-				<select
-					aria-label={`${label} sort`}
-					value={params.sort ?? "id,asc"}
-					className={inputClass}
-					onChange={(event) =>
-						update({ sort: event.target.value } as Partial<P>)
-					}
-				>
-					{sorts.map(([value, text]) => (
-						<option key={value} value={value}>
-							{text}
-						</option>
-					))}
-				</select>
-			</label>
-			<label className="flex flex-col gap-1 text-sm text-foreground">
-				Per page
-				<select
-					aria-label={`${label} page size`}
-					value={params.size ?? 20}
-					className={inputClass}
-					onChange={(event) =>
-						update({ size: Number(event.target.value) } as Partial<P>)
-					}
-				>
-					{[10, 20, 50].map((size) => (
-						<option key={size} value={size}>
-							{size}
-						</option>
-					))}
-				</select>
-			</label>
+			<FieldGroup className="min-w-0 flex-[1_1_16rem] flex-row items-end gap-3">
+				<Field className="min-w-0 flex-[2_1_0%] gap-2">
+					<FieldLabel htmlFor={`${filterId}-sort`} className={labelClass}>
+						Sort
+					</FieldLabel>
+					<Select
+						value={params.sort ?? "id,asc"}
+						onValueChange={(sort) => update({ sort } as Partial<P>)}
+					>
+						<SelectTrigger
+							id={`${filterId}-sort`}
+							aria-label={`${label} sort`}
+							className={controlClass}
+						>
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent align="start">
+							<SelectGroup>
+								{sorts.map(([value, text]) => (
+									<SelectItem key={value} value={value}>
+										{text}
+									</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+				</Field>
+				<Field className="min-w-0 flex-1 gap-2">
+					<FieldLabel htmlFor={`${filterId}-size`} className={labelClass}>
+						Per page
+					</FieldLabel>
+					<Select
+						value={String(params.size ?? 20)}
+						onValueChange={(size) =>
+							update({ size: Number(size) } as Partial<P>)
+						}
+					>
+						<SelectTrigger
+							id={`${filterId}-size`}
+							aria-label={`${label} page size`}
+							className={controlClass}
+						>
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent align="start">
+							<SelectGroup>
+								{[10, 20, 50].map((size) => (
+									<SelectItem key={size} value={String(size)}>
+										{size}
+									</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+				</Field>
+			</FieldGroup>
 		</div>
 	);
 };

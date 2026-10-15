@@ -1,8 +1,6 @@
-import { Bookmark } from "lucide-react";
-import { FaCircleInfo } from "react-icons/fa6";
-import { LuFileText } from "react-icons/lu";
+import { ArrowUpRight, Bookmark, Info } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components";
+import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { actionError } from "@/features/editor/persistence/actionError";
 import { useToggleFavorite } from "@/hooks/document";
@@ -10,7 +8,7 @@ import { useUser } from "@/hooks/user";
 import type { Document } from "@/models/Document";
 import useDocumentBranch from "@/states/useDocumentBranch";
 import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
-import BadgeList from "./BadgeList";
+import DocumentTile from "./DocumentTile";
 
 interface Props {
 	document: Document;
@@ -30,69 +28,65 @@ const DocumentCard = ({ document }: Props) => {
 	} = useToggleFavorite(document.id);
 
 	return (
-		<div
-			className={`relative group w- bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm transition-shadow duration-200 hover:shadow-md ${
-				collapsed ? "pointer-events-auto" : "pointer-events-none"
-			}`}
-		>
-			<div className="relative aspect-4/3 p-4">
-				<div className="absolute z-10 top-2 right-2 flex flex-row items-start gap-2 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
+		<DocumentTile
+			document={document}
+			disabled={!collapsed}
+			actions={
+				<>
 					{isOwner && (
 						<Toggle
 							aria-label="Toggle bookmark"
+							title={
+								document.favorite ? "Remove bookmark" : "Bookmark document"
+							}
 							disabled={isPending}
-							size="default"
-							variant="outline"
+							size="sm"
 							pressed={document.favorite}
-							onClick={() => {
+							onPressedChange={() => {
 								if (isOwner) toggleFavorite();
 							}}
-							className="cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 data-[state=on]:bg-yellow-50 data-[state=on]:border-yellow-400 data-[state=on]:text-yellow-600 dark:data-[state=on]:bg-yellow-900/20 dark:data-[state=on]:border-yellow-500 dark:data-[state=on]:text-yellow-400"
 						>
-							<Bookmark className="h-4 w-4" />
+							<Bookmark
+								aria-hidden="true"
+								fill={document.favorite ? "currentColor" : "none"}
+							/>
 						</Toggle>
 					)}
 					<Button
-						icon={FaCircleInfo}
 						type="button"
-						className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+						variant="ghost"
+						size="icon"
+						aria-label={`Information about ${document.title}`}
 						onClick={() => {
 							toggleDocumentInfoPopup();
 							resetBranchName();
 							setDocumentId(document.id);
 							setShared(document.shared);
 						}}
-					/>
-				</div>
-
-				<div className="absolute z-10 bottom-2 right-2">
-					<BadgeList document={document} />
-				</div>
-
-				<Link
-					to={`/document/${document.id}/branch/${document.mainBranchId}/edit`}
-					aria-label={`Open ${document.title}`}
-					className="relative bg-gray-50 dark:bg-gray-900 w-full h-full rounded-md cursor-pointer flex justify-center items-center overflow-hidden transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-850 border border-gray-200 dark:border-gray-700"
-				>
-					<LuFileText className="text-7xl text-gray-400 dark:text-gray-600 transition-transform duration-200 group-hover:scale-105" />
-				</Link>
-			</div>
-
-			<div className="flex flex-col gap-1 px-4 pb-4 border-t border-gray-100 dark:border-gray-700 pt-3">
-				<p className="text-sm font-medium text-gray-900 dark:text-gray-100 capitalize line-clamp-1">
-					{document.title}
-				</p>
-				<p className="text-xs text-gray-500 dark:text-gray-400">
-					Updated {document.updatedAt}
-				</p>
-			</div>
-			{isError && (
-				<p role="alert" className="px-4 pb-3 text-sm text-destructive">
-					{actionError(error)}
-				</p>
-			)}
-		</div>
+					>
+						<Info aria-hidden="true" />
+					</Button>
+				</>
+			}
+			openAction={
+				<Button asChild variant="ghost" size="sm">
+					<Link
+						to={`/document/${document.id}/branch/${document.mainBranchId}/edit`}
+						aria-label={`Open ${document.title}`}
+					>
+						Open
+						<ArrowUpRight aria-hidden="true" data-icon="inline-end" />
+					</Link>
+				</Button>
+			}
+			error={
+				isError && (
+					<p role="alert" className="px-4 text-sm text-destructive">
+						{actionError(error)}
+					</p>
+				)
+			}
+		/>
 	);
 };
-
 export default DocumentCard;

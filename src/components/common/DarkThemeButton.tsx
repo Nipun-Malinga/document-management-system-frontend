@@ -1,31 +1,30 @@
+import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
-import { FaMoon, FaSun } from "react-icons/fa6";
-import Button from "./Button";
+import { Button } from "@/components/ui/button";
 
 const DarkThemeButton = () => {
 	const [isDark, setIsDark] = useState(() => {
-		if (localStorage.theme === "dark") return true;
-		if (!("theme" in localStorage))
-			return window.matchMedia("(prefers-color-scheme: dark)").matches;
-		return false;
+		const theme = localStorage.getItem("theme");
+		if (theme === "dark" || theme === "light") return theme === "dark";
+		return window.matchMedia("(prefers-color-scheme: dark)").matches;
 	});
 
 	useEffect(() => {
-		const root = document.documentElement;
-		if (isDark) {
-			root.classList.add("dark");
-			localStorage.theme = "dark";
-		} else {
-			root.classList.remove("dark");
-			localStorage.theme = "light";
-		}
+		document.documentElement.classList.toggle("dark", isDark);
+		localStorage.setItem("theme", isDark ? "dark" : "light");
 	}, [isDark]);
 
 	return (
 		<Button
+			type="button"
+			variant="ghost"
+			size="icon"
+			aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+			title={isDark ? "Switch to light theme" : "Switch to dark theme"}
 			onClick={() => setIsDark((prev) => !prev)}
-			icon={isDark ? FaMoon : FaSun}
-		/>
+		>
+			{isDark ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
+		</Button>
 	);
 };
 

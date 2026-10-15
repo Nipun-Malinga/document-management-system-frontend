@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, UserPlus } from "lucide-react";
-import { useId, useState } from "react";
+import { LoaderCircle, Search } from "lucide-react";
+import { type ReactNode, useId, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "@/components";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
 	Field,
 	FieldDescription,
@@ -10,22 +11,33 @@ import {
 	FieldGroup,
 	FieldLabel,
 	FieldLegend,
-	FieldSeparator,
 	FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useFindUser, useUser } from "@/hooks/user";
 import { type TUserSchema, userSchema } from "@/types/User";
 import { collectionErrorMessage } from "@/utils/collectionUtils";
+import UserAvatar from "./User";
 
 interface Props {
 	title: string;
 	subTitle: string;
 	onClick: (userId: number) => void;
 	userPending: boolean;
+	children?: ReactNode;
+	onCancel?: () => void;
+	actionLabel?: string;
 }
 
-const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
+const SearchUser = ({
+	title,
+	subTitle,
+	onClick,
+	userPending,
+	children,
+	onCancel,
+	actionLabel = "Add",
+}: Props) => {
 	const emailId = useId();
 	const [email, setEmail] = useState<string>("");
 	const query = useFindUser(email);
@@ -48,51 +60,62 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
 	};
 
 	return (
-		<div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
-			<div className="flex items-center gap-3 mb-4">
-				<div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-					<UserPlus className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-				</div>
-				<div>
-					<h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
-						{title}
-					</h3>
-					<p className="text-xs text-gray-500 dark:text-gray-400">{subTitle}</p>
-				</div>
-			</div>
-
-			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-				<FieldGroup>
-					<FieldSet>
-						<FieldLegend>{title}</FieldLegend>
+		<div className="flex min-w-0 flex-col gap-4">
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<FieldGroup className="gap-4">
+					<FieldSet className="gap-4">
+						<FieldLegend className="mb-0">{title}</FieldLegend>
 						<FieldDescription>{subTitle}</FieldDescription>
-						<FieldGroup>
-							<div className="grid md:grid-cols-2 gap-2">
-								<Field>
-									<FieldLabel htmlFor={emailId}>User email</FieldLabel>
-									<Input
-										id={emailId}
-										type="email"
-										placeholder="person@example.com"
-										{...register("email", { onChange: () => setEmail("") })}
-									/>
-									{errors.email && (
-										<FieldError>{errors.email.message}</FieldError>
-									)}
-								</Field>
-							</div>
+						<FieldGroup className="gap-4">
+							<Field data-invalid={!!errors.email}>
+								<FieldLabel htmlFor={emailId}>User email</FieldLabel>
+								<Input
+									id={emailId}
+									type="email"
+									aria-invalid={!!errors.email}
+									aria-describedby={
+										errors.email ? `${emailId}-error` : undefined
+									}
+									disabled={userPending}
+									className="h-10 bg-background shadow-none"
+									placeholder="person@example.com"
+									{...register("email", { onChange: () => setEmail("") })}
+								/>
+								{errors.email && (
+									<FieldError id={`${emailId}-error`}>
+										{errors.email.message}
+									</FieldError>
+								)}
+							</Field>
+							{children}
 						</FieldGroup>
 					</FieldSet>
-					<FieldSeparator />
 					<Field orientation="horizontal">
-						<Button type="submit" disabled={!isValid || isFetching}>
-							Submit
+						<Button
+							type="submit"
+							className="h-10"
+							disabled={!isValid || isFetching || userPending}
+						>
+							{isFetching ? (
+								<LoaderCircle
+									aria-hidden="true"
+									data-icon="inline-start"
+									className="animate-spin motion-reduce:animate-none"
+								/>
+							) : (
+								<Search aria-hidden="true" data-icon="inline-start" />
+							)}
+							{isFetching ? "Searching…" : "Find person"}
 						</Button>
 						<Button
 							type="button"
+							variant="outline"
+							disabled={userPending}
+							className="h-10"
 							onClick={() => {
 								reset();
 								setEmail("");
+								onCancel?.();
 							}}
 						>
 							Cancel
@@ -101,53 +124,58 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
 				</FieldGroup>
 			</form>
 
-			{/* Search Result */}
 			{email && fetchedUser && !isError && !isFetching && (
-				<div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300">
-					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-								<span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-									{fetchedUser.email.charAt(0).toUpperCase()}
-								</span>
-							</div>
-							<div>
-								<p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-									{fetchedUser.email}
-								</p>
-								<p className="text-xs text-gray-500 dark:text-gray-400">
-									User found
-								</p>
-							</div>
+				<div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+					<div className="flex min-w-0 flex-1 items-center gap-3">
+						<UserAvatar username={fetchedUser.username || fetchedUser.email} />
+						<div className="flex min-w-0 flex-col gap-1">
+							<p className="wrap-anywhere text-sm font-medium">
+								{fetchedUser.email}
+							</p>
+							<p className="text-xs text-muted-foreground">
+								{user?.id === fetchedUser.id
+									? "This is your account"
+									: "Ready to add"}
+							</p>
 						</div>
-						<Button
-							disabled={userPending || user?.id === fetchedUser.id}
-							onClick={() => onClick(fetchedUser.id)}
-							className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-150 shadow-sm hover:shadow-md active:scale-95"
-						>
-							{userPending ? (
-								<LoaderCircle className="w-5 h-5 animate-spin" />
-							) : (
-								"Add"
-							)}
-						</Button>
 					</div>
+					<Button
+						type="button"
+						className="h-10"
+						disabled={userPending || user?.id === fetchedUser.id}
+						onClick={() => onClick(fetchedUser.id)}
+					>
+						{userPending && (
+							<LoaderCircle
+								aria-hidden="true"
+								data-icon="inline-start"
+								className="animate-spin motion-reduce:animate-none"
+							/>
+						)}
+						{userPending ? "Adding…" : actionLabel}
+					</Button>
 				</div>
 			)}
 
-			{email && isFetching && <p>Looking up user…</p>}
+			{email && isFetching && (
+				<p role="status" className="text-sm text-muted-foreground">
+					Looking up user…
+				</p>
+			)}
 			{email && isError && (
-				<div role="alert" className="mt-4 space-y-2 text-sm text-foreground">
-					<p>{collectionErrorMessage(query.error, "this user")}</p>
-					<Button
-						type="button"
-						onClick={() => {
-							void query.refetch();
-						}}
-					>
-						Retry lookup
-					</Button>
-				</div>
+				<Alert variant="destructive">
+					<AlertDescription>
+						<p>{collectionErrorMessage(query.error, "this user")}</p>
+						<Button
+							type="button"
+							onClick={() => {
+								void query.refetch();
+							}}
+						>
+							Retry lookup
+						</Button>
+					</AlertDescription>
+				</Alert>
 			)}
 		</div>
 	);

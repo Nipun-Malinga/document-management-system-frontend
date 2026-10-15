@@ -57,7 +57,7 @@ const useActions = () => {
 				status: "PRIVATE",
 				templateId: 1,
 			}),
-		rename: () => rename.mutateAsync({ title: "Renamed" }),
+		rename: () => rename.mutateAsync({ title: "Renamed", status: "PRIVATE" }),
 		favorite: () => favorite.mutateAsync(),
 		save: () => save.mutateAsync(json),
 		createBranch: () => branch.mutateAsync({ branchName: "Draft" }),
@@ -97,7 +97,15 @@ const keys = [
 ];
 const cases: [keyof ReturnType<typeof useActions>, string[]][] = [
 	["create", ["documentCount", "document-favorites-count", "branches"]],
-	["rename", ["document", "trashed_documents_own", "trashed_branches_own"]],
+	[
+		"rename",
+		[
+			"document",
+			"trashed_documents_own",
+			"trashed_branches_own",
+			"permissions",
+		],
+	],
 	["favorite", ["document", "document-favorites-count"]],
 	["save", ["document", "branches"]],
 	["createBranch", ["document", "branches"]],

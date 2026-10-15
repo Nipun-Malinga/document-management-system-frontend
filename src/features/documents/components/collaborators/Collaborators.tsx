@@ -1,38 +1,48 @@
 import { Users } from "lucide-react";
+import type { ReactNode } from "react";
+import { Badge } from "@/components/ui/badge";
 import useCollaborators from "@/hooks/document/collaboration/useCollaborators";
 import useCollectionParams from "@/hooks/useCollectionParams";
-import type { CollaboratorsResponse } from "@/models/Collaborator";
 import type { CollaboratorParams } from "@/models/PageResponse";
-import CollectionFilters from "../collections/CollectionFilters";
+import CollectionEmpty from "../collections/CollectionEmpty";
+import CollectionFilter from "../collections/CollectionFilter";
 import CollectionPagination from "../collections/CollectionPagination";
 import CollectionResults from "../collections/CollectionResults";
 import { permissionField } from "../collections/collectionFilterOptions";
-import Collaborator from "./CollaboratorCard";
+import hasCollectionFilters from "../collections/hasCollectionFilters";
+import CollaboratorCard from "./CollaboratorCard";
 
 interface Props {
 	documentId: string;
+	actions?: ReactNode;
+	children?: ReactNode;
 }
 
-const collaboratorRenderer = (collaborators: CollaboratorsResponse) => {
-	return (
-		<div className="max-h-80 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-			<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-				{collaborators.content.map((collaborator) => (
-					<Collaborator collaborator={collaborator} key={collaborator.userId} />
-				))}
-			</div>
-		</div>
-	);
-};
-
-const Collaborators = ({ documentId }: Props) => {
+const Collaborators = ({ documentId, actions, children }: Props) => {
 	const { params, update, setPage } =
 		useCollectionParams<CollaboratorParams>(documentId);
 	const query = useCollaborators(documentId, params);
-	const { data } = query;
 	return (
-		<div className="space-y-6">
-			<CollectionFilters
+		<div className="flex min-w-0 flex-col gap-4">
+			<div className="flex flex-wrap items-start justify-between gap-3">
+				<div className="flex min-w-0 flex-col gap-1.5">
+					<div className="flex items-center gap-2">
+						<h3 className="font-semibold">People with access</h3>
+						{query.data && !query.isError && (
+							<Badge variant="secondary" className="tabular-nums">
+								{query.data.totalElements}
+							</Badge>
+						)}
+					</div>
+					<p className="text-sm leading-relaxed text-muted-foreground">
+						See who can view or edit this document.
+					</p>
+				</div>
+				{actions}
+			</div>
+			{children}
+
+			<CollectionFilter
 				key={documentId}
 				params={params}
 				update={update}
@@ -47,33 +57,38 @@ const Collaborators = ({ documentId }: Props) => {
 				]}
 				label="collaborators"
 			/>
-			<CollectionResults query={query} label="collaborators">
-				{() => (
-					<div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
-						<div className="flex items-center justify-between mb-4">
-							<div className="flex items-center gap-3">
-								<div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-									<Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-								</div>
-								<div>
-									<h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
-										Collaborators
-									</h3>
-									<p className="text-xs text-gray-500 dark:text-gray-400">
-										People with access to this document
-									</p>
-								</div>
-							</div>
-							<span className="px-3 py-1 text-sm font-semibold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200 dark:border-blue-800">
-								{data?.totalElements}
-							</span>
-						</div>
-						{data && collaboratorRenderer(data)}
-					</div>
+			<CollectionResults
+				query={query}
+				label="collaborators"
+				empty={
+					hasCollectionFilters(params) ? undefined : (
+						<CollectionEmpty
+							icon={Users}
+							title="No collaborators yet"
+							description="People invited to this document will appear here, along with their access level."
+						/>
+					)
+				}
+			>
+				{(items) => (
+					<ul
+						aria-label="People with access"
+						className="overflow-hidden rounded-xl border bg-card"
+					>
+						{items.map((collaborator) => (
+							<li
+								key={collaborator.userId}
+								className="border-b last:border-b-0"
+							>
+								<CollaboratorCard collaborator={collaborator} />
+							</li>
+						))}
+					</ul>
 				)}
 			</CollectionResults>
 			<CollectionPagination
-				data={data}
+				className="mt-0"
+				data={query.data}
 				pending={query.isFetching}
 				onPage={setPage}
 				label="collaborators"
