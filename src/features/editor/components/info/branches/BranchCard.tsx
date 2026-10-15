@@ -1,4 +1,4 @@
-import { Eye, GitBranch, LoaderCircle, Trash2 } from "lucide-react";
+import { ArrowRight, Eye, GitBranch, LoaderCircle, Trash2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert } from "@/components";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useTrashBranch } from "@/hooks/document";
 import useDocumentAccess from "@/hooks/document/useDocumentAccess";
+import { cn } from "@/lib/utils";
 import type { Branch } from "@/models/Branch";
 import MergeControl from "../MergeControl";
 
@@ -34,79 +35,77 @@ const BranchCard = ({ branch }: Props) => {
 	const isMainBranch = branch.branchName.toLowerCase() === "main";
 
 	return (
-		<Card className="min-w-0 gap-4 shadow-none">
-			<CardHeader className="gap-3 px-5">
-				<div className="flex items-start gap-3">
-					<GitBranch
+		<Card
+			aria-current={isCurrentBranch ? "true" : undefined}
+			className={cn(
+				"min-w-0 gap-3 overflow-hidden py-0 shadow-none transition-colors hover:border-primary/50 focus-within:border-primary/50",
+				isCurrentBranch && "border-primary/50",
+			)}
+		>
+			<CardHeader className="px-4 pt-4">
+				<div className="flex min-w-0 items-start gap-3">
+					<span
 						aria-hidden="true"
-						className="mt-0.5 size-5 shrink-0 text-primary"
-						strokeWidth={1.5}
-					/>
+						className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary"
+					>
+						<GitBranch className="size-4" />
+					</span>
 					<div className="flex min-w-0 flex-1 flex-col gap-2">
 						<CardTitle>
-							<h3 className="break-words text-base leading-relaxed">
+							<h3 className="wrap-anywhere text-base leading-6">
 								{branch.branchName}
 							</h3>
 						</CardTitle>
 						{(isMainBranch || isCurrentBranch) && (
 							<div className="flex flex-wrap items-center gap-2">
+								{isCurrentBranch && <Badge>Active</Badge>}
 								{isMainBranch && <Badge variant="secondary">Main</Badge>}
-								{isCurrentBranch && <Badge variant="outline">Active</Badge>}
 							</div>
 						)}
 					</div>
 				</div>
 			</CardHeader>
-			<CardContent className="px-5">
-				<p className="break-words text-xs text-muted-foreground">
+			<CardContent className="px-4 pb-1">
+				<p className="wrap-anywhere text-xs leading-relaxed text-muted-foreground tabular-nums">
 					Created {branch.createdAt}
 				</p>
 			</CardContent>
-			<CardFooter className="flex-col items-stretch gap-3 px-5">
-				<div className="flex flex-wrap gap-2">
+			<CardFooter className="flex-wrap items-start gap-2 border-t bg-muted/30 px-4 py-3 [.border-t]:pt-3">
+				<Button
+					variant="ghost"
+					size="sm"
+					className="flex-1"
+					onClick={() =>
+						navigate(`/document/${branch.documentId}/branch/${branch.id}/view`)
+					}
+				>
+					<Eye aria-hidden="true" data-icon="inline-start" />
+					Preview
+				</Button>
+				{!isCurrentBranch && (
 					<Button
-						variant="outline"
 						size="sm"
 						className="flex-1"
 						onClick={() =>
 							navigate(
-								`/document/${branch.documentId}/branch/${branch.id}/view`,
+								`/document/${branch.documentId}/branch/${branch.id}/edit`,
 							)
 						}
 					>
-						<Eye aria-hidden="true" data-icon="inline-start" />
-						Preview
+						Switch
+						<ArrowRight aria-hidden="true" data-icon="inline-end" />
 					</Button>
-					{!isCurrentBranch && (
-						<Button
-							size="sm"
-							className="flex-1"
-							onClick={() =>
-								navigate(
-									`/document/${branch.documentId}/branch/${branch.id}/edit`,
-								)
-							}
-						>
-							Switch
-						</Button>
-					)}
-				</div>
-				{canWrite && (
-					<MergeControl
-						documentId={branch.documentId}
-						targetBranchId={branchId ?? ""}
-						source={{ kind: "branch", id: branch.id, name: branch.branchName }}
-					/>
 				)}
 				{!isMainBranch && isOwner && (
 					<Alert
-						className="w-full"
+						className="shrink-0"
 						trigger={
 							<Button
 								variant="destructive"
-								size="sm"
+								size="icon-sm"
 								disabled={isPending}
-								className="w-full"
+								aria-label={isPending ? "Deleting..." : "Delete"}
+								title="Delete branch"
 							>
 								{isPending ? (
 									<LoaderCircle
@@ -117,7 +116,6 @@ const BranchCard = ({ branch }: Props) => {
 								) : (
 									<Trash2 aria-hidden="true" data-icon="inline-start" />
 								)}
-								{isPending ? "Deleting..." : "Delete"}
 							</Button>
 						}
 						title="Delete Branch?"
@@ -126,6 +124,13 @@ const BranchCard = ({ branch }: Props) => {
 						onClick={async () => {
 							if (isOwner) await mutateAsync();
 						}}
+					/>
+				)}
+				{canWrite && (
+					<MergeControl
+						documentId={branch.documentId}
+						targetBranchId={branchId ?? ""}
+						source={{ kind: "branch", id: branch.id, name: branch.branchName }}
 					/>
 				)}
 			</CardFooter>

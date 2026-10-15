@@ -15,7 +15,7 @@ import {
 import { useBranches } from "@/hooks/document";
 import useCollectionParams from "@/hooks/useCollectionParams";
 import type { BranchParams } from "@/models/PageResponse";
-import InfoDrawerBody from "../InfoDrawerBody";
+import InfoDrawerBody, { InfoDrawerEmpty } from "../InfoDrawerBody";
 import BranchCard from "./BranchCard";
 import BranchCreateForm from "./BranchCreateForm";
 
@@ -27,22 +27,23 @@ const Branches = () => {
 
 	return (
 		<>
-			<div className="flex shrink-0 items-start gap-3 border-y bg-secondary px-5 py-4">
-				<GitBranch
-					aria-hidden="true"
-					className="mt-0.5 size-5 shrink-0 text-primary"
-				/>
-				<DrawerHeader className="p-0">
-					<DrawerTitle>Branches</DrawerTitle>
-					<DrawerDescription>
-						Explore document branches or create a new direction from your
-						current work.
-					</DrawerDescription>
-				</DrawerHeader>
-			</div>
+			<DrawerHeader className="shrink-0 gap-2 border-b bg-card px-4 py-5 text-left sm:px-6">
+				<DrawerTitle className="flex items-center gap-2">
+					<GitBranch
+						aria-hidden="true"
+						className="size-5 shrink-0 text-primary"
+					/>
+					Branches
+				</DrawerTitle>
+				<DrawerDescription>
+					Explore document branches or create a new direction from your current
+					work.
+				</DrawerDescription>
+			</DrawerHeader>
 			<InfoDrawerBody emptyTitle="Branches" emptyDescription="">
-				<BranchCreateForm />
 				<CollectionFilter
+					toolbar={<BranchCreateForm />}
+					buttonLabel="Filters"
 					key={documentId}
 					params={params}
 					update={update}
@@ -53,9 +54,18 @@ const Branches = () => {
 					sorts={branchSorts}
 					label="branches"
 				/>
-				<CollectionResults query={query} label="branches">
+				<CollectionResults
+					query={query}
+					label="branches"
+					empty={
+						<InfoDrawerEmpty
+							emptyTitle="No branches match these filters."
+							emptyDescription=""
+						/>
+					}
+				>
 					{(items) => (
-						<ul className="flex flex-col gap-3">
+						<ul className="flex min-w-0 flex-col gap-3">
 							{items.map((branch) => (
 								<li key={branch.id}>
 									<BranchCard branch={branch} />
@@ -65,6 +75,7 @@ const Branches = () => {
 					)}
 				</CollectionResults>
 				<CollectionPagination
+					className="mt-auto"
 					data={query.data}
 					pending={query.isFetching}
 					onPage={setPage}

@@ -20,7 +20,7 @@ const InfoBase = ({ document }: Props) => (
 		].map(([label, value]) => (
 			<div key={label} className="flex min-w-0 flex-col gap-1.5">
 				<dt className="text-muted-foreground">{label}</dt>
-				<dd className="break-words font-medium">{value}</dd>
+				<dd className="wrap-break-word font-medium">{value}</dd>
 			</div>
 		))}
 	</dl>

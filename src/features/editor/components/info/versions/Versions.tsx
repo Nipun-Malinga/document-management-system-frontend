@@ -1,3 +1,4 @@
+import { History } from "lucide-react";
 import { useParams } from "react-router-dom";
 import {
 	DrawerDescription,
@@ -14,7 +15,7 @@ import {
 import useDocumentVersions from "@/hooks/document/useDocumentVersions";
 import useCollectionParams from "@/hooks/useCollectionParams";
 import type { VersionParams } from "@/models/PageResponse";
-import InfoDrawerBody from "../InfoDrawerBody";
+import InfoDrawerBody, { InfoDrawerEmpty } from "../InfoDrawerBody";
 import VersionCard from "./VersionCard";
 import VersionCreateForm from "./VersionCreateForm";
 
@@ -26,15 +27,22 @@ const Versions = () => {
 
 	return (
 		<>
-			<DrawerHeader className="shrink-0 border-b px-5 pb-5 pt-0">
-				<DrawerTitle>Versions</DrawerTitle>
+			<DrawerHeader className="shrink-0 gap-2 border-b bg-card px-4 py-5 text-left sm:px-6">
+				<DrawerTitle className="flex items-center gap-2">
+					<History
+						aria-hidden="true"
+						className="size-5 shrink-0 text-primary"
+					/>
+					Versions
+				</DrawerTitle>
 				<DrawerDescription>
 					Browse saved versions and create a snapshot of your current work.
 				</DrawerDescription>
 			</DrawerHeader>
 			<InfoDrawerBody emptyTitle="Versions" emptyDescription="">
-				<VersionCreateForm />
 				<CollectionFilter
+					toolbar={<VersionCreateForm />}
+					buttonLabel="Filters"
 					key={documentId}
 					params={params}
 					update={update}
@@ -46,14 +54,28 @@ const Versions = () => {
 					sorts={versionSorts}
 					label="versions"
 				/>
-				<CollectionResults query={query} label="versions">
-					{(items) =>
-						items.map((version) => (
-							<VersionCard version={version} key={version.id} />
-						))
+				<CollectionResults
+					query={query}
+					label="versions"
+					empty={
+						<InfoDrawerEmpty
+							emptyTitle="No versions match these filters."
+							emptyDescription=""
+						/>
 					}
+				>
+					{(items) => (
+						<ul className="flex min-w-0 flex-col gap-3">
+							{items.map((version) => (
+								<li key={version.id}>
+									<VersionCard version={version} />
+								</li>
+							))}
+						</ul>
+					)}
 				</CollectionResults>
 				<CollectionPagination
+					className="mt-auto"
 					data={query.data}
 					pending={query.isFetching}
 					onPage={setPage}

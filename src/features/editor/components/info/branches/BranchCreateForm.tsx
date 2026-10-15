@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -67,7 +67,8 @@ const CreateBranchForm = () => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button disabled={safety.disabled} className="w-full">
+				<Button disabled={safety.disabled} className="h-10 w-full">
+					<Plus aria-hidden="true" data-icon="inline-start" />
 					Create Branch
 				</Button>
 			</DialogTrigger>
@@ -75,7 +76,7 @@ const CreateBranchForm = () => {
 				<p className="text-sm text-muted-foreground">{safety.reason}</p>
 			)}
 			<DialogContent>
-				<DialogHeader>
+				<DialogHeader className="gap-3 border-b pb-5 text-left">
 					<DialogTitle>Create a new branch</DialogTitle>
 					<DialogDescription>
 						Enter a name for the new branch.
@@ -108,7 +109,7 @@ const CreateBranchForm = () => {
 							</p>
 						)}
 					</DialogBody>
-					<DialogFooter>
+					<DialogFooter className="border-t pt-4">
 						<DialogClose asChild>
 							<Button type="button" variant="outline" disabled={isPending}>
 								Cancel

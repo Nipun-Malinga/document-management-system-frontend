@@ -20,19 +20,28 @@ const InfoDrawerContent = ({
 	children,
 }: Props) => {
 	return (
-		<div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain [scrollbar-gutter:stable] px-5 py-5">
+		<div className="flex min-h-0 min-w-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain bg-background px-4 py-5 [scrollbar-gutter:stable] [scrollbar-color:var(--border)_var(--background)] sm:px-6">
 			{children ?? (
-				<Empty>
-					<EmptyHeader>
-						<EmptyMedia variant="icon">
-							<FolderOpen />
-						</EmptyMedia>
-						<EmptyTitle>{emptyTitle}</EmptyTitle>
-						<EmptyDescription>{emptyDescription}</EmptyDescription>
-					</EmptyHeader>
-				</Empty>
+				<InfoDrawerEmpty
+					emptyTitle={emptyTitle}
+					emptyDescription={emptyDescription}
+				/>
 			)}
 		</div>
 	);
 };
+export const InfoDrawerEmpty = ({ emptyTitle, emptyDescription }: Props) => (
+	<Empty className="rounded-xl border bg-card px-4 py-10">
+		<EmptyHeader>
+			<EmptyMedia variant="icon">
+				<FolderOpen aria-hidden="true" />
+			</EmptyMedia>
+			<EmptyTitle>{emptyTitle}</EmptyTitle>
+			{emptyDescription && (
+				<EmptyDescription>{emptyDescription}</EmptyDescription>
+			)}
+		</EmptyHeader>
+	</Empty>
+);
+
 export default InfoDrawerContent;

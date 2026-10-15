@@ -1,4 +1,4 @@
-import { CheckCircle } from "lucide-react";
+import { GitMerge } from "lucide-react";
 import { useState } from "react";
 import {
 	AlertDialog,
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { DialogBody } from "@/components/ui/dialog";
 import useMergeBranch from "@/hooks/document/useMergeBranch";
 import useMergeVersion from "@/hooks/document/useMergeVersion";
+import { cn } from "@/lib/utils";
 import { actionError } from "../../persistence/actionError";
 import useSoloActionState from "../../persistence/useSoloActionState";
 
@@ -33,7 +34,12 @@ const MergeControl = ({ documentId, targetBranchId, source }: Props) => {
 	const self = source.kind === "branch" && source.id === targetBranchId;
 	const disabled = safety.disabled || self || !targetBranchId;
 	return (
-		<div className="flex w-full flex-col gap-2">
+		<div
+			className={cn(
+				"flex min-w-0 flex-col gap-2",
+				safety.reason || self ? "basis-full" : "flex-1 basis-24",
+			)}
+		>
 			<AlertDialog
 				open={open}
 				onOpenChange={(next) => {
@@ -44,8 +50,13 @@ const MergeControl = ({ documentId, targetBranchId, source }: Props) => {
 				}}
 			>
 				<AlertDialogTrigger asChild>
-					<Button variant="outline" disabled={disabled} className="w-full">
-						<CheckCircle aria-hidden="true" data-icon="inline-start" />
+					<Button
+						variant="outline"
+						size="sm"
+						disabled={disabled}
+						className="w-full"
+					>
+						<GitMerge aria-hidden="true" data-icon="inline-start" />
 						Merge
 					</Button>
 				</AlertDialogTrigger>
@@ -88,10 +99,12 @@ const MergeControl = ({ documentId, targetBranchId, source }: Props) => {
 				</AlertDialogContent>
 			</AlertDialog>
 			{safety.reason && (
-				<p className="text-sm text-muted-foreground">{safety.reason}</p>
+				<p className="text-xs leading-relaxed text-muted-foreground">
+					{safety.reason}
+				</p>
 			)}
 			{self && (
-				<p className="text-sm text-muted-foreground">
+				<p className="text-xs leading-relaxed text-muted-foreground">
 					Choose a different source branch.
 				</p>
 			)}

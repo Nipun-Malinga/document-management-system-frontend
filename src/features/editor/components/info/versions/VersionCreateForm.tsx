@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -82,7 +82,8 @@ const VersionCreateForm = () => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button disabled={safety.disabled} className="w-full">
+				<Button disabled={safety.disabled} className="h-10 w-full">
+					<Plus aria-hidden="true" data-icon="inline-start" />
 					Create Version
 				</Button>
 			</DialogTrigger>
@@ -90,7 +91,7 @@ const VersionCreateForm = () => {
 				<p className="text-sm text-muted-foreground">{safety.reason}</p>
 			)}
 			<DialogContent>
-				<DialogHeader>
+				<DialogHeader className="gap-3 border-b pb-5 text-left">
 					<DialogTitle>Create a new version</DialogTitle>
 					<DialogDescription>
 						Give your version a meaningful name and set its visibility.
@@ -149,7 +150,7 @@ const VersionCreateForm = () => {
 							</p>
 						)}
 					</DialogBody>
-					<DialogFooter>
+					<DialogFooter className="border-t pt-4">
 						<DialogClose asChild>
 							<Button type="button" variant="outline" disabled={isPending}>
 								Cancel
