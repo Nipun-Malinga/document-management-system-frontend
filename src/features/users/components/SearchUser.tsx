@@ -135,7 +135,7 @@ const SearchUser = ({ title, subTitle, onClick, userPending }: Props) => {
 				</div>
 			)}
 
-			{email && isFetching && <p role="status">Looking up user…</p>}
+			{email && isFetching && <p>Looking up user…</p>}
 			{email && isError && (
 				<div role="alert" className="mt-4 space-y-2 text-sm text-foreground">
 					<p>{collectionErrorMessage(query.error, "this user")}</p>

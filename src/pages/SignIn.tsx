@@ -45,8 +45,8 @@ const Signin = () => {
 		setApiError(null);
 		clearErrors();
 		mutate(data, {
-			onSuccess: () => {
-				navigate("/dashboard/home");
+			onSuccess: async () => {
+				await navigate("/dashboard/home");
 			},
 			onError: (error) => {
 				setApiError(applyFormError(error, setError, ["email", "password"]));

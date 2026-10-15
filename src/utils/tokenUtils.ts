@@ -6,17 +6,16 @@ export type SessionUser = Omit<User, "firstname" | "lastname">;
 export const parseAccessToken = (
 	token: string | null,
 	allowExpired = false,
-) => {
+): { user: SessionUser; expiresAt: number } | null => {
 	try {
-		if (
-			token?.split(".").length !== 3 ||
-			token.split(".").some((part) => !part)
-		)
-			return null;
-		const header = jwtDecode<{ alg?: unknown }>(token, { header: true });
-		if (typeof header.alg !== "string" || !header.alg || header.alg === "none")
-			return null;
-		const payload = jwtDecode<{
+		if (!token) return null;
+		const parts = token.split(".");
+		if (parts.length !== 3 || parts.some((part) => !part)) return null;
+
+		const { alg } = jwtDecode<{ alg?: unknown }>(token, { header: true });
+		if (typeof alg !== "string" || !alg || alg === "none") return null;
+
+		const { sub, username, email, role, exp, token_type } = jwtDecode<{
 			sub: string;
 			username: string;
 			email: string;
@@ -24,28 +23,25 @@ export const parseAccessToken = (
 			exp: number;
 			token_type?: string;
 		}>(token);
+
+		const id = Number(sub);
+		const expiresAt = exp * 1000;
 		if (
-			typeof payload.sub !== "string" ||
-			!/^[1-9]\d*$/.test(payload.sub) ||
-			!Number.isSafeInteger(Number(payload.sub)) ||
-			typeof payload.username !== "string" ||
-			!payload.username.trim() ||
-			typeof payload.email !== "string" ||
-			!payload.email.trim() ||
-			(payload.role !== "USER" && payload.role !== "ADMIN") ||
-			(payload.token_type !== undefined && payload.token_type !== "access") ||
-			typeof payload.exp !== "number" ||
-			!Number.isFinite(payload.exp * 1000) ||
-			(!allowExpired && payload.exp <= Date.now() / 1000)
+			typeof sub !== "string" ||
+			!/^[1-9]\d*$/.test(sub) ||
+			!Number.isSafeInteger(id) ||
+			typeof username !== "string" ||
+			!username.trim() ||
+			typeof email !== "string" ||
+			!email.trim() ||
+			(role !== "USER" && role !== "ADMIN") ||
+			(token_type !== undefined && token_type !== "access") ||
+			typeof exp !== "number" ||
+			!Number.isFinite(expiresAt) ||
+			(!allowExpired && exp <= Date.now() / 1000)
 		)
 			return null;
-		const user: SessionUser = {
-			id: Number(payload.sub),
-			username: payload.username,
-			email: payload.email,
-			role: payload.role,
-		};
-		return { user, expiresAt: payload.exp * 1000 };
+		return { user: { id, username, email, role }, expiresAt };
 	} catch {
 		return null;
 	}

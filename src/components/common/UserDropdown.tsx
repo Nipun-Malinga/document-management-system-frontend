@@ -13,7 +13,7 @@ import { actionError } from "@/features/editor/persistence/actionError";
 import { flushActiveEditor } from "@/features/editor/persistence/persistenceRegistry";
 import { useUser } from "@/hooks/user";
 import useUserProfilePopup from "@/states/useUserProfilePopup";
-import { clearAccessToken } from "@/utils/authUtils";
+import { endSession } from "@/utils/authUtils";
 import { Button } from "../ui/button";
 
 const UserDropdown = () => {
@@ -22,9 +22,9 @@ const UserDropdown = () => {
 	const { toggleProfilePopup } = useUserProfilePopup();
 	const [error, setError] = useState("");
 	const [pending, setPending] = useState(false);
-	const finishLogout = () => {
-		clearAccessToken();
-		navigate("/auth/signin");
+	const finishLogout = async () => {
+		endSession();
+		await navigate("/auth/signin");
 	};
 	const logout = async () => {
 		if (pending) return;
@@ -32,7 +32,7 @@ const UserDropdown = () => {
 		setError("");
 		try {
 			await flushActiveEditor();
-			finishLogout();
+			await finishLogout();
 		} catch (error) {
 			setError(actionError(error));
 		} finally {
@@ -64,7 +64,7 @@ const UserDropdown = () => {
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
-			{pending && <p role="status">Saving before logout…</p>}
+			{pending && <p>Saving before logout…</p>}
 			{error && (
 				<div role="alert" className="space-y-2 text-sm text-foreground">
 					<p>{error}</p>

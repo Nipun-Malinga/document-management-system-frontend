@@ -22,7 +22,7 @@ const EditorContainer = () => {
 			{data ? (
 				<EditorMode key={`${documentId}/${branchId}`} shared={data.shared} />
 			) : isError ? (
-				<div role="alert">
+				<div>
 					<p>{collectionErrorMessage(error, "this document")}</p>
 					<Button
 						onClick={() => {
@@ -33,7 +33,7 @@ const EditorContainer = () => {
 					</Button>
 				</div>
 			) : (
-				<p role="status">Loading document…</p>
+				<p>Loading document…</p>
 			)}
 		</>
 	);

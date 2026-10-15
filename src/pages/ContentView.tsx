@@ -11,6 +11,7 @@ const ContentView = () => {
 	const branch = useDocumentContent(documentId ?? "", branchId ?? "");
 	const version = useVersionContent(documentId ?? "", versionId ?? "");
 	const query = versionId ? version : branch;
+
 	return (
 		<div className="w-full h-dvh rounded-md overflow-y-auto">
 			<nav className="p-3 flex flex-wrap gap-3 text-sm">
@@ -25,7 +26,7 @@ const ContentView = () => {
 				{versionId ? "Version preview" : "Saved branch preview"}
 			</p>
 			{query.isPending ? (
-				<p role="status">Loading preview…</p>
+				<p>Loading preview…</p>
 			) : query.isError ? (
 				<div role="alert">
 					<p>{collectionErrorMessage(query.error, "this preview")}</p>

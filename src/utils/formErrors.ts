@@ -17,7 +17,7 @@ export const applyFormError = <T extends FieldValues>(
 		}
 		if (error.response?.status === 409) {
 			const detail = typeof problem?.detail === "string" ? problem.detail : "";
-			// The backend distinguishes conflicts through its ProblemDetail detail.
+
 			const field = /^username\b/i.test(detail)
 				? "username"
 				: /^email\b/i.test(detail)

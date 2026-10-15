@@ -14,7 +14,7 @@ export const SoloEditor = () => {
 	const { data } = contentQuery;
 	const access = useDocumentAccess(documentId ?? "", branchId ?? "");
 
-	if (access.isPending) return <p role="status">Checking document access...</p>;
+	if (access.isPending) return <p>Checking document access...</p>;
 	if (access.isError)
 		return (
 			<div role="alert">
@@ -47,7 +47,7 @@ export const SoloEditor = () => {
 				</Button>
 			</div>
 		) : (
-			<p role="status">Loading saved content…</p>
+			<p>Loading saved content…</p>
 		);
 
 	return (

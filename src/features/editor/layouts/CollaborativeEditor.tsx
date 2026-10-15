@@ -10,7 +10,7 @@ const CollaborativeEditor = () => {
 
 	const access = useDocumentAccess(documentId ?? "", branchId ?? "");
 
-	if (access.isPending) return <p role="status">Checking document access...</p>;
+	if (access.isPending) return <p>Checking document access...</p>;
 	if (access.isError)
 		return (
 			<div role="alert">
