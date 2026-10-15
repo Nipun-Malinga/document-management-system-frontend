@@ -108,7 +108,14 @@ const WorkspacePreview = () => {
 		shared: shared.length,
 		trash: 0,
 	});
-	const collectionDocuments = collection === "quick" ? bookmarked : collection === "shared" ? shared : collection === "trash" ? [] : owned;
+	const collectionDocuments =
+		collection === "quick"
+			? bookmarked
+			: collection === "shared"
+				? shared
+				: collection === "trash"
+					? []
+					: owned;
 	const visible = collectionDocuments.filter(
 		(document) => !search.trim() || document.title === search.trim(),
 	);

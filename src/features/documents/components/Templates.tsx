@@ -38,7 +38,7 @@ const Templates = () => {
 				templateId,
 			});
 			setTemplate({ id: templateId, title: name, template: content });
-			navigate(`/document/${doc.id}/branch/${doc.mainBranchId}/edit`);
+			await navigate(`/document/${doc.id}/branch/${doc.mainBranchId}/edit`);
 		} catch (error) {
 			const detail = axios.isAxiosError<ProblemDetail>(error)
 				? error.response?.data?.detail
@@ -61,7 +61,7 @@ const Templates = () => {
 				</p>
 			)}
 			{isPending && (
-				<p role="status" className="my-3 text-sm text-muted-foreground">
+				<p className="my-3 text-sm text-muted-foreground">
 					Creating document…
 				</p>
 			)}

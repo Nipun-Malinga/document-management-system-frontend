@@ -83,11 +83,7 @@ const CollaboratorTabs = ({ document }: { document: Document }) => {
 				)
 			}
 		>
-			{notice && (
-				<p role="status" className="text-sm text-primary">
-					{notice}
-				</p>
-			)}
+			{notice && <p className="text-sm text-primary">{notice}</p>}
 			{isOwner && (
 				<section
 					id={inviteId}

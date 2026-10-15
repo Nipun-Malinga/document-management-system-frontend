@@ -46,13 +46,11 @@ const CollectionResults = <T,>({
 			);
 		if (query.isPending || !query.data)
 			return (
-				<p role="status" className="my-4 text-sm text-muted-foreground">
-					Loading {label}…
-				</p>
+				<p className="my-4 text-sm text-muted-foreground">Loading {label}…</p>
 			);
 		if (!query.data.content.length && query.data.page > 0)
 			return (
-				<p role="status" className="my-4 text-sm text-muted-foreground">
+				<p className="my-4 text-sm text-muted-foreground">
 					No {label} on this page. Use Previous to return to earlier results.
 				</p>
 			);
@@ -60,7 +58,7 @@ const CollectionResults = <T,>({
 			return (
 				<>
 					{empty ?? (
-						<p role="status" className="my-4 text-sm text-muted-foreground">
+						<p className="my-4 text-sm text-muted-foreground">
 							No {label} match these filters.
 						</p>
 					)}

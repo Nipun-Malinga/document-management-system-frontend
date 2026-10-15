@@ -40,12 +40,12 @@ const BranchSwitch = ({ documentId }: { documentId: string }) => {
 				<DropdownMenuLabel>Switch branch</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{query.isPending ? (
-					<p role="status" className="px-2 py-3 text-sm text-muted-foreground">
+					<p className="px-2 py-3 text-sm text-muted-foreground">
 						Loading branches…
 					</p>
 				) : query.isError ? (
 					<>
-						<p role="alert" className="px-2 py-3 text-sm text-destructive">
+						<p className="px-2 py-3 text-sm text-destructive">
 							{collectionErrorMessage(query.error, "branches")}
 						</p>
 						<DropdownMenuGroup>
@@ -86,7 +86,7 @@ const BranchSwitch = ({ documentId }: { documentId: string }) => {
 						})}
 					</DropdownMenuGroup>
 				) : (
-					<p role="status" className="px-2 py-3 text-sm text-muted-foreground">
+					<p className="px-2 py-3 text-sm text-muted-foreground">
 						No branches available.
 					</p>
 				)}
