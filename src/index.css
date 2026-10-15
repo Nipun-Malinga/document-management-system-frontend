@@ -154,6 +154,7 @@
 .home-page,
 .auth-page,
 .workspace-page,
+.editor-page,
 .flowdocs-overlay {
 	--background: oklch(0.985 0.003 85);
 	--foreground: oklch(0.24 0.018 260);
@@ -178,6 +179,7 @@
 .dark .home-page,
 .dark .auth-page,
 .dark .workspace-page,
+.dark .editor-page,
 .dark .flowdocs-overlay {
 	--background: oklch(0.18 0.012 260);
 	--foreground: oklch(0.95 0.005 260);
@@ -194,6 +196,7 @@
 .home-page ::selection,
 .auth-page ::selection,
 .workspace-page ::selection,
+.editor-page ::selection,
 .flowdocs-overlay ::selection {
 	background: var(--primary);
 	color: var(--primary-foreground);

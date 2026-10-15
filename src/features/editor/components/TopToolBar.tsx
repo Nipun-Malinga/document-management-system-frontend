@@ -1,6 +1,7 @@
+import { ArrowLeft, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import DarkThemeButton from "@/components/common/DarkThemeButton";
-import { Button } from "../../../components";
+import { Button } from "@/components/ui/button";
 import AutoSaver from "./AutoSaver";
 import { InfoDrawer } from "./info";
 
@@ -20,32 +21,48 @@ const TopToolBar = ({
 	const navigate = useNavigate();
 
 	return (
-		<div className="sticky top-0 z-20 flex flex-col md:flex-row items-center gap-2 px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
-			<Button
-				title="Back to Home"
-				className="order-3 md:order-1 rounded-2xl"
-				onClick={() => navigate("/dashboard/home")}
-			/>
-
-			<h1 className="order-1 md:order-2 text-lg font-medium truncate max-w-full md:max-w-md">
-				{documentTitle}
-			</h1>
-
-			<div className="order-2 md:order-3 md:ml-auto flex items-center gap-2 shrink-0">
-				{enableAutoSaver && <AutoSaver />}
-
-				<Button
-					title="Preview"
-					className="rounded-2xl"
-					onClick={() =>
-						navigate(`/document/${documentId}/branch/${branchId}/view`)
-					}
-				/>
-
-				<DarkThemeButton />
-				<InfoDrawer />
+		<header className="shrink-0 border-b border-border bg-card px-3 py-3 sm:px-6">
+			<div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
+				<div className="flex min-w-0 basis-full items-center gap-3 sm:basis-0 sm:flex-1">
+					<Button
+						type="button"
+						variant="ghost"
+						size="icon"
+						aria-label="Back to Home"
+						title="Back to Home"
+						onClick={() => navigate("/dashboard/home")}
+					>
+						<ArrowLeft aria-hidden="true" />
+					</Button>
+					<h1
+						className="min-w-0 flex-1 truncate text-base font-semibold sm:text-lg"
+						title={documentTitle}
+					>
+						{documentTitle}
+					</h1>
+				</div>
+				<div className="order-2 ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						onClick={() =>
+							navigate(`/document/${documentId}/branch/${branchId}/view`)
+						}
+					>
+						<Eye aria-hidden="true" data-icon="inline-start" />
+						Preview
+					</Button>
+					<DarkThemeButton />
+					<InfoDrawer />
+				</div>
+				{enableAutoSaver && (
+					<div className="order-1 min-w-0 flex-1 text-muted-foreground sm:order-none sm:flex-none">
+						<AutoSaver />
+					</div>
+				)}
 			</div>
-		</div>
+		</header>
 	);
 };
 

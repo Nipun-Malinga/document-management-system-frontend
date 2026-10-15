@@ -1,27 +1,28 @@
 import type { Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
-import { useCallback, useEffect, useState } from "react";
 import {
-	FaAlignCenter,
-	FaAlignJustify,
-	FaAlignLeft,
-	FaAlignRight,
-	FaBold,
-	FaCode,
-	FaHighlighter,
-	FaImage,
-	FaItalic,
-	FaLink,
-	FaListOl,
-	FaListUl,
-	FaPalette,
-	FaRedo,
-	FaStrikethrough,
-	FaUnderline,
-	FaUndo,
-	FaUnlink,
-} from "react-icons/fa";
-import { MdFormatClear } from "react-icons/md";
+	AlignCenter,
+	AlignJustify,
+	AlignLeft,
+	AlignRight,
+	Baseline,
+	Bold,
+	Code,
+	Highlighter,
+	ImagePlus,
+	Italic,
+	Link,
+	List,
+	ListOrdered,
+	Redo2,
+	RemoveFormatting,
+	Strikethrough,
+	Underline,
+	Undo2,
+	Unlink,
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 import ToolButton from "./ToolButton";
 
 interface Props {
@@ -96,30 +97,38 @@ const Toolbar = ({
 	};
 
 	return (
-		<div className="relative overflow-visible border-b border-gray-200 dark:border-gray-700">
+		<div className="editor-toolbar relative border-b border-border bg-card text-card-foreground">
 			<fieldset
 				disabled={disabled}
-				className={`
-          flex items-center gap-2
-          px-3 py-2
-          overflow-x-auto whitespace-nowrap
-          scrollbar-thin
-          md:flex-wrap md:overflow-visible
-          ${disabled ? "pointer-events-none opacity-50" : ""}
-        `}
+				aria-label="Document formatting"
+				className={cn(
+					"flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2 sm:px-6",
+					disabled && "opacity-50",
+				)}
 			>
 				{/* History */}
 				{onUndo && onRedo && (
-					<div className="flex items-center gap-1 md:border-r md:pr-2">
-						<ToolButton icon={FaUndo} onClick={onUndo} disabled={!canUndo} />
-						<ToolButton icon={FaRedo} onClick={onRedo} disabled={!canRedo} />
+					<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
+						<ToolButton
+							label="Undo"
+							icon={Undo2}
+							onClick={onUndo}
+							disabled={!canUndo}
+						/>
+						<ToolButton
+							label="Redo"
+							icon={Redo2}
+							onClick={onRedo}
+							disabled={!canRedo}
+						/>
 					</div>
 				)}
 
 				{/* Headings (space reserved to avoid jump) */}
-				<div className="hidden md:flex w-[140px] md:border-r md:pr-2">
+				<div className="flex w-36 shrink-0 border-r border-border pr-3">
 					<select
-						className="w-full px-2 py-1.5 text-sm rounded-lg border dark:bg-gray-900"
+						aria-label="Text style"
+						className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed"
 						value={
 							editor.isActive("heading", { level: 1 })
 								? "1"
@@ -150,50 +159,58 @@ const Toolbar = ({
 				</div>
 
 				{/* Text formatting */}
-				<div className="flex items-center gap-1 md:border-r md:pr-2">
+				<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
 					<ToolButton
-						icon={FaBold}
+						label="Bold"
+						icon={Bold}
 						active={editorState.bold}
 						onClick={() => editor.chain().focus().toggleBold().run()}
 					/>
 					<ToolButton
-						icon={FaItalic}
+						label="Italic"
+						icon={Italic}
 						active={editorState.italic}
 						onClick={() => editor.chain().focus().toggleItalic().run()}
 					/>
 					<ToolButton
-						icon={FaUnderline}
+						label="Underline"
+						icon={Underline}
 						active={editorState.underline}
 						onClick={() => editor.chain().focus().toggleUnderline().run()}
 					/>
 					<ToolButton
-						icon={FaStrikethrough}
+						label="Strikethrough"
+						icon={Strikethrough}
 						active={editorState.strike}
 						onClick={() => editor.chain().focus().toggleStrike().run()}
 					/>
 					<ToolButton
-						icon={FaCode}
+						label="Inline code"
+						icon={Code}
 						active={editorState.code}
 						onClick={() => editor.chain().focus().toggleCode().run()}
 					/>
 				</div>
 
 				{/* Colors */}
-				<div className="hidden md:flex items-center gap-1 md:border-r md:pr-2 relative">
+				<div className="relative flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
 					<ToolButton
-						icon={FaHighlighter}
+						label="Text color"
+						icon={Baseline}
 						onClick={() => {
 							setShowHighlightPicker((v) => !v);
 							setShowColorPicker(false);
 						}}
 					/>
 					{showHighlightPicker && (
-						<div className="absolute right-0 md:left-0 top-full mt-2 z-50 grid grid-cols-4 gap-2 p-3 w-36 rounded-xl bg-white dark:bg-gray-800 border shadow-xl">
+						<div className="absolute left-0 top-full z-30 mt-2 grid w-36 grid-cols-4 gap-2 rounded-lg bg-popover p-3 text-popover-foreground shadow-lg outline outline-1 outline-border">
 							{COLORS.map((c) => (
 								<button
 									type="button"
 									key={c}
-									className="w-7 h-7 rounded-md border"
+									aria-label={`Apply ${c}`}
+									title={`Apply ${c}`}
+									className="size-7 rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-popover"
 									style={{ backgroundColor: c }}
 									onClick={() => {
 										editor.chain().focus().setColor(c).run();
@@ -205,19 +222,22 @@ const Toolbar = ({
 					)}
 
 					<ToolButton
-						icon={FaPalette}
+						label="Highlight color"
+						icon={Highlighter}
 						onClick={() => {
 							setShowColorPicker((v) => !v);
 							setShowHighlightPicker(false);
 						}}
 					/>
 					{showColorPicker && (
-						<div className="absolute right-0 md:left-0 top-full mt-2 z-50 grid grid-cols-4 gap-2 p-3 w-36 rounded-xl bg-white dark:bg-gray-800 border shadow-xl">
+						<div className="absolute left-0 top-full z-30 mt-2 grid w-36 grid-cols-4 gap-2 rounded-lg bg-popover p-3 text-popover-foreground shadow-lg outline outline-1 outline-border">
 							{COLORS.map((c) => (
 								<button
 									type="button"
 									key={c}
-									className="w-7 h-7 rounded-md border"
+									aria-label={`Apply ${c}`}
+									title={`Apply ${c}`}
+									className="size-7 rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-popover"
 									style={{ backgroundColor: c }}
 									onClick={() => {
 										editor.chain().focus().setBackgroundColor(c).run();
@@ -229,54 +249,66 @@ const Toolbar = ({
 					)}
 
 					<ToolButton
-						icon={MdFormatClear}
+						label="Clear formatting"
+						icon={RemoveFormatting}
 						onClick={() => editor.chain().focus().unsetAllMarks().run()}
 					/>
 				</div>
 
 				{/* Lists */}
-				<div className="flex items-center gap-1 md:border-r md:pr-2">
+				<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
 					<ToolButton
-						icon={FaListUl}
+						label="Bullet list"
+						icon={List}
 						active={editorState.bullet}
 						onClick={() => editor.chain().focus().toggleBulletList().run()}
 					/>
 					<ToolButton
-						icon={FaListOl}
+						label="Numbered list"
+						icon={ListOrdered}
 						active={editorState.ordered}
 						onClick={() => editor.chain().focus().toggleOrderedList().run()}
 					/>
 				</div>
 
 				{/* Links & images */}
-				<div className="hidden md:flex items-center gap-1 md:border-r md:pr-2">
-					<ToolButton icon={FaLink} onClick={setLink} />
+				<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
+					<ToolButton label="Insert link" icon={Link} onClick={setLink} />
 					<ToolButton
-						icon={FaUnlink}
+						label="Remove link"
+						icon={Unlink}
 						onClick={() => editor.chain().focus().unsetLink().run()}
 					/>
-					<ToolButton icon={FaImage} onClick={addImage} />
+					<ToolButton
+						label="Insert image"
+						icon={ImagePlus}
+						onClick={addImage}
+					/>
 				</div>
 
 				{/* Alignment */}
-				<div className="flex items-center gap-1">
+				<div className="flex shrink-0 items-center gap-0.5">
 					<ToolButton
-						icon={FaAlignLeft}
+						label="Align left"
+						icon={AlignLeft}
 						active={editorState.left}
 						onClick={() => editor.chain().focus().setTextAlign("left").run()}
 					/>
 					<ToolButton
-						icon={FaAlignCenter}
+						label="Align center"
+						icon={AlignCenter}
 						active={editorState.center}
 						onClick={() => editor.chain().focus().setTextAlign("center").run()}
 					/>
 					<ToolButton
-						icon={FaAlignRight}
+						label="Align right"
+						icon={AlignRight}
 						active={editorState.right}
 						onClick={() => editor.chain().focus().setTextAlign("right").run()}
 					/>
 					<ToolButton
-						icon={FaAlignJustify}
+						label="Justify text"
+						icon={AlignJustify}
 						active={editorState.justify}
 						onClick={() => editor.chain().focus().setTextAlign("justify").run()}
 					/>

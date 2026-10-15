@@ -1,25 +1,49 @@
-import type { IconType } from "react-icons";
-import { Button } from "../../../components";
+import type { LucideIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Toggle } from "@/components/ui/toggle";
 
 interface Props {
-	icon: IconType;
+	icon: LucideIcon;
+	label: string;
 	active?: boolean;
 	disabled?: boolean;
 	onClick: () => void;
 }
 
-const ToolButton = ({ icon, active, disabled, onClick }: Props) => {
+const ToolButton = ({
+	icon: Icon,
+	label,
+	active,
+	disabled,
+	onClick,
+}: Props) => {
+	const content = <Icon aria-hidden="true" />;
+	if (active !== undefined) {
+		return (
+			<Toggle
+				type="button"
+				aria-label={label}
+				title={label}
+				pressed={active}
+				disabled={disabled}
+				onPressedChange={onClick}
+			>
+				{content}
+			</Toggle>
+		);
+	}
 	return (
 		<Button
-			icon={icon}
+			type="button"
+			variant="ghost"
+			size="icon"
+			aria-label={label}
+			title={label}
 			disabled={disabled}
 			onClick={onClick}
-			className={`${
-				active
-					? "bg-gray-300 dark:bg-gray-400 text-slate-300!"
-					: "text-slate-900!"
-			}`}
-		/>
+		>
+			{content}
+		</Button>
 	);
 };
 

@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 
 const Editor = () => {
 	return (
-		<div className="bg-gray-50 dark:bg-gray-950 w-screen h-screen overflow-hidden">
+		<div className="editor-page flex h-svh min-w-0 flex-col overflow-hidden bg-background text-foreground">
 			<Outlet />
 		</div>
 	);
