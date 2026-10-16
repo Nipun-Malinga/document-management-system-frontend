@@ -20,6 +20,7 @@ const InfoPopup = ({ documentId }: Props) => {
 	const { collapsed, toggleDocumentInfoPopup } = useDocumentInfoPopUp();
 	return (
 		<PopupWrapper
+			compact
 			collapsed={collapsed}
 			onClose={toggleDocumentInfoPopup}
 			title={data?.title ?? "Document information"}
@@ -60,7 +61,7 @@ const InfoPopup = ({ documentId }: Props) => {
 			)}
 			{data && documentId && !isError && (
 				<>
-					<div className="flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-xl bg-muted/40 p-3">
+					<div className="flex min-w-0 shrink-0 flex-wrap items-center justify-between gap-2 rounded-lg border bg-muted/30 px-3 py-2">
 						<BadgeList document={data} />
 						<BranchSwitch documentId={documentId} />
 					</div>

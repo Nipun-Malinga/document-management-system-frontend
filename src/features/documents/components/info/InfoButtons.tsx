@@ -31,9 +31,9 @@ const InfoButtons = ({ documentId }: Props) => {
 	if (!isOwner) return null;
 
 	return (
-		<div className="flex flex-col gap-4">
+		<div className="flex flex-col gap-2">
 			<Separator />
-			<div className="flex flex-wrap items-center justify-between gap-3">
+			<div className="flex flex-wrap items-center justify-between gap-2">
 				<p className="text-xs text-muted-foreground">
 					Move this document to Trash.
 				</p>

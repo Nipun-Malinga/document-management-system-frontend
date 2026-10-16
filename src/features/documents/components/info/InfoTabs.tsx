@@ -13,36 +13,36 @@ const InfoTabs = ({ document }: { document: Document }) => {
 		<Tabs
 			key={isOwner ? "owner" : "viewer"}
 			defaultValue="information"
-			className="min-w-0 gap-5"
+			className="flex min-h-0 min-w-0 flex-1 flex-col gap-3"
 		>
-			<TabsList
-				className="h-auto min-h-11 w-full flex-wrap gap-1 p-1"
-				aria-label="Document details"
-			>
-				<TabsTrigger value="information" className="min-h-9">
-					<Info aria-hidden="true" />
+			<TabsList className="h-9 w-full shrink-0" aria-label="Document details">
+				<TabsTrigger value="information" className="min-w-0 gap-1 px-2">
+					<Info aria-hidden="true" className="hidden sm:block" />
 					Information
 				</TabsTrigger>
 				{isOwner && (
-					<TabsTrigger value="edit" className="min-h-9">
-						<Pencil aria-hidden="true" />
+					<TabsTrigger value="edit" className="min-w-0 gap-1 px-2">
+						<Pencil aria-hidden="true" className="hidden sm:block" />
 						Edit
 					</TabsTrigger>
 				)}
-				<TabsTrigger value="collaborators" className="min-h-9">
-					<Users aria-hidden="true" />
+				<TabsTrigger value="collaborators" className="min-w-0 gap-1 px-2">
+					<Users aria-hidden="true" className="hidden sm:block" />
 					Collaborators
 				</TabsTrigger>
 			</TabsList>
-			<TabsContent value="information">
+			<TabsContent className="flex min-h-0 flex-1 flex-col" value="information">
 				<InfoBase document={document} />
 			</TabsContent>
 			{isOwner && (
-				<TabsContent value="edit">
+				<TabsContent className="flex min-h-0 flex-1 flex-col" value="edit">
 					<InfoEditor document={document} />
 				</TabsContent>
 			)}
-			<TabsContent value="collaborators">
+			<TabsContent
+				className="flex min-h-0 flex-1 flex-col"
+				value="collaborators"
+			>
 				<CollaboratorTabs document={document} />
 			</TabsContent>
 		</Tabs>

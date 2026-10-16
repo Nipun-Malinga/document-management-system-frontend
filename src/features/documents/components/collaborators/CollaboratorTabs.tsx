@@ -60,10 +60,13 @@ const CollaboratorTabs = ({ document }: { document: Document }) => {
 	return (
 		<Collaborators
 			documentId={document.id}
+			compact
+			showList={!inviteOpen}
 			actions={
 				isOwner && (
 					<Button
 						ref={inviteButton}
+						size="sm"
 						type="button"
 						disabled={isPending}
 						aria-expanded={inviteOpen}
@@ -83,16 +86,21 @@ const CollaboratorTabs = ({ document }: { document: Document }) => {
 				)
 			}
 		>
-			{notice && <p className="text-sm text-primary">{notice}</p>}
+			{notice && (
+				<p role="status" className="text-sm text-primary">
+					{notice}
+				</p>
+			)}
 			{isOwner && (
 				<section
 					id={inviteId}
 					hidden={!inviteOpen}
 					aria-label="Invite a collaborator"
-					className="rounded-xl border bg-muted/30 p-4"
+					className="info-invitation rounded-lg border bg-muted/30 p-3"
 				>
 					{inviteOpen && (
 						<SearchUser
+							compact
 							title="Give someone access"
 							subTitle="Find a person by email, then choose what they can do."
 							onClick={(userId) => {

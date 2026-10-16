@@ -22,6 +22,7 @@ export interface CollectionFiltersProps<P extends PageParams> {
 	sorts: readonly (readonly [string, string])[];
 	label: string;
 	className?: string;
+	compact?: boolean;
 }
 
 const allValues = "__collection_all__";
@@ -36,12 +37,41 @@ const CollectionFilters = <P extends PageParams>({
 	sorts,
 	label,
 	className,
+	compact = false,
 }: CollectionFiltersProps<P>) => {
 	const filterId = useId();
 	const [resetCount, setResetCount] = useState(0);
 	const values = params as Record<string, unknown>;
 	const filterKey = JSON.stringify(fields.map(({ name }) => values[name]));
 
+	const sortField = (
+		<Field className="min-w-0 flex-[2_1_0%] gap-2">
+			<FieldLabel htmlFor={`${filterId}-sort`} className={labelClass}>
+				Sort
+			</FieldLabel>
+			<Select
+				value={params.sort ?? "id,asc"}
+				onValueChange={(sort) => update({ sort } as Partial<P>)}
+			>
+				<SelectTrigger
+					id={`${filterId}-sort`}
+					aria-label={`${label} sort`}
+					className={controlClass}
+				>
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent align="start">
+					<SelectGroup>
+						{sorts.map(([value, text]) => (
+							<SelectItem key={value} value={value}>
+								{text}
+							</SelectItem>
+						))}
+					</SelectGroup>
+				</SelectContent>
+			</Select>
+		</Field>
+	);
 	return (
 		<div
 			className={cn(
@@ -115,6 +145,7 @@ const CollectionFilters = <P extends PageParams>({
 							)}
 						</Field>
 					))}
+					{compact && sortField}
 				</FieldGroup>
 				<div className="ml-auto flex shrink-0 items-center gap-2">
 					<Button type="submit" className="h-10">
@@ -141,62 +172,39 @@ const CollectionFilters = <P extends PageParams>({
 					</Button>
 				</div>
 			</form>
-			<FieldGroup className="min-w-0 flex-[1_1_16rem] flex-row items-end gap-3">
-				<Field className="min-w-0 flex-[2_1_0%] gap-2">
-					<FieldLabel htmlFor={`${filterId}-sort`} className={labelClass}>
-						Sort
-					</FieldLabel>
-					<Select
-						value={params.sort ?? "id,asc"}
-						onValueChange={(sort) => update({ sort } as Partial<P>)}
-					>
-						<SelectTrigger
-							id={`${filterId}-sort`}
-							aria-label={`${label} sort`}
-							className={controlClass}
+			{!compact && (
+				<FieldGroup className="min-w-0 flex-[1_1_16rem] flex-row items-end gap-3">
+					{sortField}
+					<Field className="min-w-0 flex-1 gap-2">
+						<FieldLabel htmlFor={`${filterId}-size`} className={labelClass}>
+							Per page
+						</FieldLabel>
+						<Select
+							value={String(params.size ?? 20)}
+							onValueChange={(size) =>
+								update({ size: Number(size) } as Partial<P>)
+							}
 						>
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent align="start">
-							<SelectGroup>
-								{sorts.map(([value, text]) => (
-									<SelectItem key={value} value={value}>
-										{text}
-									</SelectItem>
-								))}
-							</SelectGroup>
-						</SelectContent>
-					</Select>
-				</Field>
-				<Field className="min-w-0 flex-1 gap-2">
-					<FieldLabel htmlFor={`${filterId}-size`} className={labelClass}>
-						Per page
-					</FieldLabel>
-					<Select
-						value={String(params.size ?? 20)}
-						onValueChange={(size) =>
-							update({ size: Number(size) } as Partial<P>)
-						}
-					>
-						<SelectTrigger
-							id={`${filterId}-size`}
-							aria-label={`${label} page size`}
-							className={controlClass}
-						>
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent align="start">
-							<SelectGroup>
-								{[10, 20, 50].map((size) => (
-									<SelectItem key={size} value={String(size)}>
-										{size}
-									</SelectItem>
-								))}
-							</SelectGroup>
-						</SelectContent>
-					</Select>
-				</Field>
-			</FieldGroup>
+							<SelectTrigger
+								id={`${filterId}-size`}
+								aria-label={`${label} page size`}
+								className={controlClass}
+							>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent align="start">
+								<SelectGroup>
+									{[10, 20, 50].map((size) => (
+										<SelectItem key={size} value={String(size)}>
+											{size}
+										</SelectItem>
+									))}
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+					</Field>
+				</FieldGroup>
+			)}
 		</div>
 	);
 };

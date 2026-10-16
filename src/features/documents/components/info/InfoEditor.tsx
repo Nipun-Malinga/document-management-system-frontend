@@ -70,14 +70,14 @@ const InfoEditor = ({ document }: Props) => {
 
 	return (
 		<div className="min-w-0">
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<FieldGroup>
-					<FieldSet>
-						<FieldLegend>Edit Information</FieldLegend>
-						<FieldDescription>
+			<form onSubmit={handleSubmit(onSubmit)} className="document-info-editor">
+				<FieldGroup className="gap-3">
+					<FieldSet className="gap-3">
+						<FieldLegend className="sr-only">Edit Information</FieldLegend>
+						<FieldDescription className="sr-only">
 							Change the document title and visibility.
 						</FieldDescription>
-						<FieldGroup>
+						<FieldGroup className="gap-3">
 							<Field data-invalid={!!errors.title}>
 								<FieldLabel htmlFor={`document-title-${document.id}`}>
 									Document Title
@@ -144,7 +144,7 @@ const InfoEditor = ({ document }: Props) => {
 						</p>
 					)}
 					<FieldSeparator />
-					<Field orientation="horizontal">
+					<Field orientation="horizontal" className="gap-2">
 						<Button type="submit" disabled={!isValid || isPending}>
 							{isPending ? (
 								<>

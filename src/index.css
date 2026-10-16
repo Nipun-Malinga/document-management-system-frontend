@@ -236,3 +236,179 @@
 		}
 	}
 }
+
+/* Document information fits its fixed frame; long collections use pagination. */
+.info-popup-surface {
+	gap: 0.75rem;
+	padding: 1rem;
+}
+
+.info-popup-surface .popup-body {
+	display: flex;
+	min-height: 0;
+	flex-direction: column;
+	gap: 0.75rem;
+	overflow: visible;
+	scrollbar-gutter: auto;
+}
+
+.info-popup-surface :where([data-slot="tabs-content"]) {
+	min-height: 0;
+}
+
+.info-popup-surface :where([data-slot="field"]),
+.info-popup-surface :where([data-slot="field-group"]),
+.info-popup-surface :where([data-slot="field-set"]) {
+	min-width: 0;
+	gap: 0.5rem;
+}
+
+.info-popup-surface
+	:where(
+		.document-info-editor [data-slot="field-set"] > [data-slot="field-group"]
+	),
+.info-popup-surface
+	:where(.info-invitation [data-slot="field-set"] > [data-slot="field-group"]) {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 0.75rem;
+}
+
+.info-popup-surface :where(.info-invitation [data-slot="field-description"]) {
+	/* Keep the invitation guidance available to assistive technology. */
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	clip-path: inset(50%);
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.info-popup-surface :where(.info-invitation [data-slot="field-legend"]) {
+	font-size: 0.875rem;
+}
+
+.info-popup-surface :where(.info-invitation > div) {
+	gap: 0.75rem;
+}
+
+.info-popup-surface :where(.info-invitation > div > div) {
+	gap: 0.5rem;
+	padding-top: 0.75rem;
+}
+
+.info-popup-surface :where(.info-invitation [data-slot="button"]),
+.info-popup-surface :where(.info-invitation [data-slot="input"]),
+.info-popup-surface :where(.info-invitation [data-slot="select-trigger"]) {
+	height: 2rem;
+}
+
+.info-popup-surface :where(.info-collaborator-filters > div) {
+	margin: 0;
+	gap: 0.75rem;
+}
+
+.info-popup-surface :where(.info-collaborator-filters form) {
+	flex-basis: 100%;
+	gap: 0.75rem;
+}
+
+.info-popup-surface
+	:where(.info-collaborator-filters form > [data-slot="field-group"]) {
+	display: grid;
+	flex-basis: 100%;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.info-popup-surface
+	:where(.info-collaborator-filters > div > [data-slot="field-group"]) {
+	flex-basis: 100%;
+}
+
+.info-popup-surface :where(.info-collaborator-filters [data-slot="button"]),
+.info-popup-surface :where(.info-collaborator-filters [data-slot="input"]),
+.info-popup-surface
+	:where(.info-collaborator-filters [data-slot="select-trigger"]) {
+	height: 2rem;
+}
+
+.info-popup-surface :where([data-slot="empty"]) {
+	gap: 0.75rem;
+	padding: 1rem;
+}
+
+@media (min-width: 640px) {
+	.info-popup-surface {
+		padding: 1.25rem;
+	}
+}
+
+@media (max-height: 520px) {
+	.info-popup-surface {
+		--popup-gutter: 0.5rem;
+		gap: 0.5rem;
+		padding: 0.75rem;
+	}
+	.info-popup-surface .popup-body {
+		gap: 0.5rem;
+	}
+}
+
+.info-popup-surface :where(.info-user-result) {
+	padding-top: 0;
+}
+
+@media (max-height: 520px) {
+	.info-popup-surface :where(.info-invitation) {
+		padding: 0.375rem;
+	}
+	.info-popup-surface :where(.info-invitation > div),
+	.info-popup-surface :where(.info-invitation > div > div),
+	.info-popup-surface :where(.info-collaborators) {
+		gap: 0.5rem;
+	}
+	.info-popup-surface :where(.info-invitation [data-slot="field-legend"]),
+	.info-popup-surface :where(.info-popup-footer .text-xs) {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		clip-path: inset(50%);
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	.info-popup-surface :where(.info-collaborators h3) {
+		font-size: 0.875rem;
+	}
+	.info-popup-surface :where([data-slot="empty-icon"]) {
+		display: none;
+	}
+}
+
+.info-popup-surface :where(.info-collaborator-filters form > div:last-child) {
+	width: 100%;
+}
+
+.info-popup-surface
+	:where(.info-collaborator-filters form > div:last-child > button) {
+	min-width: 0;
+	flex: 1;
+	gap: 0.25rem;
+	padding-inline: 0.5rem;
+}
+
+@media (min-width: 600px) and (max-height: 520px) {
+	.info-popup-surface
+		:where(.info-collaborator-filters form > [data-slot="field-group"]) {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+	.info-popup-surface :where(.info-user-result) {
+		grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) auto auto;
+		align-items: end;
+	}
+	.info-popup-surface :where(.info-invitation [data-slot="field-set"]) {
+		gap: 0.25rem;
+	}
+	.info-popup-surface :where(.info-invitation > p[role="alert"]) {
+		margin-top: 0.25rem;
+	}
+}

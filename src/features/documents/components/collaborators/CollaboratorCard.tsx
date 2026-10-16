@@ -3,15 +3,17 @@ import { Eye, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import User from "@/features/users/components/User";
+import { cn } from "@/lib/utils";
 import type { Collaborator } from "@/models/Collaborator";
 import WebSocketService from "@/services/websocketService";
 import { useSessionStore } from "@/states/sessionStore";
 
 interface Props {
 	collaborator: Collaborator;
+	compact?: boolean;
 }
 
-const CollaboratorCard = ({ collaborator }: Props) => {
+const CollaboratorCard = ({ collaborator, compact = false }: Props) => {
 	const [status, setStatus] = useState<boolean>(false);
 
 	const epoch = useSessionStore((state) => state.epoch);
@@ -49,18 +51,50 @@ const CollaboratorCard = ({ collaborator }: Props) => {
 	const canEdit = collaborator.permission === "READ_WRITE";
 	const PermissionIcon = canEdit ? Pencil : Eye;
 	return (
-		<div className="flex min-w-0 flex-wrap items-start gap-3 p-4">
+		<div
+			className={cn(
+				"flex min-w-0 flex-wrap items-start gap-3 p-4",
+				compact && "h-[55px] flex-nowrap items-center gap-2 px-3 py-2",
+			)}
+		>
 			<User username={collaborator.username} />
-			<div className="flex min-w-0 flex-1 flex-col gap-1.5">
-				<div className="flex flex-wrap items-center gap-2">
-					<p className="wrap-anywhere text-sm font-medium">
+			<div
+				className={cn(
+					"flex min-w-0 flex-1 flex-col gap-1.5",
+					compact && "gap-0.5",
+				)}
+			>
+				<div
+					className={cn(
+						"flex flex-wrap items-center gap-2",
+						compact && "flex-nowrap",
+					)}
+				>
+					<p
+						title={collaborator.username}
+						className={cn(
+							"wrap-anywhere text-sm font-medium",
+							compact && "truncate",
+						)}
+					>
 						{collaborator.username}
 					</p>
-					<span className="text-xs text-muted-foreground">
+					<span
+						className={cn(
+							"text-xs text-muted-foreground",
+							compact && "sr-only",
+						)}
+					>
 						{status ? "Online" : "Offline"}
 					</span>
 				</div>
-				<p className="wrap-anywhere text-xs leading-relaxed text-muted-foreground">
+				<p
+					title={collaborator.email}
+					className={cn(
+						"wrap-anywhere text-xs leading-relaxed text-muted-foreground",
+						compact && "truncate",
+					)}
+				>
 					{collaborator.email}
 				</p>
 			</div>

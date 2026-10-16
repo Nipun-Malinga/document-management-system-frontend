@@ -13,6 +13,7 @@ interface Props {
 	onPage: (page: number) => void;
 	label: string;
 	className?: string;
+	compact?: boolean;
 }
 
 type PageItem = number | "start-ellipsis" | "end-ellipsis";
@@ -33,9 +34,50 @@ const CollectionPagination = ({
 	onPage,
 	label,
 	className,
+	compact = false,
 }: Props) => {
 	if (!data) return null;
 	const currentPage = data.totalPages === 0 ? 0 : data.page + 1;
+	if (compact)
+		return (
+			<nav
+				aria-label={`${label} pagination`}
+				aria-busy={pending}
+				className={cn(
+					"flex shrink-0 items-center justify-between gap-2 border-t pt-2",
+					className,
+				)}
+			>
+				<Button
+					type="button"
+					variant="outline"
+					size="icon-sm"
+					aria-label="Previous"
+					disabled={pending || !data.hasPrevious}
+					onClick={() => onPage(Math.max(0, data.page - 1))}
+				>
+					<ChevronLeft aria-hidden="true" />
+				</Button>
+				<p
+					role="status"
+					aria-atomic="true"
+					className="text-xs text-muted-foreground tabular-nums"
+				>
+					<span className="sr-only">{data.totalElements} items · </span>Page{" "}
+					{currentPage} of {data.totalPages}
+				</p>
+				<Button
+					type="button"
+					variant="outline"
+					size="icon-sm"
+					aria-label="Next"
+					disabled={pending || !data.hasNext}
+					onClick={() => onPage(data.page + 1)}
+				>
+					<ChevronRight aria-hidden="true" />
+				</Button>
+			</nav>
+		);
 	return (
 		<nav
 			aria-label={`${label} pagination`}

@@ -7,6 +7,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 interface Props {
 	collapsed: boolean;
@@ -16,6 +17,7 @@ interface Props {
 	children: ReactNode;
 	returnFocusId?: string;
 	footer?: ReactNode;
+	compact?: boolean;
 }
 
 const PopupWrapper = ({
@@ -26,6 +28,7 @@ const PopupWrapper = ({
 	children,
 	returnFocusId,
 	footer,
+	compact = false,
 }: Props) => {
 	const opener = useRef<HTMLElement | null>(null);
 	return (
@@ -36,7 +39,7 @@ const PopupWrapper = ({
 			}}
 		>
 			<DialogContent
-				className="gap-6"
+				className={cn("gap-6", compact && "info-popup-surface")}
 				onOpenAutoFocus={() => {
 					opener.current =
 						document.activeElement instanceof HTMLElement
@@ -54,11 +57,22 @@ const PopupWrapper = ({
 				}}
 			>
 				<DialogHeader className="pr-6">
-					<DialogTitle className="break-words">{title}</DialogTitle>
-					<DialogDescription>{description}</DialogDescription>
+					<DialogTitle
+						className={compact ? "truncate" : "break-words"}
+						title={title}
+					>
+						{title}
+					</DialogTitle>
+					<DialogDescription className={compact ? "sr-only" : undefined}>
+						{description}
+					</DialogDescription>
 				</DialogHeader>
 				<DialogBody className="flex flex-col gap-6">{children}</DialogBody>
-				{footer && <div className="shrink-0">{footer}</div>}
+				{footer && (
+					<div className={cn("shrink-0", compact && "info-popup-footer")}>
+						{footer}
+					</div>
+				)}
 			</DialogContent>
 		</Dialog>
 	);

@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AxiosError } from "axios";
 import { MemoryRouter } from "react-router-dom";
@@ -9,6 +9,7 @@ import UserDropdown from "@/components/common/UserDropdown";
 import InfoPopup from "@/features/documents/components/info/InfoPopup";
 import ProfilePopup from "@/features/users/components/ProfilePopup";
 import { axiosInstance } from "@/services/apiService";
+import WebSocketService from "@/services/websocketService";
 import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
 import useUserProfilePopup from "@/states/useUserProfilePopup";
 import { replaceAccessToken } from "@/utils/authUtils";
@@ -103,6 +104,116 @@ const renderInfo = () =>
 	);
 
 describe("document information popup", () => {
+	it("fits collaborator pages to available space and keeps later people reachable", async () => {
+		const user = userEvent.setup();
+		const sizes: number[] = [];
+		let resize: (height: number) => void = () => {};
+		const observe = vi.fn();
+		vi.spyOn(WebSocketService.prototype, "subscribe").mockImplementation(
+			() => () => {},
+		);
+		vi.stubGlobal(
+			"ResizeObserver",
+			class {
+				constructor(callback: ResizeObserverCallback) {
+					resize = (height) =>
+						callback(
+							[
+								{
+									contentRect: new DOMRect(0, 0, 300, height),
+								} as ResizeObserverEntry,
+							],
+							this as unknown as ResizeObserver,
+						);
+				}
+				observe = observe;
+				unobserve() {}
+				disconnect() {}
+			},
+		);
+		axiosInstance.defaults.adapter = async (config) => {
+			let data: unknown = fixture;
+			if (config.url?.endsWith("/share/users")) {
+				const { page, size } = config.params;
+				sizes.push(size);
+				const people = Array.from({ length: 5 }, (_, index) => ({
+					userId: index + 2,
+					username: `Reader ${index + 1}`,
+					email: `reader${index + 1}@example.com`,
+					permission: "READ_ONLY",
+				}));
+				data = pageOf(
+					people.slice(page * size, (page + 1) * size),
+					page,
+					people.length,
+					size,
+				);
+			} else if (config.url !== "/documents/doc") data = pageOf([]);
+			return { config, data, status: 200, statusText: "OK", headers: {} };
+		};
+		try {
+			renderInfo();
+			await user.click(
+				screen.getByRole("button", { name: "Show document information" }),
+			);
+			await user.click(
+				await screen.findByRole("tab", { name: "Collaborators" }),
+			);
+			await screen.findByText("Reader 1");
+			expect(sizes).toEqual([1]);
+			await waitFor(() => expect(observe).toHaveBeenCalled());
+			await act(async () => resize(112));
+			await screen.findByText("Reader 2");
+			expect(screen.getAllByRole("listitem")).toHaveLength(2);
+			const navigation = screen.getByRole("navigation", {
+				name: "collaborators pagination",
+			});
+			await user.click(
+				within(navigation).getByRole("button", { name: "Next" }),
+			);
+			await screen.findByText("Reader 3");
+			await act(async () => resize(56));
+			await screen.findByText("Reader 1");
+			expect(screen.queryByText("Reader 2")).not.toBeInTheDocument();
+			expect(navigation).toHaveTextContent("Page 1 of 5");
+		} finally {
+			vi.unstubAllGlobals();
+			vi.restoreAllMocks();
+		}
+	});
+
+	it("replaces the people list with invitations or filters and restores filter focus", async () => {
+		const user = userEvent.setup();
+		renderInfo();
+		await user.click(
+			screen.getByRole("button", { name: "Show document information" }),
+		);
+		await user.click(await screen.findByRole("tab", { name: "Collaborators" }));
+		await screen.findByText("No collaborators yet");
+		await user.click(screen.getByRole("button", { name: "Add people" }));
+		expect(screen.getByLabelText("User email")).toBeVisible();
+		expect(
+			screen.queryByRole("navigation", { name: "collaborators pagination" }),
+		).not.toBeInTheDocument();
+		expect(screen.queryByText("No collaborators yet")).not.toBeInTheDocument();
+		await user.click(screen.getByRole("button", { name: "Cancel" }));
+		await user.click(
+			screen.getByRole("button", { name: "Filter collaborators" }),
+		);
+		expect(screen.getByLabelText("Exact email")).toBeVisible();
+		expect(
+			screen.queryByRole("navigation", { name: "collaborators pagination" }),
+		).not.toBeInTheDocument();
+		expect(
+			screen.queryByRole("combobox", { name: "collaborators page size" }),
+		).not.toBeInTheDocument();
+		await user.click(screen.getByRole("button", { name: "Apply filters" }));
+		await screen.findByText("No collaborators yet");
+		expect(
+			screen.getByRole("button", { name: "Filter collaborators" }),
+		).toHaveFocus();
+	});
+
 	it.each([
 		["PRIVATE", "Public", "PUBLIC"],
 		["PUBLIC", "Private", "PRIVATE"],
