@@ -150,6 +150,11 @@
 	scrollbar-gutter: stable;
 }
 
+/* Account forms need the full body width when no scrollbar is present. */
+.account-popup-surface .popup-body {
+	scrollbar-gutter: auto;
+}
+
 /* Shared FlowDocs theme for public pages and the document workspace. */
 .home-page,
 .auth-page,

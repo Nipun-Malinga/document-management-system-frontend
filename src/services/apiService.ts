@@ -2,6 +2,7 @@ import axios, {
 	type AxiosRequestConfig,
 	type InternalAxiosRequestConfig,
 } from "axios";
+import type { ProblemDetail } from "@/models/ProblemDetail";
 import {
 	assertSession,
 	commitRefresh,
@@ -107,6 +108,14 @@ axiosInstance.interceptors.response.use(
 		if (epoch === undefined) throw error;
 		assertSession(epoch);
 		if (error.response?.status !== 401 || isPublic(config)) throw error;
+
+		if (
+			config.method?.toLowerCase() === "put" &&
+			config.url === "/users/me/password" &&
+			(error.response?.data as ProblemDetail | undefined)?.detail ===
+				"Invalid credentials."
+		)
+			throw error;
 		if (config.sessionRetried) {
 			endSession();
 			throw error;

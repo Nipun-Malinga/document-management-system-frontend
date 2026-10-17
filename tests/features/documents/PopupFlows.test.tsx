@@ -59,7 +59,19 @@ beforeEach(() => {
 			statusText: "OK",
 			headers: {},
 			data:
-				config.url === "/documents/doc" ? { ...fixture, ownerId } : pageOf([]),
+				config.url === "/users/me"
+					? {
+							id: 1,
+							firstname: "Alex",
+							lastname: "Morgan",
+							username: "owner",
+							email: "owner@example.com",
+							role: "USER",
+							locked: false,
+						}
+					: config.url === "/documents/doc"
+						? { ...fixture, ownerId }
+						: pageOf([]),
 		};
 	};
 });
@@ -494,15 +506,22 @@ describe("account and notification popups", () => {
 	it("opens profile from the account menu and restores account focus", async () => {
 		const user = userEvent.setup();
 		render(
-			<MemoryRouter>
-				<UserDropdown />
-				<ProfilePopup />
-			</MemoryRouter>,
+			<QueryClientProvider client={client}>
+				<MemoryRouter>
+					<UserDropdown />
+					<ProfilePopup />
+				</MemoryRouter>
+			</QueryClientProvider>,
 		);
 		await user.click(screen.getByRole("button", { name: "owner" }));
 		await user.click(screen.getByRole("menuitem", { name: "Profile" }));
 		const dialog = await screen.findByRole("dialog", { name: "Your profile" });
-		expect(within(dialog).getByText("owner@example.com")).toBeInTheDocument();
+		expect(await within(dialog).findByLabelText("Email address")).toHaveValue(
+			"owner@example.com",
+		);
+		expect(within(dialog).getByLabelText("Username")).toHaveAttribute(
+			"readonly",
+		);
 		expect(dialog).toContainElement(
 			window.document.activeElement as HTMLElement,
 		);

@@ -61,9 +61,7 @@ const Templates = () => {
 				</p>
 			)}
 			{isPending && (
-				<p className="my-3 text-sm text-muted-foreground">
-					Creating document…
-				</p>
+				<p className="my-3 text-sm text-muted-foreground">Creating document…</p>
 			)}
 			<CollectionResults query={query} label="templates">
 				{(templates) => (
