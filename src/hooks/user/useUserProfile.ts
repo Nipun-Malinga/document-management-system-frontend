@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import ms from "ms";
 import APIService from "@/services/apiService";
 import {
 	assertSession,
@@ -11,17 +12,23 @@ import type {
 	UserProfile,
 } from "@/types/UserProfile";
 
-const profileKey = (epoch: number) => ["my-profile", epoch] as const;
+const profileKey = (epoch: number) => ["profile", epoch] as const;
 
-export const useUserProfile = (enabled: boolean) => {
+export const useUserProfile = () => {
 	const epoch = useSessionStore((state) => state.epoch);
+
+	const service = new APIService<undefined, UserProfile>("/users/me");
+	const data = () => service.get();
+
 	return useQuery({
 		queryKey: profileKey(epoch),
-		queryFn: async ({ signal }) => {
-			const profile = await new APIService<undefined, UserProfile>(
-				"/users/me",
-			).get({ signal, timeout: 15000 });
+		staleTime: ms("5m"),
+		gcTime: ms("30m"),
+		queryFn: async () => {
+			const profile = await data();
+
 			assertSession(epoch);
+
 			if (profile.id !== getSession().user?.id)
 				throw new Error("Profile identity changed.");
 			useSessionStore.setState({
@@ -34,9 +41,6 @@ export const useUserProfile = (enabled: boolean) => {
 			});
 			return profile;
 		},
-		enabled: enabled && Boolean(getSession().user),
-		retry: false,
-		refetchOnWindowFocus: false,
 	});
 };
 

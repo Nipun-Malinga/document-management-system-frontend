@@ -18,6 +18,9 @@ interface Props {
 	returnFocusId?: string;
 	footer?: ReactNode;
 	compact?: boolean;
+	pending?: boolean;
+	className?: string;
+	bodyClassName?: string;
 }
 
 const PopupWrapper = ({
@@ -29,17 +32,24 @@ const PopupWrapper = ({
 	returnFocusId,
 	footer,
 	compact = false,
+	pending = false,
+	className,
+	bodyClassName,
 }: Props) => {
 	const opener = useRef<HTMLElement | null>(null);
 	return (
 		<Dialog
 			open={!collapsed}
 			onOpenChange={(open) => {
-				if (!open) onClose();
+				if (!open && !pending) onClose();
 			}}
 		>
 			<DialogContent
-				className={cn("gap-6", compact && "info-popup-surface")}
+				className={cn("gap-6", compact && "info-popup-surface", className)}
+				showCloseButton={!pending}
+				onEscapeKeyDown={(event) => {
+					if (pending) event.preventDefault();
+				}}
 				onOpenAutoFocus={() => {
 					opener.current =
 						document.activeElement instanceof HTMLElement
@@ -58,7 +68,7 @@ const PopupWrapper = ({
 			>
 				<DialogHeader className="pr-6">
 					<DialogTitle
-						className={compact ? "truncate" : "break-words"}
+						className={compact ? "truncate" : "wrap-break-word"}
 						title={title}
 					>
 						{title}
@@ -67,7 +77,9 @@ const PopupWrapper = ({
 						{description}
 					</DialogDescription>
 				</DialogHeader>
-				<DialogBody className="flex flex-col gap-6">{children}</DialogBody>
+				<DialogBody className={cn("flex flex-col gap-6", bodyClassName)}>
+					{children}
+				</DialogBody>
 				{footer && (
 					<div className={cn("shrink-0", compact && "info-popup-footer")}>
 						{footer}

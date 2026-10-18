@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { type ReactNode, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
 import {
 	Field,
 	FieldDescription,
@@ -20,21 +21,18 @@ import type { ProfileSectionState } from "@/features/users/components/AccountSec
 import ProfileFeedback from "@/features/users/components/ProfileFeedback";
 import ProfileSectionActions from "@/features/users/components/ProfileSectionActions";
 import { useUpdateProfile, useUserProfile } from "@/hooks/user";
-import {
-	profileSchema,
-	type UpdateProfileRequest,
-	type UserProfile,
-} from "@/types/UserProfile";
+import { profileSchema, type UpdateProfileRequest } from "@/types/UserProfile";
 import { applyFormError } from "@/utils/formErrors";
 
 type ProfileSectionProps = {
-	children: (section: ProfileSectionState) => ReactNode;
+	disabled: boolean;
+	onStateChange: (state: ProfileSectionState) => void;
 };
 
-const ProfileForm = ({
-	profile,
-	children,
-}: ProfileSectionProps & { profile: UserProfile }) => {
+const ProfileSection = ({ disabled, onStateChange }: ProfileSectionProps) => {
+	const query = useUserProfile();
+	const profile = query.data;
+	const [initialized, setInitialized] = useState(false);
 	const [message, setMessage] = useState("");
 	const [error, setError] = useState("");
 	const update = useUpdateProfile();
@@ -42,9 +40,9 @@ const ProfileForm = ({
 		resolver: zodResolver(profileSchema),
 		mode: "onChange",
 		defaultValues: {
-			firstname: profile.firstname,
-			lastname: profile.lastname,
-			email: profile.email,
+			firstname: "",
+			lastname: "",
+			email: "",
 		},
 	});
 	const clearFeedback = () => {
@@ -55,52 +53,92 @@ const ProfileForm = ({
 		form.reset();
 		clearFeedback();
 	};
-	const saveProfile = (pending: boolean) =>
-		form.handleSubmit(async (data) => {
-			if (pending) return;
+	const saveProfile = form.handleSubmit(async (data) => {
+		if (disabled || update.isPending || !profile) return;
 
-			setError("");
-			setMessage("");
+		setError("");
+		setMessage("");
 
-			form.clearErrors();
+		form.clearErrors();
 
-			const emailChanged = data.email !== profile.email;
+		const emailChanged = data.email !== profile.email;
 
-			try {
-				const saved = await update.mutateAsync(data);
-				form.reset({
-					firstname: saved.firstname,
-					lastname: saved.lastname,
-					email: saved.email,
-				});
-				setMessage(
-					emailChanged
-						? "Profile saved. Use your updated email the next time you sign in."
-						: "Profile saved.",
-				);
-			} catch (error) {
-				setError(
-					axios.isAxiosError(error) && error.code === "ECONNABORTED"
-						? "The request took too long. Your entries are preserved. Try again."
-						: applyFormError(error, form.setError, [
-								"firstname",
-								"lastname",
-								"email",
-							]),
-				);
-			}
+		try {
+			const saved = await update.mutateAsync(data);
+			form.reset({
+				firstname: saved.firstname,
+				lastname: saved.lastname,
+				email: saved.email,
+			});
+			setMessage(
+				emailChanged
+					? "Profile saved. Use your updated email the next time you sign in."
+					: "Profile saved.",
+			);
+		} catch (error) {
+			setError(
+				axios.isAxiosError(error) && error.code === "ECONNABORTED"
+					? "The request took too long. Your entries are preserved. Try again."
+					: applyFormError(error, form.setError, [
+							"firstname",
+							"lastname",
+							"email",
+						]),
+			);
+		}
+	});
+
+	const { reset: resetForm } = form;
+	useEffect(() => {
+		if (!profile || initialized) return;
+		resetForm({
+			firstname: profile.firstname,
+			lastname: profile.lastname,
+			email: profile.email,
 		});
+		setInitialized(true);
+	}, [profile, initialized, resetForm]);
 
-	return children({
-		ready: true,
-		pending: update.isPending,
-		dirty: form.formState.isDirty,
-		renderContent: (pending) => (
+	const ready = Boolean(profile) && initialized;
+	const saving = update.isPending;
+	const pending = disabled || saving;
+	const dirty = form.formState.isDirty;
+
+	useEffect(() => {
+		onStateChange({ ready, pending: saving, dirty });
+	}, [onStateChange, ready, saving, dirty]);
+
+	if (!ready || !profile) {
+		return query.isPending || profile ? (
+			<div className="flex flex-col gap-4">
+				<Skeleton className="h-9 w-44" />
+				<Skeleton className="h-16 w-full" />
+				<Skeleton className="h-16 w-full" />
+				<Skeleton className="h-10 w-32 self-end" />
+				<span className="sr-only">Loading your profile…</span>
+			</div>
+		) : (
+			<>
+				<Alert variant="destructive">
+					<AlertTitle>Could not load your profile</AlertTitle>
+					<AlertDescription>
+						{actionError(query.error, "Please try again.")}
+					</AlertDescription>
+				</Alert>
+				<Button variant="outline" onClick={() => void query.refetch()}>
+					Retry profile
+				</Button>
+			</>
+		);
+	}
+
+	return (
+		<div className="flex flex-col gap-6">
 			<form
 				id="profile-details-form"
-				onSubmit={saveProfile(pending)}
+				onSubmit={saveProfile}
 				aria-label="Edit profile"
-				aria-busy={update.isPending}
+				aria-busy={saving}
 				className="flex flex-col gap-4"
 				noValidate
 				onChange={clearFeedback}
@@ -139,8 +177,6 @@ const ProfileForm = ({
 											autoComplete={
 												name === "firstname" ? "given-name" : "family-name"
 											}
-											aria-invalid={Boolean(error)}
-											aria-describedby={`profile-${name}-hint${error ? ` profile-${name}-error` : ""}`}
 											{...form.register(name)}
 										/>
 										<FieldDescription id={`profile-${name}-hint`}>
@@ -182,49 +218,16 @@ const ProfileForm = ({
 					</FieldGroup>
 				</FieldSet>
 			</form>
-		),
-		renderActions: (pending) => (
-			<ProfileSectionActions
-				form={form}
-				pending={pending}
-				saving={update.isPending}
-				onReset={reset}
-			/>
-		),
-	});
+			<DialogFooter>
+				<ProfileSectionActions
+					form={form}
+					pending={pending}
+					saving={saving}
+					onReset={reset}
+				/>
+			</DialogFooter>
+		</div>
+	);
 };
 
-const ProfileSection = ({ children }: ProfileSectionProps) => {
-	const profile = useUserProfile(true);
-	if (profile.data)
-		return <ProfileForm profile={profile.data}>{children}</ProfileForm>;
-	return children({
-		ready: false,
-		pending: false,
-		dirty: false,
-		renderActions: () => null,
-		renderContent: () =>
-			profile.isPending ? (
-				<div className="flex flex-col gap-4">
-					<Skeleton className="h-9 w-44" />
-					<Skeleton className="h-16 w-full" />
-					<Skeleton className="h-16 w-full" />
-					<Skeleton className="h-10 w-32 self-end" />
-					<span className="sr-only">Loading your profile…</span>
-				</div>
-			) : (
-				<>
-					<Alert variant="destructive">
-						<AlertTitle>Could not load your profile</AlertTitle>
-						<AlertDescription>
-							{actionError(profile.error, "Please try again.")}
-						</AlertDescription>
-					</Alert>
-					<Button variant="outline" onClick={() => void profile.refetch()}>
-						Retry profile
-					</Button>
-				</>
-			),
-	});
-};
 export default ProfileSection;

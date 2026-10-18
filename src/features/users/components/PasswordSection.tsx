@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { LoaderCircle } from "lucide-react";
-import { type ReactNode, useState } from "react";
+import { useEffect, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import PasswordField from "@/features/auth/components/PasswordField";
 import type { AccountSectionState } from "@/features/users/components/AccountSectionState";
@@ -13,74 +14,128 @@ import { useChangePassword } from "@/hooks/user";
 import { type PasswordFormValues, passwordSchema } from "@/types/UserProfile";
 import { applyFormError } from "@/utils/formErrors";
 
-type PasswordSectionProps = {
-	children: (section: AccountSectionState) => ReactNode;
+const FORM_ID = "profile-password-form";
+
+const DEFAULT_VALUES: PasswordFormValues = {
+	currentPassword: "",
+	newPassword: "",
+	confirmPassword: "",
 };
 
-const PasswordSection = ({ children }: PasswordSectionProps) => {
+const MESSAGES = {
+	success: "Password changed. Use your new password the next time you sign in.",
+	timeout: "The request took too long. Your entries are preserved. Try again.",
+	wrongCurrentPassword: "Current password is incorrect. Try again.",
+} as const;
+
+const SERVER_FIELDS = ["currentPassword", "newPassword"] as const;
+
+type FieldConfig = {
+	name: keyof PasswordFormValues;
+	id: string;
+	label: string;
+	autoComplete: "current-password" | "new-password";
+	keyPrefix: string;
+	description?: string;
+};
+
+const FIELDS: FieldConfig[] = [
+	{
+		name: "currentPassword",
+		id: "profile-current-password",
+		label: "Current password",
+		autoComplete: "current-password",
+		keyPrefix: "current",
+	},
+	{
+		name: "newPassword",
+		id: "profile-new-password",
+		label: "New password",
+		autoComplete: "new-password",
+		keyPrefix: "new",
+		description: "Use 8–20 characters.",
+	},
+	{
+		name: "confirmPassword",
+		id: "profile-confirm-password",
+		label: "Confirm new password",
+		autoComplete: "new-password",
+		keyPrefix: "confirm",
+	},
+];
+
+type PasswordSectionProps = {
+	disabled: boolean;
+	onStateChange: (state: AccountSectionState) => void;
+};
+
+const PasswordSection = ({ disabled, onStateChange }: PasswordSectionProps) => {
 	const [message, setMessage] = useState("");
 	const [error, setError] = useState("");
 	const changePassword = useChangePassword();
+
 	const form = useForm<PasswordFormValues>({
 		resolver: zodResolver(passwordSchema),
 		mode: "onChange",
-		defaultValues: {
-			currentPassword: "",
-			newPassword: "",
-			confirmPassword: "",
-		},
+		defaultValues: DEFAULT_VALUES,
 	});
+
 	const clearFeedback = () => {
 		setMessage("");
 		setError("");
 	};
-	const savePassword = (pending: boolean) =>
-		form.handleSubmit(async ({ currentPassword, newPassword }) => {
-			if (pending) return;
-			setError("");
-			setMessage("");
+
+	const handleSubmitError = (err: unknown) => {
+		if (axios.isAxiosError(err)) {
+			if (err.code === "ECONNABORTED") {
+				setError(MESSAGES.timeout);
+				return;
+			}
+			if (
+				err.response?.status === 401 &&
+				err.response.data?.detail === "Invalid credentials."
+			) {
+				form.setError(
+					"currentPassword",
+					{ type: "server", message: MESSAGES.wrongCurrentPassword },
+					{ shouldFocus: true },
+				);
+				return;
+			}
+		}
+		setError(applyFormError(err, form.setError, [...SERVER_FIELDS]));
+	};
+
+	const savePassword = form.handleSubmit(
+		async ({ currentPassword, newPassword }) => {
+			if (disabled || changePassword.isPending) return;
+			clearFeedback();
 			form.clearErrors();
 			try {
 				await changePassword.mutateAsync({ currentPassword, newPassword });
 				form.reset();
-				setMessage(
-					"Password changed. Use your new password the next time you sign in.",
-				);
-			} catch (error) {
-				if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
-					setError(
-						"The request took too long. Your entries are preserved. Try again.",
-					);
-				} else if (
-					axios.isAxiosError(error) &&
-					error.response?.status === 401 &&
-					error.response.data?.detail === "Invalid credentials."
-				) {
-					form.setError(
-						"currentPassword",
-						{
-							type: "server",
-							message: "Current password is incorrect. Try again.",
-						},
-						{ shouldFocus: true },
-					);
-				} else
-					setError(
-						applyFormError(error, form.setError, [
-							"currentPassword",
-							"newPassword",
-						]),
-					);
+				setMessage(MESSAGES.success);
+			} catch (err) {
+				handleSubmitError(err);
 			}
-		});
+		},
+	);
 
-	return children({
-		pending: changePassword.isPending,
-		dirty: form.formState.isDirty,
-		renderContent: (pending) => (
+	const resetKeySuffix = changePassword.isSuccess ? "-reset" : "";
+
+	const pending = disabled || changePassword.isPending;
+	const dirty = form.formState.isDirty;
+	const saving = changePassword.isPending;
+
+	useEffect(() => {
+		onStateChange({ pending: saving, dirty });
+	}, [onStateChange, saving, dirty]);
+
+	return (
+		<div className="flex flex-col gap-6">
 			<form
-				id="profile-password-form"
-				onSubmit={savePassword(pending)}
+				id={FORM_ID}
+				onSubmit={savePassword}
 				aria-label="Change password"
 				aria-busy={changePassword.isPending}
 				className="flex flex-col gap-4"
@@ -92,43 +147,26 @@ const PasswordSection = ({ children }: PasswordSectionProps) => {
 				<FieldSet disabled={pending} className="gap-3">
 					<FieldLegend className="sr-only">Change password</FieldLegend>
 					<FieldGroup className="gap-3">
-						<PasswordField
-							key={changePassword.isSuccess ? "current-reset" : "current"}
-							id="profile-current-password"
-							label="Current password"
-							autoComplete="current-password"
-							error={form.formState.errors.currentPassword?.message}
-							{...form.register("currentPassword")}
-						/>
-						<PasswordField
-							key={changePassword.isSuccess ? "new-reset" : "new"}
-							id="profile-new-password"
-							label="New password"
-							autoComplete="new-password"
-							description="Use 8–20 characters."
-							error={form.formState.errors.newPassword?.message}
-							{...form.register("newPassword")}
-						/>
-						<PasswordField
-							key={changePassword.isSuccess ? "confirm-reset" : "confirm"}
-							id="profile-confirm-password"
-							label="Confirm new password"
-							autoComplete="new-password"
-							error={form.formState.errors.confirmPassword?.message}
-							{...form.register("confirmPassword")}
-						/>
+						{FIELDS.map(({ name, keyPrefix, ...field }) => (
+							<PasswordField
+								key={`${keyPrefix}${resetKeySuffix}`}
+								error={form.formState.errors[name]?.message}
+								{...field}
+								{...form.register(name)}
+							/>
+						))}
 					</FieldGroup>
 				</FieldSet>
 			</form>
-		),
-		renderActions: (pending) => (
-			<PasswordSectionActions
-				form={form}
-				pending={pending}
-				saving={changePassword.isPending}
-			/>
-		),
-	});
+			<DialogFooter>
+				<PasswordSectionActions
+					form={form}
+					pending={pending}
+					saving={changePassword.isPending}
+				/>
+			</DialogFooter>
+		</div>
+	);
 };
 
 type PasswordSectionActionsProps = {
@@ -145,7 +183,7 @@ const PasswordSectionActions = ({
 	<div className="flex justify-end">
 		<Button
 			type="submit"
-			form="profile-password-form"
+			form={FORM_ID}
 			disabled={pending || !form.formState.isValid}
 		>
 			{saving && (
