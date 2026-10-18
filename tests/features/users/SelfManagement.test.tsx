@@ -44,6 +44,7 @@ describe.skipIf(!baseURL)(
 				</QueryClientProvider>,
 			);
 			await screen.findByLabelText("First name");
+			await screen.findByRole("tab", { name: "Profile" });
 			return userEvent.setup();
 		};
 		const fillPasswords = async (
@@ -112,7 +113,7 @@ describe.skipIf(!baseURL)(
 			);
 			expect(getSession().user?.email).toBe("updated@example.com");
 			expect(
-				client.getQueryData(["my-profile", getSession().epoch]),
+				client.getQueryData(["profile", getSession().epoch]),
 			).toMatchObject({
 				email: "updated@example.com",
 				username: "owner",
@@ -178,7 +179,7 @@ describe.skipIf(!baseURL)(
 				expect(screen.getByLabelText(name, { exact: true })).toHaveValue("");
 			expect(getSession().status).toBe("authenticated");
 		});
-		it("validates confirmation locally and protects dirty drafts when closing", async () => {
+		it("validates confirmation locally and clears password drafts when closing", async () => {
 			const user = await open();
 			await fillPasswords(user, "old-password", "different-password");
 			expect(await screen.findByText("Passwords must match.")).toBeVisible();
@@ -186,13 +187,45 @@ describe.skipIf(!baseURL)(
 				screen.getByRole("button", { name: "Change password" }),
 			).toBeDisabled();
 			await user.keyboard("{Escape}");
-			expect(await screen.findByText("Discard unsaved changes?")).toBeVisible();
-			await user.click(screen.getByRole("button", { name: "Keep editing" }));
-			expect(
-				screen.getByLabelText("Current password", { exact: true }),
-			).toHaveValue("old-password");
+			await waitFor(() =>
+				expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+			);
+			act(() => useUserProfilePopup.setState({ collapsed: false }));
+			await user.click(await screen.findByRole("tab", { name: "Password" }));
+			for (const name of [
+				"Current password",
+				"New password",
+				"Confirm new password",
+			])
+				expect(screen.getByLabelText(name, { exact: true })).toHaveValue("");
+		});
+		it("starts with clean forms and the profile tab after closing and reopening", async () => {
+			const user = await open();
+			await user.clear(screen.getByLabelText("First name"));
+			await user.type(screen.getByLabelText("First name"), "Jamie");
+			await fillPasswords(user);
 			await user.keyboard("{Escape}");
-			await user.click(screen.getByRole("button", { name: "Discard changes" }));
+			await waitFor(() =>
+				expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+			);
+
+			act(() => useUserProfilePopup.setState({ collapsed: false }));
+			expect(await screen.findByLabelText("First name")).toHaveValue("Alex");
+			expect(screen.getByRole("tab", { name: "Profile" })).toHaveAttribute(
+				"aria-selected",
+				"true",
+			);
+			expect(
+				screen.getByRole("button", { name: "Save profile" }),
+			).toBeDisabled();
+			await user.click(screen.getByRole("tab", { name: "Password" }));
+			for (const name of [
+				"Current password",
+				"New password",
+				"Confirm new password",
+			])
+				expect(screen.getByLabelText(name, { exact: true })).toHaveValue("");
+			await user.keyboard("{Escape}");
 			await waitFor(() =>
 				expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
 			);
@@ -207,7 +240,7 @@ describe.skipIf(!baseURL)(
 				"draft-password",
 			);
 			await act(async () => {
-				await client.invalidateQueries({ queryKey: ["my-profile"] });
+				await client.invalidateQueries({ queryKey: ["profile"] });
 			});
 			expect(
 				screen.getByLabelText("Current password", { exact: true }),
@@ -218,7 +251,7 @@ describe.skipIf(!baseURL)(
 				body: JSON.stringify({ profileFailure: true }),
 			});
 			await act(async () => {
-				await client.invalidateQueries({ queryKey: ["my-profile"] });
+				await client.invalidateQueries({ queryKey: ["profile"] });
 			});
 			expect(
 				screen.getByLabelText("Current password", { exact: true }),
@@ -236,6 +269,16 @@ describe.skipIf(!baseURL)(
 			});
 			await user.click(screen.getByRole("button", { name: "Change password" }));
 			expect(screen.getByRole("tab", { name: "Profile" })).toBeDisabled();
+			expect(
+				screen.queryByRole("button", { name: "Close" }),
+			).not.toBeInTheDocument();
+			await user.keyboard("{Escape}");
+			expect(
+				screen.getByRole("dialog", { name: "Your profile" }),
+			).toBeVisible();
+			expect(
+				screen.queryByText("Discard unsaved changes?"),
+			).not.toBeInTheDocument();
 			expect(
 				await screen.findByRole("alert", {}, { timeout: 17000 }),
 			).toHaveTextContent("The request took too long.");

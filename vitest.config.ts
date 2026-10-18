@@ -9,6 +9,7 @@ export default defineConfig({
 	},
 	test: {
 		environment: "jsdom",
+		fileParallelism: !process.env.DMS_SELF_SERVICE_URL,
 		setupFiles: ["./tests/setup.ts"],
 		include: ["tests/**/*.test.{ts,tsx}"],
 	},
