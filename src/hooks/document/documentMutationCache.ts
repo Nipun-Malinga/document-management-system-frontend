@@ -86,6 +86,21 @@ export const mutationQueryKeys = (
 			["trashed_branches_own"],
 			["permissions", documentId],
 		);
+	if (
+		[
+			"create",
+			"favorite",
+			"share",
+			"trashDocument",
+			"restoreDocument",
+			"deleteDocument",
+			"trashBranch",
+			"restoreBranch",
+			"deleteBranch",
+		].includes(action)
+	) {
+		keys.push(["sidebar-stats"]);
+	}
 	return keys;
 };
 
