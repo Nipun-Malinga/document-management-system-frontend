@@ -1,6 +1,14 @@
 import { Menu, UserStar } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useUser } from "@/features/auth/hooks";
 import useAside from "@/features/workspace/stores/useAside";
 import DarkThemeButton from "../common/DarkThemeButton";
@@ -10,7 +18,7 @@ import UserDropdown from "../common/UserDropdown";
 const titles: Record<string, string> = {
 	home: "Home",
 	quick: "Quick Access",
-	resents: "Recants",
+	resents: "Recents",
 	shared: "Shared With Me",
 	trash: "Trash",
 };
@@ -34,19 +42,27 @@ const TopBar = () => {
 				>
 					<Menu aria-hidden="true" />
 				</Button>
-				<span className="hidden text-sm text-muted-foreground sm:inline">
-					Workspace
-				</span>
-				<span aria-hidden="true" className="hidden text-border sm:inline">
-					/
-				</span>
-				<span className="hidden truncate text-sm font-medium sm:inline">
-					{titles[pathname.split("/").at(-1) ?? ""] ?? "Workspace"}
-				</span>
+				<Breadcrumb className="min-w-0">
+					<BreadcrumbList className="flex-nowrap">
+						<BreadcrumbItem className="hidden sm:inline-flex">
+							Workspace
+						</BreadcrumbItem>
+						<BreadcrumbSeparator className="hidden sm:block" />
+						<BreadcrumbItem className="min-w-0">
+							<BreadcrumbPage className="truncate">
+								{titles[pathname.split("/").at(-1) ?? ""] ?? "Workspace"}
+							</BreadcrumbPage>
+						</BreadcrumbItem>
+					</BreadcrumbList>
+				</Breadcrumb>
 			</div>
 			<div className="flex shrink-0 items-center gap-1 sm:gap-2">
 				<Notification />
 				<DarkThemeButton />
+				<Separator
+					orientation="vertical"
+					className="mx-1 hidden h-5 sm:block"
+				/>
 				<UserDropdown />
 				{user?.role === "ADMIN" && (
 					<Button

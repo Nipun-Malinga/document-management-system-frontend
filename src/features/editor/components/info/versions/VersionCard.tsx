@@ -1,4 +1,4 @@
-import { Eye, Globe, History, LockKeyhole, UserRound } from "lucide-react";
+import { Eye, Globe, History, LockKeyhole } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,45 +25,41 @@ const VersionCard = ({ version }: Props) => {
 	const VisibilityIcon = version.status === "PRIVATE" ? LockKeyhole : Globe;
 
 	return (
-		<Card className="min-w-0 gap-3 overflow-hidden py-0 shadow-none transition-colors hover:border-primary/50 focus-within:border-primary/50">
-			<CardHeader className="px-4 pt-4">
+		<Card className="editor-history-entry min-w-0 gap-3 py-4 shadow-none">
+			<CardHeader className="px-4">
 				<div className="flex min-w-0 items-start gap-3">
-					<span
-						aria-hidden="true"
-						className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary"
-					>
+					<span aria-hidden="true" className="editor-history-marker">
 						<History className="size-4" />
 					</span>
 					<div className="flex min-w-0 flex-1 flex-col gap-2">
 						<CardTitle>
-							<h3 className="wrap-anywhere text-base leading-6">
+							<h3 className="wrap-anywhere text-sm leading-6">
 								{version.title}
 							</h3>
 						</CardTitle>
 						<div>
-							<Badge variant="secondary">
+							<Badge variant="outline">
 								<VisibilityIcon aria-hidden="true" />
-								{version.status}
+								{version.status === "PRIVATE" ? "Private" : "Public"}
 							</Badge>
 						</div>
 					</div>
 				</div>
 			</CardHeader>
-			<CardContent className="flex flex-col gap-1.5 px-4 pb-1">
-				<p className="flex min-w-0 items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
-					<UserRound aria-hidden="true" className="mt-0.5 size-3.5 shrink-0" />
-					<span className="wrap-anywhere">
-						Created by {version.createdBy.username}
-					</span>
-				</p>
+			<CardContent className="flex flex-col gap-1 pl-16 pr-4">
+				<dl className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 text-xs leading-relaxed text-muted-foreground">
+					<dt>Saved by</dt>
+					<dd className="wrap-anywhere">{version.createdBy.username}</dd>
+				</dl>
 				<p className="wrap-anywhere text-xs leading-relaxed text-muted-foreground tabular-nums">
 					Created {version.createdAt}
 				</p>
 			</CardContent>
-			<CardFooter className="flex-wrap items-start gap-2 border-t bg-muted/30 px-4 py-3 [.border-t]:pt-3">
+			<CardFooter className="editor-history-actions flex-wrap items-start gap-2 pl-16 pr-4">
 				<Button
-					variant="ghost"
+					variant="outline"
 					size="sm"
+					aria-label={`Preview version ${version.title}`}
 					className="flex-1"
 					onClick={() =>
 						navigate(

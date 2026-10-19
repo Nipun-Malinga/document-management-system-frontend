@@ -1,7 +1,9 @@
 import type { Content } from "@tiptap/core";
 import axios from "axios";
+import { AlertCircle } from "lucide-react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useCreateDocument, useGetTemplates } from "@/features/documents/hooks";
 import type { TemplateParams } from "@/features/documents/types/CollectionParams";
 import useEditorTemplate from "@/features/editor/stores/useEditorTemplate";
@@ -53,20 +55,24 @@ const Templates = () => {
 	};
 
 	return (
-		<>
+		<div className="flex min-w-0 flex-col gap-3">
 			{creationError && (
-				<p role="alert" className="my-3 text-sm text-destructive">
-					{creationError}
-				</p>
+				<Alert variant="destructive">
+					<AlertCircle aria-hidden="true" />
+					<AlertTitle>Document could not be created</AlertTitle>
+					<AlertDescription>{creationError}</AlertDescription>
+				</Alert>
 			)}
 			{isPending && (
-				<p className="my-3 text-sm text-muted-foreground">Creating document…</p>
+				<p role="status" className="text-sm text-muted-foreground">
+					Creating document…
+				</p>
 			)}
 			<CollectionResults query={query} label="templates">
 				{(templates) => (
-					<ul className="flex gap-3 overflow-x-auto pb-2">
+					<ul className="flex snap-x snap-proximity gap-3 overflow-x-auto pb-2">
 						{templates.map((template) => (
-							<li key={template.id} className="w-56 shrink-0">
+							<li key={template.id} className="w-48 shrink-0 snap-start">
 								<TemplateTile
 									type="button"
 									title={template.title}
@@ -110,7 +116,7 @@ const Templates = () => {
 					label="templates"
 				/>
 			)}
-		</>
+		</div>
 	);
 };
 

@@ -1,0 +1,130 @@
+/* Editor history extends the existing FlowDocs tokens without changing the theme. */
+.editor-history-header [data-slot="drawer-title"] {
+	font-size: 1.5rem;
+	line-height: 1.25;
+	letter-spacing: -0.025em;
+}
+
+.editor-history-header [data-slot="drawer-description"] {
+	max-width: 36ch;
+	line-height: 1.6;
+}
+
+.editor-history-symbol {
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-lg);
+	background: var(--card);
+	color: var(--primary);
+}
+
+.editor-history-symbol > svg {
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.editor-history-list {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.editor-history-branches {
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-xl);
+	background: var(--card);
+}
+
+.editor-history-branches > :where(li + li) {
+	border-top: 1px solid var(--border);
+}
+
+.editor-history-entry {
+	position: relative;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+}
+
+.editor-history-entry-current {
+	background: color-mix(in oklch, var(--primary) 5%, var(--card));
+}
+
+.editor-history-marker {
+	position: relative;
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: var(--radius-md);
+	background: var(--secondary);
+	color: var(--muted-foreground);
+}
+
+.editor-history-entry-current .editor-history-marker {
+	background: var(--primary);
+	color: var(--primary-foreground);
+}
+
+.editor-history-versions > li {
+	position: relative;
+}
+
+.editor-history-versions > li:not(:last-child)::before {
+	position: absolute;
+	top: 2.5rem;
+	bottom: -2rem;
+	left: 2.125rem;
+	width: 1px;
+	background: var(--border);
+	content: "";
+}
+
+.editor-history-versions .editor-history-marker {
+	background: var(--background);
+	border: 1px solid var(--border);
+	color: var(--primary);
+}
+
+.editor-history-pagination {
+	position: sticky;
+	bottom: -1.25rem;
+	padding-bottom: 0.75rem;
+	background: var(--background);
+}
+
+/* Skeletons follow the same single-column layout as the drawer's entries. */
+.editor-history [aria-busy="true"] > .grid {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.editor-history-create {
+	width: min(28rem, calc(100vw - 2rem));
+	gap: 1.5rem;
+}
+
+.editor-history-create .popup-body {
+	flex: 0 1 auto;
+	scrollbar-gutter: auto;
+}
+
+@media (max-width: 380px) {
+	.editor-history-actions {
+		padding-left: 1rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.editor-history [data-slot="skeleton"],
+	.editor-history-create .animate-spin {
+		animation: none;
+	}
+}

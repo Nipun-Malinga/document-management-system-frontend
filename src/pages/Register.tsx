@@ -72,8 +72,12 @@ const Register = () => {
 			description="Create your FlowDocs account and bring your documents together."
 		>
 			{apiError && <ErrorAlert error={apiError} />}
-			<form onSubmit={handleSubmit(onSubmit)} aria-busy={isPending}>
-				<FieldGroup className="gap-5">
+			<form
+				className="auth-form"
+				onSubmit={handleSubmit(onSubmit)}
+				aria-busy={isPending}
+			>
+				<FieldGroup className="gap-6">
 					<FieldSet disabled={isPending}>
 						<FieldLegend className="sr-only">Account details</FieldLegend>
 						<FieldGroup className="gap-4">
@@ -89,7 +93,7 @@ const Register = () => {
 										id="register-firstname"
 										placeholder="Alex"
 										autoComplete="given-name"
-										className="h-11 sm:h-10"
+										className="h-11"
 										aria-invalid={Boolean(errors.firstname)}
 										aria-describedby={
 											errors.firstname ? "register-firstname-error" : undefined
@@ -111,7 +115,7 @@ const Register = () => {
 										id="register-lastname"
 										placeholder="Morgan"
 										autoComplete="family-name"
-										className="h-11 sm:h-10"
+										className="h-11"
 										aria-invalid={Boolean(errors.lastname)}
 										aria-describedby={
 											errors.lastname ? "register-lastname-error" : undefined
@@ -135,7 +139,7 @@ const Register = () => {
 										id="register-username"
 										placeholder="alexmorgan"
 										autoComplete="username"
-										className="h-11 sm:h-10"
+										className="h-11"
 										aria-invalid={Boolean(errors.username)}
 										aria-describedby={
 											errors.username ? "register-username-error" : undefined
@@ -160,7 +164,7 @@ const Register = () => {
 										type="email"
 										placeholder="you@example.com"
 										autoComplete="email"
-										className="h-11 sm:h-10"
+										className="h-11"
 										aria-invalid={Boolean(errors.email)}
 										aria-describedby={
 											errors.email ? "register-email-error" : undefined
@@ -194,13 +198,17 @@ const Register = () => {
 								/>
 							</FieldGroup>
 							<Field data-invalid={Boolean(errors.acceptTerms)}>
-								<Field orientation="horizontal">
+								<Field
+									orientation="horizontal"
+									className="items-start gap-3 rounded-lg bg-muted/60 p-3"
+								>
 									<Controller
 										name="acceptTerms"
 										control={control}
 										render={({ field }) => (
 											<Checkbox
 												id="register-terms"
+												className="mt-0.5 shrink-0"
 												name={field.name}
 												ref={field.ref}
 												checked={field.value === true}
@@ -217,7 +225,10 @@ const Register = () => {
 											/>
 										)}
 									/>
-									<FieldLabel htmlFor="register-terms">
+									<FieldLabel
+										htmlFor="register-terms"
+										className="font-normal leading-relaxed"
+									>
 										I agree to the Terms of Service and Privacy Policy.
 									</FieldLabel>
 								</Field>
@@ -233,7 +244,7 @@ const Register = () => {
 						type="submit"
 						size="lg"
 						disabled={!isValid || isPending}
-						className="w-full"
+						className="h-11 w-full"
 					>
 						{isPending ? (
 							<>

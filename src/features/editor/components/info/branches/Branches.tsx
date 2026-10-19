@@ -27,18 +27,18 @@ const Branches = () => {
 
 	return (
 		<>
-			<DrawerHeader className="shrink-0 gap-2 border-b bg-card px-4 py-5 text-left sm:px-6">
-				<DrawerTitle className="flex items-center gap-2">
-					<GitBranch
-						aria-hidden="true"
-						className="size-5 shrink-0 text-primary"
-					/>
-					Branches
-				</DrawerTitle>
-				<DrawerDescription>
-					Explore document branches or create a new direction from your current
-					work.
-				</DrawerDescription>
+			<DrawerHeader className="editor-history-header shrink-0 px-4 py-6 text-left sm:px-6">
+				<div className="flex items-start justify-between gap-4">
+					<div className="flex min-w-0 flex-col gap-2">
+						<DrawerTitle>Branches</DrawerTitle>
+						<DrawerDescription>
+							Create a branch to explore changes alongside your current work.
+						</DrawerDescription>
+					</div>
+					<span aria-hidden="true" className="editor-history-symbol">
+						<GitBranch />
+					</span>
+				</div>
 			</DrawerHeader>
 			<InfoDrawerBody emptyTitle="Branches" emptyDescription="">
 				<CollectionFilter
@@ -60,12 +60,15 @@ const Branches = () => {
 					empty={
 						<InfoDrawerEmpty
 							emptyTitle="No branches match these filters."
-							emptyDescription=""
+							emptyDescription="Adjust your filters, or create a branch from your current work."
 						/>
 					}
 				>
 					{(items) => (
-						<ul className="flex min-w-0 flex-col gap-3">
+						<ul
+							aria-label="Document branches"
+							className="editor-history-list editor-history-branches"
+						>
 							{items.map((branch) => (
 								<li key={branch.id}>
 									<BranchCard branch={branch} />
@@ -75,7 +78,7 @@ const Branches = () => {
 					)}
 				</CollectionResults>
 				<CollectionPagination
-					className="mt-auto"
+					className="editor-history-pagination mt-auto"
 					data={query.data}
 					pending={query.isFetching}
 					onPage={setPage}

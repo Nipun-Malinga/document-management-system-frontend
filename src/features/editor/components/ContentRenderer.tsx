@@ -1,6 +1,7 @@
 import type { Content } from "@tiptap/core";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { editorExtensions } from "../configs/EditorConfigs";
+import "../styles/styles.scss";
 
 interface Props {
 	content: Content;
@@ -16,17 +17,11 @@ const ContentRenderer = ({ content, type = "primary" }: Props) => {
 
 	if (type === "primary") {
 		return (
-			<div className="mx-auto max-w-4xl px-4 py-8 md:px-8 md:py-12">
-				<div className="rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+			<div className="mx-auto w-full max-w-4xl px-3 py-5 sm:px-6 sm:py-8 lg:py-12">
+				<div className="editor-sheet rounded-lg border bg-card text-card-foreground">
 					<EditorContent
 						editor={editor}
-						className="
-                  prose prose-sm sm:prose lg:prose-lg
-                  dark:prose-invert
-                  max-w-none
-                  px-8 py-12 md:px-16 md:py-16
-                  outline-none
-                "
+						className="editor-document px-5 py-8 sm:px-12 sm:py-14 lg:px-20 lg:py-20"
 					/>
 				</div>
 			</div>

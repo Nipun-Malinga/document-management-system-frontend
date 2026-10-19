@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import FlowDocsBrand from "@/components/common/FlowDocsBrand";
+import { Badge } from "@/components/ui/badge";
 import {
 	Dialog,
 	DialogContent,
@@ -37,11 +38,11 @@ const SideBar = ({ sidebarLink }: Props) => {
 	}, []);
 	const content = (
 		<>
-			<div className="px-3 pb-8 pt-2">
+			<div className="px-3 pb-10 pt-3">
 				<FlowDocsBrand />
 			</div>
 			<p className="px-3 pb-3 text-xs font-medium text-muted-foreground">
-				Workspace
+				Your workspace
 			</p>
 			<nav aria-label="Workspace navigation" className="flex flex-col gap-1">
 				{sidebarLink.map((item) => (
@@ -53,7 +54,7 @@ const SideBar = ({ sidebarLink }: Props) => {
 					>
 						<item.icon aria-hidden="true" className="size-4 shrink-0" />
 						<span className="flex-1">{item.title}</span>
-						<span className="text-xs tabular-nums">
+						<Badge variant="secondary" className="min-w-6 tabular-nums">
 							{item.count ?? (
 								<>
 									<span aria-hidden="true">—</span>
@@ -62,7 +63,7 @@ const SideBar = ({ sidebarLink }: Props) => {
 									</span>
 								</>
 							)}
-						</span>
+						</Badge>
 					</NavLink>
 				))}
 			</nav>
@@ -85,7 +86,7 @@ const SideBar = ({ sidebarLink }: Props) => {
 	);
 	return (
 		<>
-			<aside className="hidden min-h-0 flex-col overflow-y-auto border-r bg-card p-4 md:flex">
+			<aside className="hidden min-h-0 flex-col overflow-y-auto border-r bg-muted/50 p-4 md:flex">
 				{content}
 			</aside>
 			<Dialog

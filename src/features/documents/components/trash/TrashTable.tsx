@@ -26,7 +26,7 @@ const TrashTable = ({ children, label, itemHeading }: Props) => (
 								scope="col"
 								key={title}
 								className={cn(
-									"px-4 py-3 text-left text-xs font-medium",
+									"px-5 py-4 text-left text-xs font-medium",
 									index === 2 && "text-right",
 								)}
 							>

@@ -25,7 +25,9 @@ const Quick = () => {
 
 	return (
 		<CollectionPage
+			icon={Bookmark}
 			title="Quick Access"
+			resultsTitle="Bookmarked documents"
 			description="Keep your most useful documents close. Your bookmarked documents appear here."
 			count={query.data?.totalElements}
 			filters={
@@ -40,12 +42,12 @@ const Quick = () => {
 			}
 		>
 			<CollectionResults
-				fill
 				query={query}
 				label="favorites"
 				empty={
 					hasCollectionFilters(params, ["favorite"]) ? undefined : (
 						<CollectionEmpty
+							className="min-h-64 md:p-10"
 							icon={Bookmark}
 							title="No bookmarks yet"
 							description="Bookmark a document from Home to find it here whenever you need it."

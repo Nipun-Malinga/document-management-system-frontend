@@ -12,6 +12,14 @@ import SearchInput from "@/components/common/SearchInput";
 import { workspaceNavigationClass } from "@/components/layout/workspaceNavigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { Toggle } from "@/components/ui/toggle";
 import { sidebarData } from "@/data/Sidebar";
 import CollectionPagination from "@/features/documents/components/collections/CollectionPagination";
@@ -157,10 +165,10 @@ const WorkspacePreview = () => {
 						Sample workspace
 					</Badge>
 				</div>
-				<div className="grid min-w-0 @min-[40rem]/preview:grid-cols-[10rem_minmax(0,1fr)]">
+				<div className="grid min-w-0 @min-[40rem]/preview:grid-cols-[13rem_minmax(0,1fr)]">
 					<nav
 						aria-label="Preview workspace navigation"
-						className="flex min-w-0 gap-1 overflow-x-auto border-b bg-card p-2 @min-[40rem]/preview:flex-col @min-[40rem]/preview:overflow-x-visible @min-[40rem]/preview:border-r @min-[40rem]/preview:border-b-0 @min-[40rem]/preview:p-3"
+						className="flex min-w-0 gap-1 overflow-x-auto border-b bg-muted/40 p-2 @min-[40rem]/preview:flex-col @min-[40rem]/preview:overflow-x-visible @min-[40rem]/preview:border-r @min-[40rem]/preview:border-b-0 @min-[40rem]/preview:p-3"
 					>
 						{navigation.map((item) => (
 							<button
@@ -174,12 +182,12 @@ const WorkspacePreview = () => {
 								}}
 								className={cn(
 									workspaceNavigationClass(collection === item.endpoint),
-									"w-auto shrink-0 gap-2 text-xs @min-[40rem]/preview:w-full",
+									"grid w-max shrink-0 grid-cols-[1rem_minmax(0,1fr)_1.5rem] gap-2 text-xs @min-[40rem]/preview:w-full",
 								)}
 							>
 								<item.icon aria-hidden="true" className="size-4 shrink-0" />
-								<span className="flex-1 whitespace-nowrap">{item.title}</span>
-								<span className="tabular-nums">{item.count}</span>
+								<span className="min-w-0 truncate">{item.title}</span>
+								<span className="text-right tabular-nums">{item.count}</span>
 							</button>
 						))}
 					</nav>
@@ -316,25 +324,34 @@ const WorkspacePreview = () => {
 										))}
 									</DocumentTileGrid>
 								) : (
-									<div
-										role="status"
-										className="flex flex-col items-start gap-3 py-6 text-sm text-muted-foreground"
-									>
-										<p>
-											{search.trim()
-												? "No documents match this exact title."
-												: collection === "quick"
-													? "Bookmark a document to keep it in Quick Access."
-													: collection === "trash"
-														? "Your sample trash is empty."
-														: "No sample documents in this collection."}
-										</p>
+									<Empty role="status">
+										<EmptyHeader>
+											<EmptyMedia variant="icon">
+												<FileText aria-hidden="true" />
+											</EmptyMedia>
+											<EmptyTitle>
+												{search.trim()
+													? "No matching documents"
+													: "Nothing here yet"}
+											</EmptyTitle>
+											<EmptyDescription>
+												{search.trim()
+													? "No documents match this exact title."
+													: collection === "quick"
+														? "Bookmark a document to keep it in Quick Access."
+														: collection === "trash"
+															? "Your sample trash is empty."
+															: "No sample documents in this collection."}
+											</EmptyDescription>
+										</EmptyHeader>
 										{search && (
-											<Button variant="outline" onClick={() => setSearch("")}>
-												Clear search
-											</Button>
+											<EmptyContent>
+												<Button variant="outline" onClick={() => setSearch("")}>
+													Clear search
+												</Button>
+											</EmptyContent>
 										)}
-									</div>
+									</Empty>
 								)}
 								<CollectionPagination
 									data={{

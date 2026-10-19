@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useDocument } from "@/features/documents/hooks";
 import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
+import { EditorError, EditorLoading } from "../components/EditorFeedback";
 import EditorNavigationGuard from "../persistence/EditorNavigationGuard";
 import CollaborativeEditor from "./CollaborativeEditor";
 import SoloEditor from "./SoloEditor";
@@ -26,8 +27,7 @@ const EditorContainer = () => {
 			{data ? (
 				<EditorMode key={`${documentId}/${branchId}`} shared={data.shared} />
 			) : isError ? (
-				<div>
-					<p>{collectionErrorMessage(error, "this document")}</p>
+				<EditorError message={collectionErrorMessage(error, "this document")}>
 					<Button
 						onClick={() => {
 							void refetch();
@@ -35,9 +35,9 @@ const EditorContainer = () => {
 					>
 						Retry document
 					</Button>
-				</div>
+				</EditorError>
 			) : (
-				<p>Loading document…</p>
+				<EditorLoading message="Loading document…" />
 			)}
 		</>
 	);

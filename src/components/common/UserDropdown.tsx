@@ -54,9 +54,14 @@ const UserDropdown = () => {
 		<>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button id="workspace-account" variant="outline">
-						<span className="max-w-20 truncate sm:max-w-40">
-							{user?.username}
+					<Button
+						id="workspace-account"
+						variant="outline"
+						className="max-sm:size-9 max-sm:px-0"
+					>
+						<UserRound aria-hidden="true" className="sm:hidden" />
+						<span className="sr-only sm:not-sr-only sm:max-w-40 sm:truncate">
+							{user?.username ?? "Account"}
 						</span>
 					</Button>
 				</DropdownMenuTrigger>

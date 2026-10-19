@@ -1,7 +1,8 @@
-import { ArrowLeft, Eye } from "lucide-react";
+import { ArrowLeft, Eye, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import DarkThemeButton from "@/components/common/DarkThemeButton";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import AutoSaver from "./AutoSaver";
 import { InfoDrawer } from "./info";
 
@@ -21,8 +22,8 @@ const TopToolBar = ({
 	const navigate = useNavigate();
 
 	return (
-		<header className="shrink-0 border-b border-border bg-card px-3 py-3 sm:px-6">
-			<div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
+		<header className="shrink-0 border-b bg-card px-3 py-3 sm:px-6 lg:px-8">
+			<div className="mx-auto flex min-w-0 max-w-screen-2xl flex-wrap items-center gap-x-4 gap-y-3">
 				<div className="flex min-w-0 basis-full items-center gap-3 sm:basis-0 sm:flex-1">
 					<Button
 						type="button"
@@ -34,12 +35,22 @@ const TopToolBar = ({
 					>
 						<ArrowLeft aria-hidden="true" />
 					</Button>
-					<h1
-						className="min-w-0 flex-1 truncate text-base font-semibold sm:text-lg"
-						title={documentTitle}
+					<Separator orientation="vertical" className="h-7" />
+					<span
+						aria-hidden="true"
+						className="hidden size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary sm:flex"
 					>
-						{documentTitle}
-					</h1>
+						<FileText className="size-5" strokeWidth={1.5} />
+					</span>
+					<div className="flex min-w-0 flex-1 flex-col gap-0.5">
+						<h1
+							className="truncate text-base font-semibold tracking-tight sm:text-lg"
+							title={documentTitle}
+						>
+							{documentTitle}
+						</h1>
+						{enableAutoSaver && <AutoSaver />}
+					</div>
 				</div>
 				<div className="order-2 ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
 					<Button
@@ -56,11 +67,6 @@ const TopToolBar = ({
 					<DarkThemeButton />
 					<InfoDrawer />
 				</div>
-				{enableAutoSaver && (
-					<div className="order-1 min-w-0 flex-1 text-muted-foreground sm:order-0 sm:flex-none">
-						<AutoSaver />
-					</div>
-				)}
 			</div>
 		</header>
 	);

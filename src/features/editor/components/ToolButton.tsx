@@ -25,6 +25,7 @@ const ToolButton = ({
 				aria-label={label}
 				title={label}
 				pressed={active}
+				className="size-9 shrink-0"
 				disabled={disabled}
 				onPressedChange={onClick}
 			>

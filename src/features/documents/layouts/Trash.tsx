@@ -1,4 +1,5 @@
-import { FileText, GitBranch } from "lucide-react";
+import { FileText, GitBranch, Trash2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
 	useTrashBranchCount,
@@ -14,7 +15,7 @@ const TrashCount = ({
 	count?: number;
 	pending: boolean;
 }) => (
-	<span className="rounded-sm bg-muted px-1.5 py-0.5 text-xs tabular-nums">
+	<Badge variant="secondary" className="min-w-6 tabular-nums">
 		{count ?? (
 			<>
 				<span aria-hidden="true">—</span>
@@ -23,7 +24,7 @@ const TrashCount = ({
 				</span>
 			</>
 		)}
-	</span>
+	</Badge>
 );
 
 const Trash = () => {
@@ -32,16 +33,17 @@ const Trash = () => {
 
 	return (
 		<CollectionPage
+			icon={Trash2}
 			title="Trash"
 			description="Restore documents and branches, or delete them permanently."
 		>
-			<Tabs defaultValue="documents" className="min-h-0 min-w-0 flex-1 gap-5">
+			<Tabs defaultValue="documents" className="min-w-0 flex-1 gap-6">
 				<TabsList
 					aria-label="Trash collections"
-					className="h-11 w-full max-w-sm shrink-0 p-1"
+					className="h-12 w-full max-w-md shrink-0 p-1"
 				>
 					<TabsTrigger value="documents" className="gap-2">
-						<FileText aria-hidden="true" />
+						<FileText aria-hidden="true" className="hidden sm:block" />
 						Documents
 						<TrashCount
 							count={documents.data?.count}
@@ -49,7 +51,7 @@ const Trash = () => {
 						/>
 					</TabsTrigger>
 					<TabsTrigger value="branches" className="gap-2">
-						<GitBranch aria-hidden="true" />
+						<GitBranch aria-hidden="true" className="hidden sm:block" />
 						Branches
 						<TrashCount
 							count={branches.data?.count}
@@ -59,13 +61,13 @@ const Trash = () => {
 				</TabsList>
 				<TabsContent
 					value="documents"
-					className="min-h-0 min-w-0 data-[state=active]:flex data-[state=active]:flex-col"
+					className="min-w-0 data-[state=active]:flex data-[state=active]:flex-col focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
 				>
 					<TrashDocumentTable />
 				</TabsContent>
 				<TabsContent
 					value="branches"
-					className="min-h-0 min-w-0 data-[state=active]:flex data-[state=active]:flex-col"
+					className="min-w-0 data-[state=active]:flex data-[state=active]:flex-col focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
 				>
 					<TrashBranchTable />
 				</TabsContent>

@@ -18,8 +18,11 @@ const TrashBranchTable = () => {
 	const { params, update, setPage } = useCollectionParams<TrashBranchParams>();
 	const query = useTrashedBranches(params);
 	return (
-		<div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4">
-			<div className="shrink-0 rounded-xl border bg-card p-4">
+		<div className="flex min-w-0 flex-1 flex-col gap-5">
+			<section
+				aria-label="Trashed branches controls"
+				className="min-w-0 shrink-0 rounded-2xl border bg-secondary/40 p-4 @min-[40rem]/collection:p-5"
+			>
 				<CollectionFilters
 					className="my-0"
 					params={params}
@@ -32,14 +35,14 @@ const TrashBranchTable = () => {
 					sorts={branchSorts}
 					label="trashed branches"
 				/>
-			</div>
+			</section>
 			<CollectionResults
-				fill
 				query={query}
 				label="trashed branches"
 				empty={
 					hasCollectionFilters(params) ? undefined : (
 						<CollectionEmpty
+							className="min-h-64 md:p-10"
 							icon={GitBranch}
 							title="No trashed branches"
 							description="Branches you move to Trash appear here. You can restore them or delete them permanently."

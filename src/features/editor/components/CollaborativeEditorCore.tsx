@@ -14,6 +14,7 @@ import {
 } from "../configs/EditorConfigs";
 import { registerPersistence } from "../persistence/persistenceRegistry";
 import CoreEditor from "./CoreEditor";
+import { EditorLoading } from "./EditorFeedback";
 import Toolbar from "./Toolbar";
 
 interface Props {
@@ -30,7 +31,8 @@ const CollaborativeEditorCore = (props: Props) => {
 	const documentKey = `documents/${props.documentId}/branches/${props.branchId}`;
 	const provider = useProvider(documentKey);
 
-	if (!provider) return <p>Preparing collaborative editor…</p>;
+	if (!provider)
+		return <EditorLoading message="Preparing collaborative editor…" />;
 
 	return (
 		<CollaborativeEditor
@@ -131,7 +133,7 @@ const CollaborativeEditor = ({
 				</p>
 			)}
 			{!authenticationFailed && connectionStatus !== "connected" && (
-				<p>
+				<p role="status">
 					{connectionStatus === "disconnected"
 						? "Collaboration is disconnected. Keep this editor open while it reconnects; server persistence is not confirmed."
 						: "Connecting to collaboration… Server persistence is not confirmed."}

@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, Plus } from "lucide-react";
+import { CheckCircle2, GitBranch, LoaderCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import {
 	Field,
+	FieldDescription,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
@@ -36,7 +38,7 @@ const CreateBranchForm = () => {
 	const [error, setError] = useState("");
 	const safety = useSoloActionState(documentId ?? "", branchId ?? "");
 	const { canWrite } = useDocumentAccess(documentId ?? "", branchId ?? "");
-	const { mutateAsync, isPending } = useCreateBranch(
+	const { mutateAsync, isPending, isSuccess } = useCreateBranch(
 		documentId ?? "",
 		branchId ?? "",
 	);
@@ -78,18 +80,30 @@ const CreateBranchForm = () => {
 			{safety.reason && (
 				<p className="text-sm text-muted-foreground">{safety.reason}</p>
 			)}
-			<DialogContent>
-				<DialogHeader className="gap-3 border-b pb-5 text-left">
+			<DialogContent className="editor-history-create" layout="custom">
+				<DialogHeader className="gap-3 pr-6 text-left">
+					<span aria-hidden="true" className="editor-history-symbol">
+						<GitBranch />
+					</span>
 					<DialogTitle>Create a new branch</DialogTitle>
 					<DialogDescription>
-						Enter a name for the new branch.
+						Start a separate direction from the branch you’re working on.
 					</DialogDescription>
 				</DialogHeader>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
-					className="flex min-h-0 flex-1 flex-col gap-5"
+					className="flex min-h-0 flex-col gap-6"
 				>
 					<DialogBody className="flex flex-col gap-5">
+						{isSuccess && !isPending && !error && (
+							<Alert role="status">
+								<CheckCircle2 aria-hidden="true" />
+								<AlertTitle>Branch created</AlertTitle>
+								<AlertDescription>
+									You can find it in branches.
+								</AlertDescription>
+							</Alert>
+						)}
 						<FieldGroup>
 							<Field data-invalid={!!errors.branchName}>
 								<FieldLabel htmlFor="snapshot-branchName">
@@ -99,17 +113,25 @@ const CreateBranchForm = () => {
 									id="snapshot-branchName"
 									type="text"
 									aria-invalid={!!errors.branchName}
+									aria-describedby="snapshot-branchName-help"
+									autoComplete="off"
+									placeholder="Review edits"
 									{...register("branchName")}
 								/>
+								<FieldDescription id="snapshot-branchName-help">
+									Use a short name that describes this direction, such as
+									“Review edits”.
+								</FieldDescription>
 								{errors.branchName && (
 									<FieldError>{errors.branchName.message}</FieldError>
 								)}
 							</Field>
 						</FieldGroup>
 						{error && (
-							<p role="alert" className="text-sm text-destructive">
-								{error}
-							</p>
+							<Alert variant="destructive">
+								<AlertTitle>Could not create branch</AlertTitle>
+								<AlertDescription>{error}</AlertDescription>
+							</Alert>
 						)}
 					</DialogBody>
 					<DialogFooter className="border-t pt-4">
@@ -129,7 +151,7 @@ const CreateBranchForm = () => {
 									className="animate-spin motion-reduce:animate-none"
 								/>
 							)}
-							{isPending ? "Creating..." : "Create"}
+							{isPending ? "Creating…" : "Create branch"}
 						</Button>
 					</DialogFooter>
 				</form>

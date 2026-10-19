@@ -65,8 +65,12 @@ const Signin = () => {
 			description="Sign in to access your documents and pick up where you left off."
 		>
 			{apiError && <ErrorAlert error={apiError} />}
-			<form onSubmit={handleSubmit(onSubmit)} aria-busy={isPending}>
-				<FieldGroup className="gap-5">
+			<form
+				className="auth-form"
+				onSubmit={handleSubmit(onSubmit)}
+				aria-busy={isPending}
+			>
+				<FieldGroup className="gap-6">
 					<FieldSet disabled={isPending}>
 						<FieldLegend className="sr-only">Sign in details</FieldLegend>
 						<FieldGroup className="gap-4">
@@ -77,7 +81,7 @@ const Signin = () => {
 									type="email"
 									placeholder="you@example.com"
 									autoComplete="email"
-									className="h-11 sm:h-10"
+									className="h-11"
 									aria-invalid={Boolean(errors.email)}
 									aria-describedby={
 										errors.email ? "signin-email-error" : undefined
@@ -104,7 +108,7 @@ const Signin = () => {
 						type="submit"
 						size="lg"
 						disabled={isPending || !isValid}
-						className="w-full"
+						className="h-11 w-full"
 					>
 						{isPending ? (
 							<>

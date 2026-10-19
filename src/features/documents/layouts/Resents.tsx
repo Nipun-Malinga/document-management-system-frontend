@@ -25,7 +25,9 @@ const Resents = () => {
 	const query = useRecentDocuments(params);
 	return (
 		<CollectionPage
+			icon={Clock}
 			title="Recents"
+			resultsTitle="Recently updated"
 			description="Your documents, ordered by their latest update."
 			count={query.data?.totalElements}
 			filters={
@@ -46,12 +48,12 @@ const Resents = () => {
 			}
 		>
 			<CollectionResults
-				fill
 				query={query}
 				label="recent documents"
 				empty={
 					hasCollectionFilters(params) ? undefined : (
 						<CollectionEmpty
+							className="min-h-64 md:p-10"
 							icon={Clock}
 							title="No recent documents yet"
 							description="Create your first document to start building your workspace. Your latest updates will appear here."

@@ -19,8 +19,11 @@ const TrashDocumentTable = () => {
 		useCollectionParams<Omit<DocumentParams, "favorite">>();
 	const query = useTrashedDocuments(params);
 	return (
-		<div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4">
-			<div className="shrink-0 rounded-xl border bg-card p-4">
+		<div className="flex min-w-0 flex-1 flex-col gap-5">
+			<section
+				aria-label="Trashed documents controls"
+				className="min-w-0 shrink-0 rounded-2xl border bg-secondary/40 p-4 @min-[40rem]/collection:p-5"
+			>
 				<CollectionFilters
 					className="my-0"
 					params={params}
@@ -29,14 +32,14 @@ const TrashDocumentTable = () => {
 					sorts={documentSorts}
 					label="trashed documents"
 				/>
-			</div>
+			</section>
 			<CollectionResults
-				fill
 				query={query}
 				label="trashed documents"
 				empty={
 					hasCollectionFilters(params) ? undefined : (
 						<CollectionEmpty
+							className="min-h-64 md:p-10"
 							icon={Trash2}
 							title="No trashed documents"
 							description="Documents you move to Trash appear here. You can restore them or delete them permanently."

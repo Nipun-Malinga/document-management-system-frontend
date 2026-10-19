@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 
 const Main = () => {
 	return (
-		<div>
+		<div className="workspace-page min-h-svh min-w-0 bg-background text-foreground antialiased">
 			<Outlet />
 		</div>
 	);

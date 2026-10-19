@@ -6,6 +6,7 @@ import { useDocument, useDocumentContent } from "@/features/documents/hooks";
 import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
 import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 import EditorContainer from "../components/EditorContainer";
+import { EditorError, EditorLoading } from "../components/EditorFeedback";
 import SoloEditorCore from "../components/SoloEditorCore";
 import { actionError } from "../persistence/actionError";
 import { usePersistenceRegistry } from "../persistence/persistenceRegistry";
@@ -47,11 +48,13 @@ export const SoloEditor = ({
 		}
 	};
 
-	if (access.isPending) return <p>Checking document access...</p>;
+	if (access.isPending)
+		return <EditorLoading message="Checking document access..." />;
 	if (access.isError)
 		return (
-			<div role="alert">
-				<p>{collectionErrorMessage(access.error, "document access")}</p>
+			<EditorError
+				message={collectionErrorMessage(access.error, "document access")}
+			>
 				<Button
 					variant="outline"
 					onClick={() => {
@@ -60,16 +63,15 @@ export const SoloEditor = ({
 				>
 					Retry access check
 				</Button>
-			</div>
+			</EditorError>
 		);
 	if (!access.canRead)
-		return <p role="alert">You do not have access to this document.</p>;
+		return <EditorError message="You do not have access to this document." />;
 
 	if (!(documentId && branchId)) return null;
 	if (!data)
 		return contentQuery.isError ? (
-			<div role="alert">
-				<p>Unable to load saved content. The editor has not been opened.</p>
+			<EditorError message="Unable to load saved content. The editor has not been opened.">
 				<Button
 					variant="outline"
 					onClick={() => {
@@ -78,15 +80,15 @@ export const SoloEditor = ({
 				>
 					Retry loading content
 				</Button>
-			</div>
+			</EditorError>
 		) : (
-			<p>Loading saved content…</p>
+			<EditorLoading message="Loading saved content…" />
 		);
 
 	return (
 		<EditorContainer>
 			{metadata.data?.shared && (
-				<div className="flex flex-col gap-2">
+				<div className="flex shrink-0 flex-col items-start gap-3 border-b bg-secondary/40 px-4 py-4 text-sm sm:px-6">
 					<p>
 						This document is now shared. Open the collaborative editor to
 						continue editing.
@@ -100,7 +102,11 @@ export const SoloEditor = ({
 					>
 						Open collaborative editor
 					</Button>
-					{switchError && <p role="alert">{switchError}</p>}
+					{switchError && (
+						<p role="alert" className="text-destructive">
+							{switchError}
+						</p>
+					)}
 				</div>
 			)}
 			<SoloEditorCore

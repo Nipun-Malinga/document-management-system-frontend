@@ -45,12 +45,12 @@ const DocumentTile = ({
 				disabled && "pointer-events-none",
 			)}
 		>
-			<CardHeader className="gap-3 px-4 pt-4">
+			<CardHeader className="gap-4 px-5 pt-5">
 				<span
 					aria-hidden="true"
-					className="flex size-10 items-center justify-center rounded-lg bg-secondary text-primary"
+					className="flex h-14 w-11 items-center justify-center rounded-md border bg-secondary/50 text-primary"
 				>
-					<FileText className="size-5" strokeWidth={1.5} />
+					<FileText className="size-6" strokeWidth={1.5} />
 				</span>
 				{actions && (
 					<CardAction className="flex items-center gap-0.5">
@@ -62,7 +62,7 @@ const DocumentTile = ({
 						{document.title}
 					</h3>
 				</CardTitle>
-				<CardDescription className="col-span-full text-xs">
+				<CardDescription className="col-span-full">
 					Updated{" "}
 					{validDate ? (
 						<time dateTime={date.toISOString()} title={document.updatedAt}>
@@ -73,7 +73,7 @@ const DocumentTile = ({
 					)}
 				</CardDescription>
 			</CardHeader>
-			<CardContent className="flex flex-wrap gap-2 px-4">
+			<CardContent className="flex flex-wrap gap-2 px-5">
 				<Badge variant="secondary">
 					<VisibilityIcon aria-hidden="true" />
 					{document.status === "PRIVATE" ? "Private" : "Public"}
@@ -86,7 +86,7 @@ const DocumentTile = ({
 				)}
 			</CardContent>
 			{error}
-			<CardFooter className="mt-auto justify-between gap-2 border-t bg-muted/30 px-4 py-2 [.border-t]:pt-2">
+			<CardFooter className="mt-auto justify-between gap-2 border-t px-5 py-2 [.border-t]:pt-2">
 				<span className="flex items-center gap-1.5 text-xs text-muted-foreground">
 					<GitBranch aria-hidden="true" className="size-3.5" />
 					{document.branchCount}{" "}

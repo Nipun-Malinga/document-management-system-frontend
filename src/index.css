@@ -211,14 +211,52 @@
 	@apply rounded-sm text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring;
 }
 
+.auth-form [data-slot="input"] {
+	block-size: 2.75rem;
+	background-color: var(--background);
+}
+
+.auth-form
+	[data-slot="field"][data-orientation="vertical"]
+	> [data-slot="field-label"] {
+	min-block-size: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.auth-form .animate-spin {
+		animation: none;
+	}
+}
+
 .home-preview-panel {
 	/* Collections, searches, and document previews share a stable viewport. */
-	block-size: 37rem;
+	block-size: 31rem;
 	min-block-size: 0;
 	flex: none;
 	overflow: auto;
 	overscroll-behavior: contain;
 	scrollbar-gutter: stable;
+}
+
+.home-container {
+	@apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+}
+
+.home-preview-placeholder {
+	block-size: 41rem;
+}
+
+@media (min-width: 768px) {
+	.home-preview-placeholder {
+		block-size: 37rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.home-page [data-slot="skeleton"],
+	.workspace-page [data-slot="skeleton"] {
+		animation: none;
+	}
 }
 
 @media (prefers-reduced-motion: no-preference) {

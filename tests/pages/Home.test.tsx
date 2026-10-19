@@ -4,8 +4,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "@/pages/Home";
 
-const renderHome = () =>
-	render(
+const renderHome = async () => {
+	const view = render(
 		<MemoryRouter>
 			<Routes>
 				<Route path="/" element={<Home />} />
@@ -14,6 +14,11 @@ const renderHome = () =>
 			</Routes>
 		</MemoryRouter>,
 	);
+	await screen.findByRole("figure", {
+		name: "Interactive FlowDocs workspace preview",
+	});
+	return view;
+};
 
 beforeEach(() => {
 	vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({ matches: false }));
@@ -27,14 +32,14 @@ afterEach(() => {
 describe("home page", () => {
 	it("switches themes and remembers the choice after remounting", async () => {
 		const user = userEvent.setup();
-		const { unmount } = renderHome();
+		const { unmount } = await renderHome();
 		await user.click(
 			screen.getByRole("button", { name: "Switch to dark theme" }),
 		);
 		expect(document.documentElement).toHaveClass("dark");
 		expect(localStorage.getItem("theme")).toBe("dark");
 		unmount();
-		renderHome();
+		await renderHome();
 		await user.click(
 			screen.getByRole("button", { name: "Switch to light theme" }),
 		);
@@ -42,23 +47,23 @@ describe("home page", () => {
 		expect(localStorage.getItem("theme")).toBe("light");
 	});
 
-	it("uses the system theme when no preference has been saved", () => {
+	it("uses the system theme when no preference has been saved", async () => {
 		vi.mocked(window.matchMedia).mockReturnValue({
 			matches: true,
 		} as MediaQueryList);
-		renderHome();
+		await renderHome();
 		expect(document.documentElement).toHaveClass("dark");
 		expect(
 			screen.getByRole("button", { name: "Switch to light theme" }),
 		).toBeVisible();
 	});
 
-	it("honors a saved light preference over the system theme", () => {
+	it("honors a saved light preference over the system theme", async () => {
 		localStorage.setItem("theme", "light");
 		vi.mocked(window.matchMedia).mockReturnValue({
 			matches: true,
 		} as MediaQueryList);
-		renderHome();
+		await renderHome();
 		expect(document.documentElement).not.toHaveClass("dark");
 		expect(
 			screen.getByRole("button", { name: "Switch to dark theme" }),
@@ -67,7 +72,7 @@ describe("home page", () => {
 
 	it("uses the dashboard composition and keeps sample bookmarks when navigating collections", async () => {
 		const user = userEvent.setup();
-		renderHome();
+		await renderHome();
 		const preview = screen.getByRole("figure", {
 			name: "Interactive FlowDocs workspace preview",
 		});
@@ -116,7 +121,7 @@ describe("home page", () => {
 
 	it("supports keyboard navigation through the sample collections", async () => {
 		const user = userEvent.setup();
-		renderHome();
+		await renderHome();
 		const navigation = screen.getByRole("navigation", {
 			name: "Preview workspace navigation",
 		});
@@ -136,7 +141,7 @@ describe("home page", () => {
 
 	it("matches full titles, recovers from an empty search, and shows only documents shared with the sample user", async () => {
 		const user = userEvent.setup();
-		renderHome();
+		await renderHome();
 		const preview = screen.getByRole("figure");
 		const search = within(preview).getByRole("textbox", {
 			name: "Search documents by exact title",
@@ -175,7 +180,7 @@ describe("home page", () => {
 		"routes sample creation via %s to registration",
 		async (name) => {
 			const user = userEvent.setup();
-			renderHome();
+			await renderHome();
 			const preview = screen.getByRole("figure");
 			await user.click(
 				within(preview).getByRole(name === "New document" ? "link" : "button", {
@@ -193,13 +198,13 @@ describe("home page", () => {
 		["Sign in", "Sign in to FlowDocs"],
 	])("navigates from %s to its existing auth route", async (link, heading) => {
 		const user = userEvent.setup();
-		renderHome();
+		await renderHome();
 		await user.click(screen.getByRole("link", { name: link }));
 		expect(screen.getByRole("heading", { name: heading })).toBeVisible();
 	});
 
-	it("uses valid targets for every in-page navigation link", () => {
-		renderHome();
+	it("uses valid targets for every in-page navigation link", async () => {
+		await renderHome();
 		for (const link of screen.getAllByRole("link")) {
 			const href = link.getAttribute("href");
 			if (href?.startsWith("#")) {

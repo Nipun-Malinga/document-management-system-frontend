@@ -27,17 +27,18 @@ const Versions = () => {
 
 	return (
 		<>
-			<DrawerHeader className="shrink-0 gap-2 border-b bg-card px-4 py-5 text-left sm:px-6">
-				<DrawerTitle className="flex items-center gap-2">
-					<History
-						aria-hidden="true"
-						className="size-5 shrink-0 text-primary"
-					/>
-					Versions
-				</DrawerTitle>
-				<DrawerDescription>
-					Browse saved versions and create a snapshot of your current work.
-				</DrawerDescription>
+			<DrawerHeader className="editor-history-header shrink-0 px-4 py-6 text-left sm:px-6">
+				<div className="flex items-start justify-between gap-4">
+					<div className="flex min-w-0 flex-col gap-2">
+						<DrawerTitle>Versions</DrawerTitle>
+						<DrawerDescription>
+							Keep named snapshots of your work and revisit them anytime.
+						</DrawerDescription>
+					</div>
+					<span aria-hidden="true" className="editor-history-symbol">
+						<History />
+					</span>
+				</div>
 			</DrawerHeader>
 			<InfoDrawerBody emptyTitle="Versions" emptyDescription="">
 				<CollectionFilter
@@ -60,12 +61,15 @@ const Versions = () => {
 					empty={
 						<InfoDrawerEmpty
 							emptyTitle="No versions match these filters."
-							emptyDescription=""
+							emptyDescription="Adjust your filters, or save your first version of this document."
 						/>
 					}
 				>
 					{(items) => (
-						<ul className="flex min-w-0 flex-col gap-3">
+						<ul
+							aria-label="Document versions"
+							className="editor-history-list editor-history-versions"
+						>
 							{items.map((version) => (
 								<li key={version.id}>
 									<VersionCard version={version} />
@@ -75,7 +79,7 @@ const Versions = () => {
 					)}
 				</CollectionResults>
 				<CollectionPagination
-					className="mt-auto"
+					className="editor-history-pagination mt-auto"
 					data={query.data}
 					pending={query.isFetching}
 					onPage={setPage}

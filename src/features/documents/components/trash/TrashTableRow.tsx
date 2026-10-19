@@ -50,11 +50,11 @@ const TrashTableRow = ({ trash }: Props) => {
 	const Icon = isBranch ? GitBranch : FileText;
 	return (
 		<tr className="transition-colors hover:bg-muted/40 focus-within:bg-muted/40">
-			<th scope="row" className="px-4 py-4 text-left font-normal">
-				<div className="flex min-w-0 items-start gap-3">
+			<th scope="row" className="px-5 py-5 text-left font-normal">
+				<div className="flex min-w-0 items-center gap-3">
 					<span
 						aria-hidden="true"
-						className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary"
+						className="flex h-12 w-10 shrink-0 items-center justify-center rounded-md border bg-secondary/50 text-primary"
 					>
 						<Icon className="size-4" strokeWidth={1.5} />
 					</span>
@@ -66,10 +66,10 @@ const TrashTableRow = ({ trash }: Props) => {
 					</div>
 				</div>
 			</th>
-			<td className="px-4 py-4 text-xs text-muted-foreground tabular-nums">
+			<td className="px-5 py-5 text-sm text-muted-foreground tabular-nums">
 				<span className="whitespace-nowrap">{trash.addedDate}</span>
 			</td>
-			<td className="px-4 py-4 text-right">
+			<td className="px-5 py-5 text-right">
 				<div className="flex items-center justify-end gap-2">
 					<Alert
 						trigger={

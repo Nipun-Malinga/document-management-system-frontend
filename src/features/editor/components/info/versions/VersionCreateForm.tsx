@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, Plus } from "lucide-react";
+import { CheckCircle2, History, LoaderCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import {
 	Field,
+	FieldDescription,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
@@ -60,7 +62,7 @@ const VersionCreateForm = () => {
 		mode: "onChange",
 	});
 
-	const { mutateAsync, isPending } = useCreateVersion(
+	const { mutateAsync, isPending, isSuccess } = useCreateVersion(
 		documentId ?? "",
 		branchId ?? "",
 	);
@@ -90,18 +92,31 @@ const VersionCreateForm = () => {
 			{safety.reason && (
 				<p className="text-sm text-muted-foreground">{safety.reason}</p>
 			)}
-			<DialogContent>
-				<DialogHeader className="gap-3 border-b pb-5 text-left">
+			<DialogContent className="editor-history-create" layout="custom">
+				<DialogHeader className="gap-3 pr-6 text-left">
+					<span aria-hidden="true" className="editor-history-symbol">
+						<History />
+					</span>
 					<DialogTitle>Create a new version</DialogTitle>
 					<DialogDescription>
-						Give your version a meaningful name and set its visibility.
+						Save a named snapshot of your current branch and choose its
+						visibility.
 					</DialogDescription>
 				</DialogHeader>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
-					className="flex min-h-0 flex-1 flex-col gap-5"
+					className="flex min-h-0 flex-col gap-6"
 				>
 					<DialogBody className="flex flex-col gap-5">
+						{isSuccess && !isPending && !error && (
+							<Alert role="status">
+								<CheckCircle2 aria-hidden="true" />
+								<AlertTitle>Version created</AlertTitle>
+								<AlertDescription>
+									You can find it in versions.
+								</AlertDescription>
+							</Alert>
+						)}
 						<FieldGroup>
 							<Field data-invalid={!!errors.title}>
 								<FieldLabel htmlFor="snapshot-title">Version name</FieldLabel>
@@ -109,8 +124,15 @@ const VersionCreateForm = () => {
 									id="snapshot-title"
 									type="text"
 									aria-invalid={!!errors.title}
+									aria-describedby="snapshot-title-help"
+									autoComplete="off"
+									placeholder="Ready for review"
 									{...register("title")}
 								/>
+								<FieldDescription id="snapshot-title-help">
+									Use a name you can recognize later, such as “Ready for
+									review”.
+								</FieldDescription>
 								{errors.title && (
 									<FieldError>{errors.title.message}</FieldError>
 								)}
@@ -145,9 +167,10 @@ const VersionCreateForm = () => {
 							</Field>
 						</FieldGroup>
 						{error && (
-							<p role="alert" className="text-sm text-destructive">
-								{error}
-							</p>
+							<Alert variant="destructive">
+								<AlertTitle>Could not create version</AlertTitle>
+								<AlertDescription>{error}</AlertDescription>
+							</Alert>
 						)}
 					</DialogBody>
 					<DialogFooter className="border-t pt-4">
@@ -167,7 +190,7 @@ const VersionCreateForm = () => {
 									className="animate-spin motion-reduce:animate-none"
 								/>
 							)}
-							{isPending ? "Creating..." : "Create"}
+							{isPending ? "Creating…" : "Create version"}
 						</Button>
 					</DialogFooter>
 				</form>

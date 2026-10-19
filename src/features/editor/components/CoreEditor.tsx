@@ -42,18 +42,21 @@ const CoreEditor = ({
 					</div>
 				)}
 
-				<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain [scrollbar-gutter:stable]">
-					<div className="mx-auto w-full max-w-4xl px-3 py-5 sm:px-6 sm:py-8 lg:py-10">
-						<div className="rounded-xl border border-border bg-card text-card-foreground">
+				<main
+					aria-label="Document canvas"
+					className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-muted/40 [scrollbar-gutter:stable]"
+				>
+					<div className="mx-auto w-full max-w-4xl px-3 py-5 sm:px-6 sm:py-8 lg:py-12">
+						<div className="editor-sheet rounded-lg border bg-card text-card-foreground">
 							<EditorContent
 								editor={editor}
 								role="textbox"
 								aria-label="Document editor"
-								className="editor-document px-5 py-8 sm:px-10 sm:py-12 lg:px-16 lg:py-16"
+								className="editor-document px-5 py-8 sm:px-12 sm:py-14 lg:px-20 lg:py-20"
 							/>
 						</div>
 					</div>
-				</div>
+				</main>
 			</div>
 		</EditorContext.Provider>
 	);

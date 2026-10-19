@@ -4,17 +4,20 @@ import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
 import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 import CollaborativeEditorCore from "../components/CollaborativeEditorCore";
 import EditorContainer from "../components/EditorContainer";
+import { EditorError, EditorLoading } from "../components/EditorFeedback";
 
 const CollaborativeEditor = () => {
 	const { documentId, branchId } = useParams();
 
 	const access = useDocumentAccess(documentId ?? "", branchId ?? "");
 
-	if (access.isPending) return <p>Checking document access...</p>;
+	if (access.isPending)
+		return <EditorLoading message="Checking document access..." />;
 	if (access.isError)
 		return (
-			<div role="alert">
-				<p>{collectionErrorMessage(access.error, "document access")}</p>
+			<EditorError
+				message={collectionErrorMessage(access.error, "document access")}
+			>
 				<Button
 					variant="outline"
 					onClick={() => {
@@ -23,10 +26,10 @@ const CollaborativeEditor = () => {
 				>
 					Retry access check
 				</Button>
-			</div>
+			</EditorError>
 		);
 	if (!access.canRead)
-		return <p role="alert">You do not have access to this document.</p>;
+		return <EditorError message="You do not have access to this document." />;
 	if (!(documentId && branchId)) return null;
 
 	return (

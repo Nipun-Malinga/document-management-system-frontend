@@ -56,7 +56,6 @@ const MainView = () => {
 				label="documents"
 			/>
 			<CollectionResults
-				fill
 				query={query}
 				label="documents"
 				empty={
@@ -66,12 +65,12 @@ const MainView = () => {
 							value !== undefined &&
 							value !== "",
 					) ? undefined : (
-						<Empty className="min-h-0 rounded-xl border p-4 md:p-4">
+						<Empty className="min-h-64 rounded-xl border bg-card p-6 md:p-10">
 							<EmptyHeader>
 								<EmptyMedia variant="icon">
-									<FolderOpen />
+									<FolderOpen aria-hidden="true" />
 								</EmptyMedia>
-								<EmptyTitle>No Documents Yet</EmptyTitle>
+								<EmptyTitle>No documents yet</EmptyTitle>
 								<EmptyDescription>
 									Choose a template above to create your first document. Your
 									work will appear here.

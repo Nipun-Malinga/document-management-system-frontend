@@ -1,4 +1,11 @@
-import { ArrowRight, Eye, GitBranch, LoaderCircle, Trash2 } from "lucide-react";
+import {
+	ArrowRight,
+	Check,
+	Eye,
+	GitBranch,
+	LoaderCircle,
+	Trash2,
+} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert } from "@/components";
 import { Badge } from "@/components/ui/badge";
@@ -38,43 +45,46 @@ const BranchCard = ({ branch }: Props) => {
 		<Card
 			aria-current={isCurrentBranch ? "true" : undefined}
 			className={cn(
-				"min-w-0 gap-3 overflow-hidden py-0 shadow-none transition-colors hover:border-primary/50 focus-within:border-primary/50",
-				isCurrentBranch && "border-primary/50",
+				"editor-history-entry min-w-0 gap-3 py-4 shadow-none",
+				isCurrentBranch && "editor-history-entry-current",
 			)}
 		>
-			<CardHeader className="px-4 pt-4">
+			<CardHeader className="px-4">
 				<div className="flex min-w-0 items-start gap-3">
-					<span
-						aria-hidden="true"
-						className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary"
-					>
+					<span aria-hidden="true" className="editor-history-marker">
 						<GitBranch className="size-4" />
 					</span>
 					<div className="flex min-w-0 flex-1 flex-col gap-2">
 						<CardTitle>
-							<h3 className="wrap-anywhere text-base leading-6">
+							<h3 className="wrap-anywhere text-sm leading-6">
 								{branch.branchName}
 							</h3>
 						</CardTitle>
 						{(isMainBranch || isCurrentBranch) && (
 							<div className="flex flex-wrap items-center gap-2">
-								{isCurrentBranch && <Badge>Active</Badge>}
-								{isMainBranch && <Badge variant="secondary">Main</Badge>}
+								{isCurrentBranch && (
+									<Badge>
+										<Check aria-hidden="true" />
+										Current branch
+									</Badge>
+								)}
+								{isMainBranch && <Badge variant="outline">Main</Badge>}
 							</div>
 						)}
 					</div>
 				</div>
 			</CardHeader>
-			<CardContent className="px-4 pb-1">
+			<CardContent className="pl-16 pr-4">
 				<p className="wrap-anywhere text-xs leading-relaxed text-muted-foreground tabular-nums">
 					Created {branch.createdAt}
 				</p>
 			</CardContent>
-			<CardFooter className="flex-wrap items-start gap-2 border-t bg-muted/30 px-4 py-3 [.border-t]:pt-3">
+			<CardFooter className="editor-history-actions flex-wrap items-start gap-2 pl-16 pr-4">
 				<Button
-					variant="ghost"
+					variant="outline"
 					size="sm"
-					className="flex-1"
+					aria-label={`Preview branch ${branch.branchName}`}
+					className="grow basis-24"
 					onClick={() =>
 						navigate(`/document/${branch.documentId}/branch/${branch.id}/view`)
 					}
@@ -85,7 +95,7 @@ const BranchCard = ({ branch }: Props) => {
 				{!isCurrentBranch && (
 					<Button
 						size="sm"
-						className="flex-1"
+						className="grow basis-24"
 						onClick={() =>
 							navigate(
 								`/document/${branch.documentId}/branch/${branch.id}/edit`,
@@ -118,7 +128,7 @@ const BranchCard = ({ branch }: Props) => {
 								)}
 							</Button>
 						}
-						title="Delete Branch?"
+						title="Delete branch?"
 						description="Move this branch to Trash. You can restore it later."
 						action="Delete"
 						onClick={async () => {

@@ -9,8 +9,9 @@ const AutoSaver = () => {
 	const state = useSaveState(coordinator);
 	if (!coordinator) return null;
 	return (
-		<div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+		<div className="flex flex-wrap items-center gap-2 text-xs leading-relaxed text-muted-foreground">
 			<span
+				role="status"
 				className={state.status === "error" ? "text-destructive" : undefined}
 			>
 				{state.replacementPending

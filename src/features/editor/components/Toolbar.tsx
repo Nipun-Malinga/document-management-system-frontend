@@ -22,6 +22,7 @@ import {
 	Unlink,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import ToolButton from "./ToolButton";
 
@@ -102,13 +103,16 @@ const Toolbar = ({
 				disabled={disabled}
 				aria-label="Document formatting"
 				className={cn(
-					"flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2 sm:px-6",
+					"mx-auto flex max-w-screen-2xl min-w-0 flex-wrap items-center gap-x-1 gap-y-2 px-3 py-2.5 sm:px-6 lg:px-8",
 					disabled && "opacity-50",
 				)}
 			>
 				{/* History */}
 				{onUndo && onRedo && (
-					<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
+					<fieldset
+						aria-label="History"
+						className="flex shrink-0 items-center gap-0.5"
+					>
 						<ToolButton
 							label="Undo"
 							icon={Undo2}
@@ -121,14 +125,15 @@ const Toolbar = ({
 							onClick={onRedo}
 							disabled={!canRedo}
 						/>
-					</div>
+						<Separator orientation="vertical" className="mx-1 h-6" />
+					</fieldset>
 				)}
 
 				{/* Headings (space reserved to avoid jump) */}
-				<div className="flex w-36 shrink-0 border-r border-border pr-3">
+				<div className="flex shrink-0 items-center gap-1">
 					<select
 						aria-label="Text style"
-						className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed"
+						className="h-9 w-32 rounded-md border border-input bg-background px-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed"
 						value={
 							editor.isActive("heading", { level: 1 })
 								? "1"
@@ -156,10 +161,14 @@ const Toolbar = ({
 						<option value="2">Heading 2</option>
 						<option value="3">Heading 3</option>
 					</select>
+					<Separator orientation="vertical" className="mx-1 h-6" />
 				</div>
 
 				{/* Text formatting */}
-				<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
+				<fieldset
+					aria-label="Text formatting"
+					className="flex shrink-0 items-center gap-0.5"
+				>
 					<ToolButton
 						label="Bold"
 						icon={Bold}
@@ -190,10 +199,14 @@ const Toolbar = ({
 						active={editorState.code}
 						onClick={() => editor.chain().focus().toggleCode().run()}
 					/>
-				</div>
+					<Separator orientation="vertical" className="mx-1 h-6" />
+				</fieldset>
 
 				{/* Colors */}
-				<div className="relative flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
+				<fieldset
+					aria-label="Text and highlight colors"
+					className="relative ml-auto flex shrink-0 items-center gap-0.5 sm:ml-0"
+				>
 					<ToolButton
 						label="Text color"
 						icon={Baseline}
@@ -203,14 +216,14 @@ const Toolbar = ({
 						}}
 					/>
 					{showHighlightPicker && (
-						<div className="absolute left-0 top-full z-30 mt-2 grid w-36 grid-cols-4 gap-2 rounded-lg bg-popover p-3 text-popover-foreground shadow-lg outline outline-border">
+						<div className="absolute right-0 top-full z-30 mt-2 grid w-48 grid-cols-4 gap-2 rounded-xl border bg-popover p-3 text-popover-foreground">
 							{COLORS.map((c) => (
 								<button
 									type="button"
 									key={c}
 									aria-label={`Apply ${c}`}
 									title={`Apply ${c}`}
-									className="size-7 rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-popover"
+									className="size-8 rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-popover"
 									style={{ backgroundColor: c }}
 									onClick={() => {
 										editor.chain().focus().setColor(c).run();
@@ -230,14 +243,14 @@ const Toolbar = ({
 						}}
 					/>
 					{showColorPicker && (
-						<div className="absolute left-0 top-full z-30 mt-2 grid w-36 grid-cols-4 gap-2 rounded-lg bg-popover p-3 text-popover-foreground shadow-lg outline outline-border">
+						<div className="absolute right-0 top-full z-30 mt-2 grid w-48 grid-cols-4 gap-2 rounded-xl border bg-popover p-3 text-popover-foreground">
 							{COLORS.map((c) => (
 								<button
 									type="button"
 									key={c}
 									aria-label={`Apply ${c}`}
 									title={`Apply ${c}`}
-									className="size-7 rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-popover"
+									className="size-8 rounded-md border border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-popover"
 									style={{ backgroundColor: c }}
 									onClick={() => {
 										editor.chain().focus().setBackgroundColor(c).run();
@@ -253,10 +266,14 @@ const Toolbar = ({
 						icon={RemoveFormatting}
 						onClick={() => editor.chain().focus().unsetAllMarks().run()}
 					/>
-				</div>
+					<Separator orientation="vertical" className="mx-1 h-6" />
+				</fieldset>
 
 				{/* Lists */}
-				<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
+				<fieldset
+					aria-label="Lists"
+					className="flex shrink-0 items-center gap-0.5"
+				>
 					<ToolButton
 						label="Bullet list"
 						icon={List}
@@ -269,10 +286,14 @@ const Toolbar = ({
 						active={editorState.ordered}
 						onClick={() => editor.chain().focus().toggleOrderedList().run()}
 					/>
-				</div>
+					<Separator orientation="vertical" className="mx-1 h-6" />
+				</fieldset>
 
 				{/* Links & images */}
-				<div className="flex shrink-0 items-center gap-0.5 border-r border-border pr-3">
+				<fieldset
+					aria-label="Links and media"
+					className="flex shrink-0 items-center gap-0.5"
+				>
 					<ToolButton label="Insert link" icon={Link} onClick={setLink} />
 					<ToolButton
 						label="Remove link"
@@ -284,10 +305,14 @@ const Toolbar = ({
 						icon={ImagePlus}
 						onClick={addImage}
 					/>
-				</div>
+					<Separator orientation="vertical" className="mx-1 h-6" />
+				</fieldset>
 
 				{/* Alignment */}
-				<div className="flex shrink-0 items-center gap-0.5">
+				<fieldset
+					aria-label="Text alignment"
+					className="flex shrink-0 items-center gap-0.5"
+				>
 					<ToolButton
 						label="Align left"
 						icon={AlignLeft}
@@ -312,7 +337,7 @@ const Toolbar = ({
 						active={editorState.justify}
 						onClick={() => editor.chain().focus().setTextAlign("justify").run()}
 					/>
-				</div>
+				</fieldset>
 			</fieldset>
 		</div>
 	);

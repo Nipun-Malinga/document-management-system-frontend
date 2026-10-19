@@ -8,7 +8,7 @@ const Dashboard = () => {
 	const sidebarInfo = useSidebarData();
 
 	return (
-		<main className="workspace-page grid h-svh grid-cols-[minmax(0,1fr)] overflow-hidden bg-background text-foreground md:grid-cols-[15rem_minmax(0,1fr)]">
+		<div className="workspace-page grid h-svh grid-cols-[minmax(0,1fr)] overflow-hidden bg-background text-foreground antialiased md:grid-cols-[14rem_minmax(0,1fr)] lg:grid-cols-[15.5rem_minmax(0,1fr)]">
 			<a
 				href="#workspace-content"
 				className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-card focus:p-4"
@@ -18,22 +18,22 @@ const Dashboard = () => {
 			<SideBar sidebarLink={sidebarData(sidebarInfo)} />
 
 			<div className="relative flex min-w-0 flex-col overflow-hidden">
-				<header className="shrink-0 border-b bg-card px-4 py-3 sm:px-6 lg:px-8">
+				<header className="shrink-0 border-b bg-card px-4 py-3 sm:px-6 lg:px-10">
 					<TopBar />
 				</header>
 
-				<div
+				<main
 					id="workspace-content"
 					tabIndex={-1}
-					className="flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable] px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
+					className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain [scrollbar-gutter:stable] px-4 py-6 outline-none sm:px-6 lg:px-10 lg:py-10"
 				>
 					<ProfilePopup />
 					<div className="mx-auto flex w-full min-h-0 min-w-0 max-w-7xl flex-1 flex-col">
 						<Outlet />
 					</div>
-				</div>
+				</main>
 			</div>
-		</main>
+		</div>
 	);
 };
 

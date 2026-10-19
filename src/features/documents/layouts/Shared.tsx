@@ -23,7 +23,9 @@ const Shared = () => {
 
 	return (
 		<CollectionPage
+			icon={Users}
 			title="Shared With Me"
+			resultsTitle="Shared documents"
 			description="Documents shared with you. Find the right work by title, visibility, or your permission."
 			count={query.data?.totalElements}
 			filters={
@@ -42,12 +44,12 @@ const Shared = () => {
 			}
 		>
 			<CollectionResults
-				fill
 				query={query}
 				label="shared documents"
 				empty={
 					hasCollectionFilters(params) ? undefined : (
 						<CollectionEmpty
+							className="min-h-64 md:p-10"
 							icon={Users}
 							title="Nothing shared with you yet"
 							description="When someone gives you access to a document, it will appear here."

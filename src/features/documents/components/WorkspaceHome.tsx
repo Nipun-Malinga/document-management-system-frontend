@@ -1,6 +1,8 @@
 import { Plus } from "lucide-react";
 import { type ReactNode, useId } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -28,16 +30,16 @@ const WorkspaceHome = ({
 		<div
 			className={cn(
 				"@container/workspace flex min-w-0 flex-col",
-				preview ? "gap-6" : "min-h-0 flex-1 gap-4",
+				preview ? "gap-6" : "min-h-0 flex-1 gap-8",
 			)}
 		>
-			<div className="flex shrink-0 flex-wrap items-start justify-between gap-4">
+			<div className="flex shrink-0 flex-wrap items-center justify-between gap-5">
 				<div className="flex min-w-0 flex-col gap-2">
-					<Heading className="text-2xl font-semibold tracking-tight @min-[40rem]/workspace:text-3xl">
+					<Heading className="text-3xl font-semibold tracking-tight text-balance @min-[40rem]/workspace:text-4xl">
 						{title}
 					</Heading>
 					<p className="max-w-prose text-sm leading-relaxed text-muted-foreground">
-						A place for your work. Room for your next idea.
+						Pick up where you left off, or start with a fresh page.
 					</p>
 				</div>
 				{createAction ?? (
@@ -54,14 +56,17 @@ const WorkspaceHome = ({
 					id={templateId}
 					tabIndex={-1}
 					aria-labelledby={`${id}-templates-title`}
-					className="min-w-0 shrink-0 scroll-mt-6 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					className="min-w-0 shrink-0 scroll-mt-6 rounded-2xl border bg-secondary/40 p-4 outline-none focus-visible:ring-2 focus-visible:ring-ring @min-[40rem]/workspace:p-5"
 				>
-					<div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-						<h2 id={`${id}-templates-title`} className="text-sm font-semibold">
+					<div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+						<h2
+							id={`${id}-templates-title`}
+							className="text-base font-semibold"
+						>
 							Start something new
 						</h2>
 						<p className="text-xs text-muted-foreground">
-							Choose a template to get started
+							Make a template your own
 						</p>
 					</div>
 					{templates}
@@ -69,24 +74,22 @@ const WorkspaceHome = ({
 			)}
 			<section
 				aria-labelledby={`${id}-documents-title`}
-				className={cn(
-					"flex min-w-0 flex-col gap-3 border-t pt-4",
-					!preview && "min-h-0 flex-1",
-				)}
+				className={cn("flex min-w-0 flex-col gap-5", !preview && "flex-1")}
 			>
-				<div className="flex shrink-0 items-baseline gap-3">
+				<div className="flex shrink-0 items-center gap-3">
 					<h2
 						id={`${id}-documents-title`}
-						className="text-lg font-semibold tracking-tight"
+						className="shrink-0 text-lg font-semibold tracking-tight"
 					>
 						All documents
 					</h2>
 					{resultCount !== undefined && (
-						<span className="text-sm text-muted-foreground tabular-nums">
+						<Badge variant="secondary" className="tabular-nums">
 							{resultCount}
 							<span className="sr-only"> documents</span>
-						</span>
+						</Badge>
 					)}
+					<Separator className="min-w-0 flex-1" />
 				</div>
 				{children}
 			</section>
