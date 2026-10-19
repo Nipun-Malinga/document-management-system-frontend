@@ -180,6 +180,9 @@ class APIService<T, K = T> {
 	public put(data?: T, config?: AxiosRequestConfig) {
 		return this.request("put", data, config);
 	}
+	public patch(data?: T, config?: AxiosRequestConfig) {
+		return this.request("patch", data, config);
+	}
 	public delete(config?: AxiosRequestConfig) {
 		return this.request("delete", undefined, config);
 	}

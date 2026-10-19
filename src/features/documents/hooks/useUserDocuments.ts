@@ -2,12 +2,12 @@ import type { DocumentParams } from "@/features/documents/types/CollectionParams
 import type { Document } from "@/features/documents/types/Document";
 import useCollectionQuery from "@/shared/hooks/useCollectionQuery";
 
-const useUserDocuments = (params: DocumentParams = {}) =>
+const useUserDocuments = (params: DocumentParams = {}, enabled = true) =>
 	useCollectionQuery<Document, DocumentParams>(
 		`/documents`,
 		["documents-own"],
 		params,
-		{ staleTime: 60000, refetchInterval: 600000 },
+		{ staleTime: 60000, refetchInterval: 600000, enabled },
 	);
 
 export default useUserDocuments;

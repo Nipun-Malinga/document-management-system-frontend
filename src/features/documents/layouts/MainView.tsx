@@ -1,4 +1,5 @@
 import { FolderOpen } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import {
 	Empty,
 	EmptyDescription,
@@ -7,6 +8,10 @@ import {
 	EmptyTitle,
 } from "@/components/ui/empty";
 import { useUserDocuments } from "@/features/documents/hooks";
+import {
+	useFolderDocuments,
+	useFolders,
+} from "@/features/documents/hooks/useFolders";
 import type { DocumentParams } from "@/features/documents/types/CollectionParams";
 import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import CollectionFilter from "../components/collections/CollectionFilter";
@@ -19,16 +24,41 @@ import {
 import DocumentCard from "../components/DocumentCard";
 import DocumentGrid from "../components/DocumentGrid";
 import DocumentSearch from "../components/DocumentSearch";
+import FolderBrowser from "../components/folders/FolderBrowser";
 import Templates from "../components/Templates";
 import WorkspaceHome from "../components/WorkspaceHome";
 
 const MainView = () => {
-	const { params, update, setPage } = useCollectionParams<DocumentParams>();
-	const query = useUserDocuments(params);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const folderId = searchParams.get("folder");
+	const { params, update, setPage } = useCollectionParams<DocumentParams>(
+		folderId ?? "all",
+	);
+	const allDocuments = useUserDocuments(params, !folderId);
+	const folderDocuments = useFolderDocuments(folderId, params);
+	const folders = useFolders();
+	const currentFolder = folders.data?.find((folder) => folder.id === folderId);
+	const query = folderId ? folderDocuments : allDocuments;
 
 	return (
 		<WorkspaceHome
 			templates={<Templates />}
+			folders={
+				<FolderBrowser
+					folderId={folderId}
+					onNavigate={(id) => {
+						const next = new URLSearchParams(searchParams);
+						if (id) next.set("folder", id);
+						else next.delete("folder");
+						setSearchParams(next);
+					}}
+				/>
+			}
+			documentsTitle={
+				folderId
+					? `Documents in ${currentFolder?.name ?? "folder"}`
+					: "All documents"
+			}
 			resultCount={query.data?.totalElements}
 		>
 			<CollectionFilter
@@ -70,10 +100,15 @@ const MainView = () => {
 								<EmptyMedia variant="icon">
 									<FolderOpen aria-hidden="true" />
 								</EmptyMedia>
-								<EmptyTitle>No documents yet</EmptyTitle>
+								<EmptyTitle>
+									{folderId
+										? "No documents in this folder"
+										: "No documents yet"}
+								</EmptyTitle>
 								<EmptyDescription>
-									Choose a template above to create your first document. Your
-									work will appear here.
+									{folderId
+										? "Move documents here from All documents using their folder actions."
+										: "Choose a template above to create your first document. Your work will appear here."}
 								</EmptyDescription>
 							</EmptyHeader>
 						</Empty>
@@ -83,7 +118,11 @@ const MainView = () => {
 				{(items) => (
 					<DocumentGrid>
 						{items.map((document) => (
-							<DocumentCard document={document} key={document.id} />
+							<DocumentCard
+								document={document}
+								key={document.id}
+								folderId={folderId}
+							/>
 						))}
 					</DocumentGrid>
 				)}

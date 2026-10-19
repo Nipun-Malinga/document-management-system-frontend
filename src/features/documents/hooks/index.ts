@@ -6,6 +6,7 @@ export { default as useDeleteBranch } from "./useDeleteBranch";
 export { default as useDeleteDocument } from "./useDeleteDocument";
 export { default as useDocument } from "./useDocument";
 export { default as useDocumentContent } from "./useDocumentContent";
+export { useFolderDocuments, useFolderMutation, useFolders } from "./useFolders";
 export { default as useGetTemplates } from "./useGetTemplates";
 export { default as useMergeVersion } from "./useMergeVersion";
 export { default as useRestoreBranch } from "./useRestoreBranch";

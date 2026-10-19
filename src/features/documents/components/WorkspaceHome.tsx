@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 
 interface Props {
 	templates: ReactNode;
+	folders?: ReactNode;
+	documentsTitle?: string;
 	children: ReactNode;
 	preview?: boolean;
 	createAction?: ReactNode;
@@ -17,6 +19,8 @@ interface Props {
 /** The landing preview and the authenticated home use the same composition. */
 const WorkspaceHome = ({
 	templates,
+	folders,
+	documentsTitle = "All documents",
 	children,
 	preview = false,
 	createAction,
@@ -72,6 +76,7 @@ const WorkspaceHome = ({
 					{templates}
 				</section>
 			)}
+			{folders}
 			<section
 				aria-labelledby={`${id}-documents-title`}
 				className={cn("flex min-w-0 flex-col gap-5", !preview && "flex-1")}
@@ -81,7 +86,7 @@ const WorkspaceHome = ({
 						id={`${id}-documents-title`}
 						className="shrink-0 text-lg font-semibold tracking-tight"
 					>
-						All documents
+						{documentsTitle}
 					</h2>
 					{resultCount !== undefined && (
 						<Badge variant="secondary" className="tabular-nums">

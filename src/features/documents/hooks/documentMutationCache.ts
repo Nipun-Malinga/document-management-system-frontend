@@ -23,6 +23,7 @@ export const mutationQueryKeys = (
 	documentId: string,
 ): readonly unknown[][] => {
 	const keys: unknown[][] = [
+		["folder-documents"],
 		["documents-own"],
 		["shared-with"],
 		["document", documentId],

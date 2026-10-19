@@ -9,12 +9,14 @@ import type { Document } from "@/features/documents/types/Document";
 import { actionError } from "@/features/editor/persistence/actionError";
 import useDocumentBranch from "@/features/editor/stores/useDocumentBranch";
 import DocumentTile from "./DocumentTile";
+import DocumentFolderAction from "./folders/DocumentFolderAction";
 
 interface Props {
 	document: Document;
+	folderId?: string | null;
 }
 
-const DocumentCard = ({ document }: Props) => {
+const DocumentCard = ({ document, folderId }: Props) => {
 	const user = useUser();
 	const isOwner = document.ownerId === user?.id;
 	const { setDocumentId, collapsed, toggleDocumentInfoPopup, setShared } =
@@ -33,6 +35,9 @@ const DocumentCard = ({ document }: Props) => {
 			disabled={!collapsed}
 			actions={
 				<>
+					{isOwner && folderId !== undefined && (
+						<DocumentFolderAction document={document} folderId={folderId} />
+					)}
 					{isOwner && (
 						<Toggle
 							aria-label="Toggle bookmark"
