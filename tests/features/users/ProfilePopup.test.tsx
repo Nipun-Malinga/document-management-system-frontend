@@ -8,9 +8,12 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, expect, it, vi } from "vitest";
+import {
+	getSession,
+	replaceAccessToken,
+} from "@/features/auth/stores/sessionStore";
 import ProfilePopup from "@/features/users/components/ProfilePopup";
-import { getSession, replaceAccessToken } from "@/states/sessionStore";
-import useUserProfilePopup from "@/states/useUserProfilePopup";
+import useUserProfilePopup from "@/features/users/stores/useUserProfilePopup";
 import { tokenFor } from "../../fixtures";
 
 afterEach(() => {

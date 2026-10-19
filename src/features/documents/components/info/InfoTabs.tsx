@@ -1,7 +1,7 @@
 import { Info, Pencil, Users } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useUser } from "@/hooks/user";
-import type { Document } from "@/models/Document";
+import { useUser } from "@/features/auth/hooks";
+import type { Document } from "@/features/documents/types/Document";
 import { CollaboratorTabs } from "../collaborators";
 import InfoBase from "./InfoBase";
 import InfoEditor from "./InfoEditor";

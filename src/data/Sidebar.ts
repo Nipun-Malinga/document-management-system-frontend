@@ -1,6 +1,6 @@
 import { LuClock, LuFiles, LuHouse, LuTrash, LuUsers } from "react-icons/lu";
-import type { SidebarLink } from "@/models/Link";
-import type { SidebarData } from "@/models/SidebarData";
+import type { SidebarData } from "@/features/workspace/types/SidebarData";
+import type { SidebarLink } from "@/features/workspace/types/SidebarLink";
 
 export const sidebarData = (data: SidebarData): SidebarLink[] => {
 	return [

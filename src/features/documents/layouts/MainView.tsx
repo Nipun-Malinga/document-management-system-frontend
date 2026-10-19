@@ -6,9 +6,9 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
-import { useUserDocuments } from "@/hooks/document";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { DocumentParams } from "@/models/PageResponse";
+import { useUserDocuments } from "@/features/documents/hooks";
+import type { DocumentParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import CollectionFilter from "../components/collections/CollectionFilter";
 import CollectionPagination from "../components/collections/CollectionPagination";
 import CollectionResults from "../components/collections/CollectionResults";

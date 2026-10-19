@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { PageParams } from "@/models/PageResponse";
+import type { PageParams } from "@/shared/types/PageResponse";
 import CollectionFilterPanel from "./CollectionFilterPanel";
 import CollectionFilters, {
 	type CollectionFiltersProps,

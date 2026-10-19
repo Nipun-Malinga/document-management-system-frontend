@@ -16,6 +16,7 @@ import {
 import type { ReactNode } from "react";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { replaceAccessToken } from "@/features/auth/stores/sessionStore";
 import BranchSwitch from "@/features/documents/components/BranchSwitch";
 import Collaborators from "@/features/documents/components/collaborators/Collaborators";
 import CollectionFilters from "@/features/documents/components/collections/CollectionFilters";
@@ -26,13 +27,12 @@ import TrashDocumentTable from "@/features/documents/components/trash/TrashDocum
 import MainView from "@/features/documents/layouts/MainView";
 import Quick from "@/features/documents/layouts/Quick";
 import Shared from "@/features/documents/layouts/Shared";
+import type { DocumentParams } from "@/features/documents/types/CollectionParams";
 import Branches from "@/features/editor/components/info/branches/Branches";
 import Versions from "@/features/editor/components/info/versions/Versions";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { DocumentParams } from "@/models/PageResponse";
+import useEditorTemplate from "@/features/editor/stores/useEditorTemplate";
 import { axiosInstance } from "@/services/apiService";
-import { replaceAccessToken } from "@/states/sessionStore";
-import useEditorTemplate from "@/states/useEditorTemplate";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import { requireValue } from "../../assertions";
 import { document, tokenFor } from "../../fixtures";
 import { pageOf } from "../../pages";

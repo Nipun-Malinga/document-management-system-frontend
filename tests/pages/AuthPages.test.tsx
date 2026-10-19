@@ -15,7 +15,7 @@ const auth = vi.hoisted(() => ({
 	pending: false,
 }));
 
-vi.mock("@/hooks/user", () => ({
+vi.mock("@/features/auth/hooks", () => ({
 	useUser: () => null,
 	useSignIn: () => ({ mutate: auth.signIn, isPending: auth.pending }),
 	useRegistration: () => ({

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
 import DocumentTileGrid from "./DocumentTileGrid";
 
 interface Props {

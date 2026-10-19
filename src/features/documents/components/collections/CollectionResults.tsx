@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import type { PageResponse } from "@/models/PageResponse";
-import { collectionErrorMessage } from "@/utils/collectionUtils";
+import type { PageResponse } from "@/shared/types/PageResponse";
+import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 
 export interface CollectionQuery<T> {
 	data?: PageResponse<T>;

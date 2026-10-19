@@ -3,7 +3,7 @@ import {
 	assertSession,
 	getSession,
 	useSessionStore,
-} from "@/states/sessionStore";
+} from "@/features/auth/stores/sessionStore";
 import { ensureAccessToken } from "./apiService";
 
 interface Listener {

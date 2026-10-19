@@ -1,4 +1,4 @@
-import { assertSession } from "@/states/sessionStore";
+import { assertSession } from "@/features/auth/stores/sessionStore";
 
 export interface SaveState {
 	revision: number;

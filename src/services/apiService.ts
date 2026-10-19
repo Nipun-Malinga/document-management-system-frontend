@@ -2,7 +2,7 @@ import axios, {
 	type AxiosRequestConfig,
 	type InternalAxiosRequestConfig,
 } from "axios";
-import type { ProblemDetail } from "@/models/ProblemDetail";
+import type { SignInResponse } from "@/features/auth/schemas/SignIn";
 import {
 	assertSession,
 	commitRefresh,
@@ -10,8 +10,8 @@ import {
 	getSession,
 	getSessionSignal,
 	markRecovering,
-} from "@/states/sessionStore";
-import type { SignInResponse } from "@/types/SignIn";
+} from "@/features/auth/stores/sessionStore";
+import type { ProblemDetail } from "@/shared/types/ProblemDetail";
 
 // Metadata follows the original request through its single authorized retry.
 declare module "axios" {

@@ -10,8 +10,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import type { Document } from "@/features/documents/types/Document";
 import { cn } from "@/lib/utils";
-import type { Document } from "@/models/Document";
 
 interface Props {
 	document: Document;

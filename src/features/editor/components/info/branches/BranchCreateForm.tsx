@@ -22,10 +22,13 @@ import {
 	FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import useCreateBranch from "@/hooks/document/useCreateBranch";
-import useDocumentAccess from "@/hooks/document/useDocumentAccess";
-import { createBranchSchema, type TCreateBranchSchema } from "@/types/Branch";
-import { applyFormError } from "@/utils/formErrors";
+import useCreateBranch from "@/features/documents/hooks/useCreateBranch";
+import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
+import {
+	createBranchSchema,
+	type TCreateBranchSchema,
+} from "@/features/documents/schemas/Branch";
+import { applyFormError } from "@/shared/utils/formErrors";
 import useSoloActionState from "../../../persistence/useSoloActionState";
 
 const CreateBranchForm = () => {

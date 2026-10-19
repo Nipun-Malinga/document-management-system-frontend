@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import type { PageResponse } from "@/models/PageResponse";
+import type { PageResponse } from "@/shared/types/PageResponse";
 
 interface Props {
 	data?: Pick<

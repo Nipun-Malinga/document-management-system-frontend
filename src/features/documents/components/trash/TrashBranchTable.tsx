@@ -1,7 +1,7 @@
 import { GitBranch } from "lucide-react";
-import { useTrashedBranches } from "@/hooks/document";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { TrashBranchParams } from "@/models/PageResponse";
+import { useTrashedBranches } from "@/features/documents/hooks";
+import type { TrashBranchParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import CollectionEmpty from "../collections/CollectionEmpty";
 import CollectionFilters from "../collections/CollectionFilters";
 import CollectionPagination from "../collections/CollectionPagination";

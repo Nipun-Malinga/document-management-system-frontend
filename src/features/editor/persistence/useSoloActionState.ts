@@ -1,4 +1,4 @@
-import { useDocument } from "@/hooks/document";
+import { useDocument } from "@/features/documents/hooks";
 import { usePersistenceRegistry } from "./persistenceRegistry";
 import useSaveState from "./useSaveState";
 

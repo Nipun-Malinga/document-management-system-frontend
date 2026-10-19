@@ -3,10 +3,16 @@ import { Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useSignIn, useUser } from "@/hooks/user";
-import { getSession, useSessionStore } from "@/states/sessionStore";
-import { type SignInSchema, signInSchema } from "@/types/SignIn";
-import { applyFormError } from "@/utils/formErrors";
+import { useSignIn, useUser } from "@/features/auth/hooks";
+import {
+	type SignInSchema,
+	signInSchema,
+} from "@/features/auth/schemas/SignIn";
+import {
+	getSession,
+	useSessionStore,
+} from "@/features/auth/stores/sessionStore";
+import { applyFormError } from "@/shared/utils/formErrors";
 import AuthContainer from "../../components/common/AuthContainer";
 import ErrorAlert from "../../components/common/Error";
 import {

@@ -47,12 +47,16 @@ keep secrets out of them and do not commit `.env`.
 - `src/features/editor/`: solo/collaborative editors, toolbar, autosave, branches,
   versions, shared extensions, and editor SCSS.
 - `src/features/users/`: user search and profile components.
-- `src/hooks/`: domain queries/mutations and collaboration helpers.
+- Feature-local `hooks/`: domain queries/mutations; auth hooks live in
+  `features/auth`, profile/search in `features/users`, document data in
+  `features/documents`, collaboration provider in `features/editor`, and sidebar
+  queries in `features/workspace`.
 - `src/services/apiService.ts`: generic Axios-backed REST service with bearer
   authentication. `src/services/websocketService.ts`: singleton STOMP client.
-- `src/states/`: Zustand stores for local UI and editor state.
-- `src/models/` and `src/types/`: shared entities and request/response types;
-  inspect existing definitions before adding overlapping ones.
+- Feature-local `stores/`, `types/`, and `schemas/`: Zustand state, domain
+  entities, and Zod form validation owned by the corresponding feature.
+- `src/shared/`: generic collection hooks, transport types, and form utilities;
+  keep domain-specific types in features. See `src/features/README.md`.
 - `src/components/ui/`: shadcn primitives; `src/components/common/`: app wrappers.
 - `src/index.css`: Tailwind v4 configuration, theme tokens, and dark mode.
 - `src/lib/utils.ts`: `cn()` for merging conditional Tailwind classes.
@@ -75,8 +79,8 @@ keep secrets out of them and do not commit `.env`.
 ## Behavior to Preserve
 
 - Authentication currently reads the `jwt-access-token` localStorage entry via
-  `src/utils/authUtils.ts`; Axios attaches it as a bearer token. There is no
-  refresh-token interceptor. Coordinate auth changes across REST, STOMP,
+  `src/features/auth/utils/authUtils.ts`; Axios attaches it as a bearer token.
+  There is no refresh-token interceptor. Coordinate auth changes across REST, STOMP,
   Hocuspocus, and `SecureRoute`.
 - Document operations are scoped by both document ID and branch ID. Collaboration
   rooms use `documents/${documentId}/branches/${branchId}`; preserve that contract.

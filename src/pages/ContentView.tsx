@@ -1,10 +1,10 @@
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useDocumentContent } from "@/features/documents/hooks";
+import useVersionContent from "@/features/documents/hooks/useVersionContent";
 import { ContentRenderer } from "@/features/editor";
 import { convertToTiptapContent } from "@/features/editor/utils";
-import { useDocumentContent } from "@/hooks/document";
-import useVersionContent from "@/hooks/document/useVersionContent";
-import { collectionErrorMessage } from "@/utils/collectionUtils";
+import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 
 const ContentView = () => {
 	const { documentId, branchId, versionId } = useParams();

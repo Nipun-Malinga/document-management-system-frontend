@@ -9,8 +9,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import useDocumentAccess from "@/hooks/document/useDocumentAccess";
-import type { Version } from "@/models/Version";
+import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
+import type { Version } from "@/features/documents/types/Version";
 import MergeControl from "../MergeControl";
 
 interface Props {

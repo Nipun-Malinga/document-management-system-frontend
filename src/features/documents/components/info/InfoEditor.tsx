@@ -22,14 +22,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useUpdateDocumentInfo } from "@/hooks/document";
-import { useUser } from "@/hooks/user";
-import type { Document } from "@/models/Document";
+import { useUser } from "@/features/auth/hooks";
+import { useUpdateDocumentInfo } from "@/features/documents/hooks";
 import {
 	documentInfoEditorSchema,
 	type TDocumentInfoEditorSchema,
-} from "@/types/Document";
-import { applyFormError } from "@/utils/formErrors";
+} from "@/features/documents/schemas/Document";
+import type { Document } from "@/features/documents/types/Document";
+import { applyFormError } from "@/shared/utils/formErrors";
 
 interface Props {
 	document: Document;

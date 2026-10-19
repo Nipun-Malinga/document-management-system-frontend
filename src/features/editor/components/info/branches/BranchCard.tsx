@@ -10,10 +10,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { useTrashBranch } from "@/hooks/document";
-import useDocumentAccess from "@/hooks/document/useDocumentAccess";
+import { useTrashBranch } from "@/features/documents/hooks";
+import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
+import type { Branch } from "@/features/documents/types/Branch";
 import { cn } from "@/lib/utils";
-import type { Branch } from "@/models/Branch";
 import MergeControl from "../MergeControl";
 
 interface Props {

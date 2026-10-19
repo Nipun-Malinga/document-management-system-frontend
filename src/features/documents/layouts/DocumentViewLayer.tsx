@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
 import { InfoPopup } from "../components/info";
 
 const DocumentViewLayer = () => {

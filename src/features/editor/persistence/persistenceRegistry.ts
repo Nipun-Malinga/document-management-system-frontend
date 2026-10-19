@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getSession } from "@/states/sessionStore";
+import { getSession } from "@/features/auth/stores/sessionStore";
 import type { SaveCoordinator } from "./SaveCoordinator";
 
 interface ActiveEditor {

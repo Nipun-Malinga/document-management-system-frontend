@@ -4,6 +4,10 @@ import { Editor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import type { InternalAxiosRequestConfig } from "axios";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+	endSession,
+	replaceAccessToken,
+} from "@/features/auth/stores/sessionStore";
 import UploadFeedback from "@/features/editor/components/UploadFeedback";
 import { editorExtensions } from "@/features/editor/configs/EditorConfigs";
 import {
@@ -11,7 +15,6 @@ import {
 	insertUploadedImages,
 } from "@/features/editor/handlers/imageUploadHandler";
 import { axiosInstance } from "@/services/apiService";
-import { endSession, replaceAccessToken } from "@/states/sessionStore";
 import { requireValue } from "../../../assertions";
 import { tokenFor } from "../../../fixtures";
 

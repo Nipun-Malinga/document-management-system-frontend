@@ -55,10 +55,11 @@ There is no standalone typecheck script. Tests live in
 - `src/pages/` and `src/components/layout/`: route views, navigation, route guard.
 - `src/features/documents/`: lists, metadata, sharing, templates, and trash.
 - `src/features/editor/`: editors, toolbar, autosave, branches, and versions.
-- `src/hooks/` and `src/services/`: TanStack Query hooks, Axios REST access,
-  STOMP, and collaboration providers.
-- `src/states/`: Zustand UI/editor state.
-- `src/models/` and `src/types/`: shared entities and request/form types.
+- `src/services/`: shared Axios REST access, STOMP, and session integration.
+- `src/features/{auth,documents,editor,users,workspace}/`: feature-owned hooks,
+  types, form schemas, and Zustand stores alongside feature components.
+- `src/shared/`: reusable collection hooks, transport types, and form utilities.
+  See [feature architecture](src/features/README.md) for ownership conventions.
 - `src/components/ui/` and `src/components/common/`: UI primitives and wrappers.
 - `src/index.css`: Tailwind configuration and light/dark theme tokens.
 

@@ -1,5 +1,5 @@
-import type { Document } from "@/models/Document";
-import type { Permission } from "@/models/Permission";
+import type { Document } from "@/features/documents/types/Document";
+import type { Permission } from "@/features/documents/types/Permission";
 
 export const claims = {
 	sub: "1",

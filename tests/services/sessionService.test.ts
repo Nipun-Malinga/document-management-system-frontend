@@ -1,15 +1,15 @@
 import { QueryClient } from "@tanstack/react-query";
 import { afterEach, expect, it, vi } from "vitest";
-import { axiosInstance } from "@/services/apiService";
-import { startSessionRuntime } from "@/services/sessionService";
 import {
 	ACCESS_TOKEN_KEY,
 	endSession,
 	getSession,
 	replaceAccessToken,
-} from "@/states/sessionStore";
-import useAutoSave from "@/states/useAutoSave";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
+} from "@/features/auth/stores/sessionStore";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
+import useAutoSave from "@/features/editor/stores/useAutoSave";
+import { axiosInstance } from "@/services/apiService";
+import { startSessionRuntime } from "@/services/sessionService";
 import { claims, tokenFor } from "../fixtures";
 
 let stop: (() => void) | undefined;

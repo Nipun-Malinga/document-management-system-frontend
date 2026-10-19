@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import useRecentDocuments, {
 	recentDocumentParams,
-} from "@/hooks/document/useRecentDocuments";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { DocumentParams } from "@/models/PageResponse";
+} from "@/features/documents/hooks/useRecentDocuments";
+import type { DocumentParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import CollectionEmpty from "../components/collections/CollectionEmpty";
 import CollectionFilters from "../components/collections/CollectionFilters";
 import CollectionPage from "../components/collections/CollectionPage";

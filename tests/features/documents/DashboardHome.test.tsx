@@ -5,12 +5,12 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SideBar from "@/components/layout/SideBar";
 import { sidebarData } from "@/data/Sidebar";
+import { replaceAccessToken } from "@/features/auth/utils/authUtils";
 import DocumentCard from "@/features/documents/components/DocumentCard";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
+import useDocumentBranch from "@/features/editor/stores/useDocumentBranch";
+import useAside from "@/features/workspace/stores/useAside";
 import { axiosInstance } from "@/services/apiService";
-import useAside from "@/states/useAside";
-import useDocumentBranch from "@/states/useDocumentBranch";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
-import { replaceAccessToken } from "@/utils/authUtils";
 import { document as fixture, tokenFor } from "../../fixtures";
 
 const originalAdapter = axiosInstance.defaults.adapter;

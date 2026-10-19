@@ -4,9 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { replaceAccessToken } from "@/features/auth/stores/sessionStore";
 import Trash from "@/features/documents/layouts/Trash";
 import { axiosInstance } from "@/services/apiService";
-import { replaceAccessToken } from "@/states/sessionStore";
 import { document as fixture, tokenFor } from "../../fixtures";
 import { pageOf } from "../../pages";
 

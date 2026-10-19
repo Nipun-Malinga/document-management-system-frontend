@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useDocument, useDocumentContent } from "@/hooks/document";
-import useDocumentAccess from "@/hooks/document/useDocumentAccess";
-import { getSession } from "@/states/sessionStore";
-import { collectionErrorMessage } from "@/utils/collectionUtils";
+import { getSession } from "@/features/auth/stores/sessionStore";
+import { useDocument, useDocumentContent } from "@/features/documents/hooks";
+import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
+import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 import EditorContainer from "../components/EditorContainer";
 import SoloEditorCore from "../components/SoloEditorCore";
 import { actionError } from "../persistence/actionError";

@@ -12,9 +12,9 @@ import {
 	statusField,
 	versionSorts,
 } from "@/features/documents/components/collections/collectionFilterOptions";
-import useDocumentVersions from "@/hooks/document/useDocumentVersions";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { VersionParams } from "@/models/PageResponse";
+import useDocumentVersions from "@/features/documents/hooks/useDocumentVersions";
+import type { VersionParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import InfoDrawerBody, { InfoDrawerEmpty } from "../InfoDrawerBody";
 import VersionCard from "./VersionCard";
 import VersionCreateForm from "./VersionCreateForm";

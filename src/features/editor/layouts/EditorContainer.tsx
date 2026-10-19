@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useDocument } from "@/hooks/document";
-import { collectionErrorMessage } from "@/utils/collectionUtils";
+import { useDocument } from "@/features/documents/hooks";
+import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 import EditorNavigationGuard from "../persistence/EditorNavigationGuard";
 import CollaborativeEditor from "./CollaborativeEditor";
 import SoloEditor from "./SoloEditor";

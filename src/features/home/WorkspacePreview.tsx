@@ -19,8 +19,8 @@ import DocumentTile from "@/features/documents/components/DocumentTile";
 import DocumentTileGrid from "@/features/documents/components/DocumentTileGrid";
 import TemplateTile from "@/features/documents/components/TemplateTile";
 import WorkspaceHome from "@/features/documents/components/WorkspaceHome";
+import type { Document } from "@/features/documents/types/Document";
 import { cn } from "@/lib/utils";
-import type { Document } from "@/models/Document";
 
 const sampleDocuments: Document[] = [
 	{

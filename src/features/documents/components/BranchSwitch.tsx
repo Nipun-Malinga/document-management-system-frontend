@@ -11,10 +11,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useBranchOptions } from "@/hooks/document";
-import useDocumentBranch from "@/states/useDocumentBranch";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
-import { collectionErrorMessage } from "@/utils/collectionUtils";
+import { useBranchOptions } from "@/features/documents/hooks";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
+import useDocumentBranch from "@/features/editor/stores/useDocumentBranch";
+import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 
 const BranchSwitch = ({ documentId }: { documentId: string }) => {
 	const [open, setOpen] = useState(false);

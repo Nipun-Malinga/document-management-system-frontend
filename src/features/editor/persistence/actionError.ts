@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { ProblemDetail } from "@/models/ProblemDetail";
+import type { ProblemDetail } from "@/shared/types/ProblemDetail";
 
 export const actionError = (
 	error: unknown,

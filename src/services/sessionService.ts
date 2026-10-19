@@ -1,4 +1,8 @@
 import type { QueryClient } from "@tanstack/react-query";
+import type {
+	SignInRequest,
+	SignInResponse,
+} from "@/features/auth/schemas/SignIn";
 import {
 	ACCESS_TOKEN_KEY,
 	assertSession,
@@ -9,14 +13,13 @@ import {
 	getSession,
 	initializeSession,
 	useSessionStore,
-} from "@/states/sessionStore";
-import useAutoSave from "@/states/useAutoSave";
-import useDocumentBranch from "@/states/useDocumentBranch";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
-import useEditorTemplate from "@/states/useEditorTemplate";
-import useUserProfilePopup from "@/states/useUserProfilePopup";
-import type { SignInRequest, SignInResponse } from "@/types/SignIn";
-import { parseAccessToken } from "@/utils/tokenUtils";
+} from "@/features/auth/stores/sessionStore";
+import { parseAccessToken } from "@/features/auth/utils/tokenUtils";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
+import useAutoSave from "@/features/editor/stores/useAutoSave";
+import useDocumentBranch from "@/features/editor/stores/useDocumentBranch";
+import useEditorTemplate from "@/features/editor/stores/useEditorTemplate";
+import useUserProfilePopup from "@/features/users/stores/useUserProfilePopup";
 import APIService, { ensureAccessToken, refreshSession } from "./apiService";
 
 export const login = async (data: SignInRequest) => {

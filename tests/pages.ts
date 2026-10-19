@@ -1,4 +1,4 @@
-import type { PageResponse } from "@/models/PageResponse";
+import type { PageResponse } from "@/shared/types/PageResponse";
 
 export const pageOf = <T>(
 	content: T[],

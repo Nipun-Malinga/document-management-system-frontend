@@ -13,19 +13,22 @@ import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Alert from "@/components/common/Alert";
+import {
+	endSession,
+	replaceAccessToken,
+} from "@/features/auth/stores/sessionStore";
 import DocumentCard from "@/features/documents/components/DocumentCard";
 import InfoEditor from "@/features/documents/components/info/InfoEditor";
+import useUserDocuments from "@/features/documents/hooks/useUserDocuments";
 import MainView from "@/features/documents/layouts/MainView";
 import Resents from "@/features/documents/layouts/Resents";
 import SearchUser from "@/features/users/components/SearchUser";
-import useUserDocuments from "@/hooks/document/useUserDocuments";
-import useFavoriteCount from "@/hooks/sidebar/useFavoriteCount";
-import useSidebarData from "@/hooks/sidebar/useSidebarData";
+import useFavoriteCount from "@/features/workspace/hooks/useFavoriteCount";
+import useSidebarData from "@/features/workspace/hooks/useSidebarData";
 import AdminSignin from "@/pages/admin/AdminSignin";
 import Register from "@/pages/Register";
 import SignIn from "@/pages/SignIn";
 import { axiosInstance } from "@/services/apiService";
-import { endSession, replaceAccessToken } from "@/states/sessionStore";
 import { document, tokenFor } from "../../fixtures";
 import { pageOf } from "../../pages";
 

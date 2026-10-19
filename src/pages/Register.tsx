@@ -18,9 +18,12 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import AuthLayout from "@/features/auth/components/AuthLayout";
 import PasswordField from "@/features/auth/components/PasswordField";
-import { useRegistration, useUser } from "@/hooks/user";
-import { registerSchema, type TRegisterSchema } from "@/types/Register";
-import { applyFormError } from "@/utils/formErrors";
+import { useRegistration, useUser } from "@/features/auth/hooks";
+import {
+	registerSchema,
+	type TRegisterSchema,
+} from "@/features/auth/schemas/Register";
+import { applyFormError } from "@/shared/utils/formErrors";
 
 const Register = () => {
 	const navigate = useNavigate();

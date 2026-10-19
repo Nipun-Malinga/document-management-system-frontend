@@ -10,9 +10,12 @@ import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import PasswordField from "@/features/auth/components/PasswordField";
 import type { AccountSectionState } from "@/features/users/components/AccountSectionState";
 import ProfileFeedback from "@/features/users/components/ProfileFeedback";
-import { useChangePassword } from "@/hooks/user";
-import { type PasswordFormValues, passwordSchema } from "@/types/UserProfile";
-import { applyFormError } from "@/utils/formErrors";
+import { useChangePassword } from "@/features/users/hooks";
+import {
+	type PasswordFormValues,
+	passwordSchema,
+} from "@/features/users/schemas/UserProfile";
+import { applyFormError } from "@/shared/utils/formErrors";
 
 const FORM_ID = "profile-password-form";
 

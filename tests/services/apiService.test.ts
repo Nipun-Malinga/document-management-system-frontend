@@ -5,18 +5,18 @@ import {
 	type InternalAxiosRequestConfig,
 } from "axios";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import APIService, {
-	axiosInstance,
-	refreshSession,
-} from "@/services/apiService";
-import { bindSessionQueryClient, login } from "@/services/sessionService";
 import {
 	endSession,
 	getSession,
 	initializeSession,
 	replaceAccessToken,
 	useSessionStore,
-} from "@/states/sessionStore";
+} from "@/features/auth/stores/sessionStore";
+import APIService, {
+	axiosInstance,
+	refreshSession,
+} from "@/services/apiService";
+import { bindSessionQueryClient, login } from "@/services/sessionService";
 import { claims, tokenFor } from "../fixtures";
 
 const originalAdapter = axiosInstance.defaults.adapter;

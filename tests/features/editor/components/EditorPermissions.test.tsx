@@ -6,12 +6,12 @@ import { type Editor, EditorContent } from "@tiptap/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Doc } from "yjs";
+import { initializeSession } from "@/features/auth/stores/sessionStore";
 import AutoSaver from "@/features/editor/components/AutoSaver";
 import CollaborativeEditorCore from "@/features/editor/components/CollaborativeEditorCore";
 import SoloEditorCore from "@/features/editor/components/SoloEditorCore";
 import useSoloPersistence from "@/features/editor/persistence/useSoloPersistence";
 import APIService from "@/services/apiService";
-import { initializeSession } from "@/states/sessionStore";
 import { requireValue } from "../../../assertions";
 import { tokenFor } from "../../../fixtures";
 
@@ -46,7 +46,7 @@ vi.mock("@/features/editor/components/Toolbar", () => ({
 		</button>
 	),
 }));
-vi.mock("@/hooks/document/collaboration", () => ({
+vi.mock("@/features/editor/hooks", () => ({
 	useProvider: () => state.provider,
 }));
 vi.mock("@tiptap/extension-collaboration-caret", () => ({

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import SecureRoute from "@/components/layout/SecureRoute";
-import { initializeSession } from "@/states/sessionStore";
+import { initializeSession } from "@/features/auth/stores/sessionStore";
 import { claims, tokenFor } from "../../fixtures";
 
 const renderRoute = (

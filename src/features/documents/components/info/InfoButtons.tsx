@@ -1,11 +1,11 @@
 import { LoaderCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useUser } from "@/features/auth/hooks";
+import { useDocument } from "@/features/documents/hooks";
+import useTrashDocument from "@/features/documents/hooks/useTrashDocument";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
 import { actionError } from "@/features/editor/persistence/actionError";
-import { useDocument } from "@/hooks/document";
-import useTrashDocument from "@/hooks/document/useTrashDocument";
-import { useUser } from "@/hooks/user";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
 
 interface Props {
 	documentId: string;

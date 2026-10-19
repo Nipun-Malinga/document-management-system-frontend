@@ -6,8 +6,11 @@ import {
 	useDeleteDocument,
 	useRestoreBranch,
 	useRestoreDocument,
-} from "@/hooks/document";
-import type { TrashBranch, TrashDocument } from "@/models/Trash";
+} from "@/features/documents/hooks";
+import type {
+	TrashBranch,
+	TrashDocument,
+} from "@/features/documents/types/Trash";
 
 interface Props {
 	trash: TrashDocument | TrashBranch;

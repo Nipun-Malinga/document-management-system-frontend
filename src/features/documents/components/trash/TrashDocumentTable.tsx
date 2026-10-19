@@ -1,7 +1,7 @@
 import { Trash2 } from "lucide-react";
-import { useTrashedDocuments } from "@/hooks/document";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { DocumentParams } from "@/models/PageResponse";
+import { useTrashedDocuments } from "@/features/documents/hooks";
+import type { DocumentParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import CollectionEmpty from "../collections/CollectionEmpty";
 import CollectionFilters from "../collections/CollectionFilters";
 import CollectionPagination from "../collections/CollectionPagination";

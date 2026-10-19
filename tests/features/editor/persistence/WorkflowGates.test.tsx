@@ -3,16 +3,19 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+	getSession,
+	replaceAccessToken,
+} from "@/features/auth/stores/sessionStore";
+import useShareDocument from "@/features/documents/hooks/collaboration/useShareDocument";
+import useCreateBranch from "@/features/documents/hooks/useCreateBranch";
+import useCreateVersion from "@/features/documents/hooks/useCreateVersion";
+import useMergeBranch from "@/features/documents/hooks/useMergeBranch";
+import useMergeVersion from "@/features/documents/hooks/useMergeVersion";
+import {
 	registerPersistence,
 	usePersistenceRegistry,
 } from "@/features/editor/persistence/persistenceRegistry";
-import useShareDocument from "@/hooks/document/collaboration/useShareDocument";
-import useCreateBranch from "@/hooks/document/useCreateBranch";
-import useCreateVersion from "@/hooks/document/useCreateVersion";
-import useMergeBranch from "@/hooks/document/useMergeBranch";
-import useMergeVersion from "@/hooks/document/useMergeVersion";
 import { axiosInstance } from "@/services/apiService";
-import { getSession, replaceAccessToken } from "@/states/sessionStore";
 import { document, tokenFor } from "../../../fixtures";
 
 let client: QueryClient;

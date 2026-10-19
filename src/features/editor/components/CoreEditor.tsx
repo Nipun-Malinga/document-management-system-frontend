@@ -3,7 +3,7 @@ import "../styles/styles.scss";
 
 import { type Editor, EditorContent, EditorContext } from "@tiptap/react";
 import { type ReactNode, useMemo } from "react";
-import { useDocument } from "@/hooks/document";
+import { useDocument } from "@/features/documents/hooks";
 import TopToolBar from "./TopToolBar";
 
 interface Props {

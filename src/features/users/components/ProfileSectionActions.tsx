@@ -1,7 +1,7 @@
 import { LoaderCircle } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import type { UpdateProfileRequest } from "@/types/UserProfile";
+import type { UpdateProfileRequest } from "@/features/users/schemas/UserProfile";
 
 type ProfileSectionActionsProps = {
 	form: UseFormReturn<UpdateProfileRequest>;

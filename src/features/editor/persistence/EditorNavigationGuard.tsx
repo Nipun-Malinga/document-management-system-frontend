@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useBlocker } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { getSession } from "@/states/sessionStore";
+import { getSession } from "@/features/auth/stores/sessionStore";
 import { usePersistenceRegistry } from "./persistenceRegistry";
 import useSaveState from "./useSaveState";
 

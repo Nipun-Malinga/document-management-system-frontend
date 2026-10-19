@@ -2,11 +2,11 @@ import type { IMessage } from "@stomp/stompjs";
 import { Eye, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { useSessionStore } from "@/features/auth/stores/sessionStore";
+import type { Collaborator } from "@/features/documents/types/Collaborator";
 import User from "@/features/users/components/User";
 import { cn } from "@/lib/utils";
-import type { Collaborator } from "@/models/Collaborator";
 import WebSocketService from "@/services/websocketService";
-import { useSessionStore } from "@/states/sessionStore";
 
 interface Props {
 	collaborator: Collaborator;

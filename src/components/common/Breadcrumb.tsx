@@ -1,6 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 import { Link as RouterLink } from "react-router-dom";
-import type { Link } from "@/models/Link";
+import type { Link } from "@/shared/types/Link";
 import {
 	Breadcrumb as BC,
 	BreadcrumbItem,

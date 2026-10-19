@@ -20,18 +20,21 @@ import {
 } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import UserDropdown from "@/components/common/UserDropdown";
+import {
+	getSession,
+	replaceAccessToken,
+} from "@/features/auth/stores/sessionStore";
+import useShareDocument from "@/features/documents/hooks/collaboration/useShareDocument";
+import useCreateBranch from "@/features/documents/hooks/useCreateBranch";
+import useCreateVersion from "@/features/documents/hooks/useCreateVersion";
+import useMergeBranch from "@/features/documents/hooks/useMergeBranch";
+import useMergeVersion from "@/features/documents/hooks/useMergeVersion";
 import AutoSaver from "@/features/editor/components/AutoSaver";
 import EditorContainer from "@/features/editor/layouts/EditorContainer";
 import { actionError } from "@/features/editor/persistence/actionError";
 import { usePersistenceRegistry } from "@/features/editor/persistence/persistenceRegistry";
-import useShareDocument from "@/hooks/document/collaboration/useShareDocument";
-import useCreateBranch from "@/hooks/document/useCreateBranch";
-import useCreateVersion from "@/hooks/document/useCreateVersion";
-import useMergeBranch from "@/hooks/document/useMergeBranch";
-import useMergeVersion from "@/hooks/document/useMergeVersion";
 import ContentView from "@/pages/ContentView";
 import { axiosInstance } from "@/services/apiService";
-import { getSession, replaceAccessToken } from "@/states/sessionStore";
 import { requireValue } from "../../../assertions";
 import { document, permission, tokenFor } from "../../../fixtures";
 

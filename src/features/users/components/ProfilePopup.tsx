@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PopupWrapper from "@/components/common/PopupWrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSessionStore } from "@/features/auth/stores/sessionStore";
 import type {
 	AccountSectionState,
 	ProfileSectionState,
@@ -8,8 +9,7 @@ import type {
 import DiscardAlert from "@/features/users/components/DiscardAlert";
 import PasswordSection from "@/features/users/components/PasswordSection";
 import ProfileSection from "@/features/users/components/ProfileSection";
-import { useSessionStore } from "@/states/sessionStore";
-import useUserProfilePopup from "@/states/useUserProfilePopup";
+import useUserProfilePopup from "@/features/users/stores/useUserProfilePopup";
 
 type AccountTab = "profile" | "password";
 

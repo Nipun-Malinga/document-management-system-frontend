@@ -1,7 +1,7 @@
 import type { Editor } from "@tiptap/react";
 import { useEffect, useRef } from "react";
-import { useSaveDocumentContent } from "@/hooks/document";
-import { getSession } from "@/states/sessionStore";
+import { getSession } from "@/features/auth/stores/sessionStore";
+import { useSaveDocumentContent } from "@/features/documents/hooks";
 import { parseEditorContent } from "./contentUtils";
 import {
 	registerPersistence,

@@ -1,7 +1,10 @@
 import { type ReactNode, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
+import {
+	getSession,
+	useSessionStore,
+} from "@/features/auth/stores/sessionStore";
 import { ensureAccessToken } from "@/services/apiService";
-import { getSession, useSessionStore } from "@/states/sessionStore";
 
 interface Props {
 	children: ReactNode;

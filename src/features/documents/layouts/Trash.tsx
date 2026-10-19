@@ -1,6 +1,9 @@
 import { FileText, GitBranch } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useTrashBranchCount, useTrashDocumentCount } from "@/hooks/sidebar";
+import {
+	useTrashBranchCount,
+	useTrashDocumentCount,
+} from "@/features/workspace/hooks";
 import CollectionPage from "../components/collections/CollectionPage";
 import { TrashBranchTable, TrashDocumentTable } from "../components/trash";
 

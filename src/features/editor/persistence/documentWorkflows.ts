@@ -1,8 +1,8 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { refreshDocumentMutation } from "@/hooks/document/documentMutationCache";
-import type { ContentResponse } from "@/models/Content";
+import { getSession } from "@/features/auth/stores/sessionStore";
+import { refreshDocumentMutation } from "@/features/documents/hooks/documentMutationCache";
+import type { ContentResponse } from "@/features/documents/types/Content";
 import APIService from "@/services/apiService";
-import { getSession } from "@/states/sessionStore";
 import { parseEditorContent } from "./contentUtils";
 import { requireSoloCoordinator } from "./persistenceRegistry";
 

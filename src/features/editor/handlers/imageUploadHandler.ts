@@ -1,7 +1,7 @@
 import type { Editor } from "@tiptap/react";
-import type { FileUpload } from "@/models/FileUpload";
+import { assertSession, getSession } from "@/features/auth/stores/sessionStore";
+import type { FileUpload } from "@/features/editor/types/FileUpload";
 import APIService from "@/services/apiService";
-import { assertSession, getSession } from "@/states/sessionStore";
 import { actionError } from "../persistence/actionError";
 import { reportUpload } from "./uploadFeedback";
 

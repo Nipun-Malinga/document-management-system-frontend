@@ -31,13 +31,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useCreateVersion } from "@/hooks/document";
-import useDocumentAccess from "@/hooks/document/useDocumentAccess";
+import { useCreateVersion } from "@/features/documents/hooks";
+import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
 import {
 	createVersionSchema,
 	type TCreateVersionSchema,
-} from "@/types/Version";
-import { applyFormError } from "@/utils/formErrors";
+} from "@/features/documents/schemas/Version";
+import { applyFormError } from "@/shared/utils/formErrors";
 import useSoloActionState from "../../../persistence/useSoloActionState";
 
 const VersionCreateForm = () => {

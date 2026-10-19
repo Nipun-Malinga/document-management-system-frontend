@@ -4,10 +4,10 @@ import { CollaborationCaret } from "@tiptap/extension-collaboration-caret";
 import { useEditor } from "@tiptap/react";
 import { useEffect, useMemo, useState } from "react";
 import Button from "@/components/common/Button";
+import { useUser } from "@/features/auth/hooks";
+import { getSession } from "@/features/auth/stores/sessionStore";
 // import { IndexeddbPersistence } from 'y-indexeddb';
-import { useProvider } from "@/hooks/document/collaboration";
-import { useUser } from "@/hooks/user";
-import { getSession } from "@/states/sessionStore";
+import { useProvider } from "@/features/editor/hooks";
 import {
 	commonEditorConfigs,
 	editorExtensions,

@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { SideBar, TopBar } from "@/components";
 import { sidebarData } from "@/data/Sidebar";
 import ProfilePopup from "@/features/users/components/ProfilePopup";
-import { useSidebarData } from "@/hooks/sidebar";
+import { useSidebarData } from "@/features/workspace/hooks";
 
 const Dashboard = () => {
 	const sidebarInfo = useSidebarData();

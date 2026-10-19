@@ -12,9 +12,9 @@ import {
 	branchSorts,
 	statusField,
 } from "@/features/documents/components/collections/collectionFilterOptions";
-import { useBranches } from "@/hooks/document";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { BranchParams } from "@/models/PageResponse";
+import { useBranches } from "@/features/documents/hooks";
+import type { BranchParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import InfoDrawerBody, { InfoDrawerEmpty } from "../InfoDrawerBody";
 import BranchCard from "./BranchCard";
 import BranchCreateForm from "./BranchCreateForm";

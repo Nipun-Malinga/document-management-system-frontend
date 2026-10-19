@@ -17,10 +17,13 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import AuthLayout from "@/features/auth/components/AuthLayout";
 import PasswordField from "@/features/auth/components/PasswordField";
-import { useSignIn, useUser } from "@/hooks/user";
-import { useSessionStore } from "@/states/sessionStore";
-import { type SignInSchema, signInSchema } from "@/types/SignIn";
-import { applyFormError } from "@/utils/formErrors";
+import { useSignIn, useUser } from "@/features/auth/hooks";
+import {
+	type SignInSchema,
+	signInSchema,
+} from "@/features/auth/schemas/SignIn";
+import { useSessionStore } from "@/features/auth/stores/sessionStore";
+import { applyFormError } from "@/shared/utils/formErrors";
 
 const Signin = () => {
 	const navigate = useNavigate();

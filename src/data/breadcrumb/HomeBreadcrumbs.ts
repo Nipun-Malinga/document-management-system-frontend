@@ -1,4 +1,4 @@
-import type { Link } from "@/models/Link";
+import type { Link } from "@/shared/types/Link";
 
 export const mainViewBreadcrumb: Link[] = [
 	{

@@ -4,10 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import UserDropdown from "@/components/common/UserDropdown";
+import {
+	getSession,
+	replaceAccessToken,
+} from "@/features/auth/stores/sessionStore";
 import ProfilePopup from "@/features/users/components/ProfilePopup";
+import useUserProfilePopup from "@/features/users/stores/useUserProfilePopup";
 import { axiosInstance } from "@/services/apiService";
-import { getSession, replaceAccessToken } from "@/states/sessionStore";
-import useUserProfilePopup from "@/states/useUserProfilePopup";
 import { tokenFor } from "../../fixtures";
 
 const baseURL = process.env.DMS_SELF_SERVICE_URL;

@@ -9,8 +9,8 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import type { SidebarLink } from "@/models/Link";
-import useAside from "@/states/useAside";
+import useAside from "@/features/workspace/stores/useAside";
+import type { SidebarLink } from "@/features/workspace/types/SidebarLink";
 import { workspaceNavigationClass } from "./workspaceNavigation";
 
 interface Props {

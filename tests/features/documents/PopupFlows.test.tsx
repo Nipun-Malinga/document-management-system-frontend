@@ -6,13 +6,13 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Notification from "@/components/common/Notification";
 import UserDropdown from "@/components/common/UserDropdown";
+import { replaceAccessToken } from "@/features/auth/utils/authUtils";
 import InfoPopup from "@/features/documents/components/info/InfoPopup";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
 import ProfilePopup from "@/features/users/components/ProfilePopup";
+import useUserProfilePopup from "@/features/users/stores/useUserProfilePopup";
 import { axiosInstance } from "@/services/apiService";
 import WebSocketService from "@/services/websocketService";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
-import useUserProfilePopup from "@/states/useUserProfilePopup";
-import { replaceAccessToken } from "@/utils/authUtils";
 import { document as fixture, tokenFor } from "../../fixtures";
 import { pageOf } from "../../pages";
 

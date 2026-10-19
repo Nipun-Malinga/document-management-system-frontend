@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { SaveCoordinator } from "@/features/editor/persistence/SaveCoordinator";
 import {
 	endSession,
 	getSession,
 	replaceAccessToken,
-} from "@/states/sessionStore";
+} from "@/features/auth/stores/sessionStore";
+import { SaveCoordinator } from "@/features/editor/persistence/SaveCoordinator";
 import { tokenFor } from "../../../fixtures";
 
 const deferred = <T>() => {

@@ -9,15 +9,15 @@ import {
 import type { ReactNode } from "react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { initializeSession } from "@/features/auth/stores/sessionStore";
 import DocumentCard from "@/features/documents/components/DocumentCard";
 import InfoButtons from "@/features/documents/components/info/InfoButtons";
+import type { Permission } from "@/features/documents/types/Permission";
 import BranchCard from "@/features/editor/components/info/branches/BranchCard";
 import BranchCreateForm from "@/features/editor/components/info/branches/BranchCreateForm";
 import VersionCard from "@/features/editor/components/info/versions/VersionCard";
 import VersionCreateForm from "@/features/editor/components/info/versions/VersionCreateForm";
-import type { Permission } from "@/models/Permission";
 import APIService from "@/services/apiService";
-import { initializeSession } from "@/states/sessionStore";
 import { document, permission, tokenFor } from "../../fixtures";
 
 // Isolate containment from the existing Alert wrapper's nested-button markup.

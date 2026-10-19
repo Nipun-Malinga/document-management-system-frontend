@@ -2,12 +2,12 @@ import { ArrowUpRight, Bookmark, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
+import { useUser } from "@/features/auth/hooks";
+import { useToggleFavorite } from "@/features/documents/hooks";
+import useDocumentInfoPopUp from "@/features/documents/stores/useDocumentInfoPopup";
+import type { Document } from "@/features/documents/types/Document";
 import { actionError } from "@/features/editor/persistence/actionError";
-import { useToggleFavorite } from "@/hooks/document";
-import { useUser } from "@/hooks/user";
-import type { Document } from "@/models/Document";
-import useDocumentBranch from "@/states/useDocumentBranch";
-import useDocumentInfoPopUp from "@/states/useDocumentInfoPopup";
+import useDocumentBranch from "@/features/editor/stores/useDocumentBranch";
 import DocumentTile from "./DocumentTile";
 
 interface Props {

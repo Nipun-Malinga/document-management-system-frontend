@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DialogBody } from "@/components/ui/dialog";
-import useMergeBranch from "@/hooks/document/useMergeBranch";
-import useMergeVersion from "@/hooks/document/useMergeVersion";
+import useMergeBranch from "@/features/documents/hooks/useMergeBranch";
+import useMergeVersion from "@/features/documents/hooks/useMergeVersion";
 import { cn } from "@/lib/utils";
 import { actionError } from "../../persistence/actionError";
 import useSoloActionState from "../../persistence/useSoloActionState";

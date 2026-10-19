@@ -12,7 +12,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import type { PageParams } from "@/models/PageResponse";
+import type { PageParams } from "@/shared/types/PageResponse";
 import type { FilterField } from "./collectionFilterOptions";
 
 export interface CollectionFiltersProps<P extends PageParams> {

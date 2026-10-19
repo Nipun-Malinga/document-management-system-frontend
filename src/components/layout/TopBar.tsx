@@ -1,8 +1,8 @@
 import { Menu, UserStar } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/user";
-import useAside from "@/states/useAside";
+import { useUser } from "@/features/auth/hooks";
+import useAside from "@/features/workspace/stores/useAside";
 import DarkThemeButton from "../common/DarkThemeButton";
 import Notification from "../common/Notification";
 import UserDropdown from "../common/UserDropdown";

@@ -1,4 +1,4 @@
-import type { navbar } from "@/types/NavBar";
+import type { navbar } from "@/shared/types/NavBar";
 
 export const navbarData: navbar[] = [
 	{

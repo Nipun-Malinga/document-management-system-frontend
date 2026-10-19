@@ -10,12 +10,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { useUser } from "@/features/auth/hooks";
+import { useShareDocument } from "@/features/documents/hooks/collaboration";
+import type { Collaborator } from "@/features/documents/types/Collaborator";
+import type { Document } from "@/features/documents/types/Document";
 import { actionError } from "@/features/editor/persistence/actionError";
 import { SearchUser } from "@/features/users";
-import { useShareDocument } from "@/hooks/document/collaboration";
-import { useUser } from "@/hooks/user";
-import type { Collaborator } from "@/models/Collaborator";
-import type { Document } from "@/models/Document";
 import Collaborators from "./Collaborators";
 
 const CollaboratorTabs = ({ document }: { document: Document }) => {

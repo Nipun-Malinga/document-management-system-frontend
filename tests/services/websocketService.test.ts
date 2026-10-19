@@ -1,13 +1,13 @@
 import type { Client, IFrame, IMessage, StompConfig } from "@stomp/stompjs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import WebSocketService from "@/services/websocketService";
 import {
 	commitRefresh,
 	endSession,
 	getSession,
 	markRecovering,
 	replaceAccessToken,
-} from "@/states/sessionStore";
+} from "@/features/auth/stores/sessionStore";
+import WebSocketService from "@/services/websocketService";
 import { requireValue } from "../assertions";
 import { claims, tokenFor } from "../fixtures";
 

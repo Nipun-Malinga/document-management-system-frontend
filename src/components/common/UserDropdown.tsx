@@ -19,11 +19,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUser } from "@/features/auth/hooks";
+import { endSession } from "@/features/auth/utils/authUtils";
 import { actionError } from "@/features/editor/persistence/actionError";
 import { flushActiveEditor } from "@/features/editor/persistence/persistenceRegistry";
-import { useUser } from "@/hooks/user";
-import useUserProfilePopup from "@/states/useUserProfilePopup";
-import { endSession } from "@/utils/authUtils";
+import useUserProfilePopup from "@/features/users/stores/useUserProfilePopup";
 import { Button } from "../ui/button";
 
 const UserDropdown = () => {

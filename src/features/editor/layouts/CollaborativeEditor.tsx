@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import useDocumentAccess from "@/hooks/document/useDocumentAccess";
-import { collectionErrorMessage } from "@/utils/collectionUtils";
+import useDocumentAccess from "@/features/documents/hooks/useDocumentAccess";
+import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 import CollaborativeEditorCore from "../components/CollaborativeEditorCore";
 import EditorContainer from "../components/EditorContainer";
 

@@ -1,9 +1,9 @@
 import { Bookmark } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useUserDocuments } from "@/hooks/document";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { DocumentParams } from "@/models/PageResponse";
+import { useUserDocuments } from "@/features/documents/hooks";
+import type { DocumentParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import CollectionEmpty from "../components/collections/CollectionEmpty";
 import CollectionFilters from "../components/collections/CollectionFilters";
 import CollectionPage from "../components/collections/CollectionPage";

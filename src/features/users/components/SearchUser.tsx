@@ -14,10 +14,11 @@ import {
 	FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useFindUser, useUser } from "@/hooks/user";
+import { useUser } from "@/features/auth/hooks";
+import { useFindUser } from "@/features/users/hooks";
+import { type TUserSchema, userSchema } from "@/features/users/schemas/User";
 import { cn } from "@/lib/utils";
-import { type TUserSchema, userSchema } from "@/types/User";
-import { collectionErrorMessage } from "@/utils/collectionUtils";
+import { collectionErrorMessage } from "@/shared/utils/collectionUtils";
 import UserAvatar from "./User";
 
 interface Props {

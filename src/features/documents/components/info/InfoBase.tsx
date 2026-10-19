@@ -1,4 +1,4 @@
-import type { Document } from "@/models/Document";
+import type { Document } from "@/features/documents/types/Document";
 
 interface Props {
 	document: Document;

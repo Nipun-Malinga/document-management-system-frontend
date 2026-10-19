@@ -1,7 +1,7 @@
 import { Users } from "lucide-react";
-import { useUserSharedDocuments } from "@/hooks/document";
-import useCollectionParams from "@/hooks/useCollectionParams";
-import type { SharedDocumentParams } from "@/models/PageResponse";
+import { useUserSharedDocuments } from "@/features/documents/hooks";
+import type { SharedDocumentParams } from "@/features/documents/types/CollectionParams";
+import useCollectionParams from "@/shared/hooks/useCollectionParams";
 import CollectionEmpty from "../components/collections/CollectionEmpty";
 import CollectionFilters from "../components/collections/CollectionFilters";
 import CollectionPage from "../components/collections/CollectionPage";
