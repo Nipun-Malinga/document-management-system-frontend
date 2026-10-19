@@ -59,7 +59,6 @@ const CollectionPagination = ({
 					<ChevronLeft aria-hidden="true" />
 				</Button>
 				<p
-					role="status"
 					aria-atomic="true"
 					className="text-xs text-muted-foreground tabular-nums"
 				>
@@ -87,7 +86,6 @@ const CollectionPagination = ({
 			<Separator aria-hidden="true" />
 			<div className="flex min-w-0 flex-col gap-3 py-4 @min-[48rem]/pagination:flex-row @min-[48rem]/pagination:items-center @min-[48rem]/pagination:justify-between">
 				<p
-					role="status"
 					aria-atomic="true"
 					className="text-sm text-muted-foreground tabular-nums"
 				>

@@ -9,7 +9,7 @@ const UploadFeedback = ({ editor }: { editor: Editor }) => {
 	);
 	const message = useSyncExternalStore(subscribe, () => uploadMessage(editor));
 	return message ? (
-		<p role="alert" className="p-3 text-sm text-destructive">
+		<p className="p-3 text-sm text-destructive">
 			{message}
 		</p>
 	) : null;

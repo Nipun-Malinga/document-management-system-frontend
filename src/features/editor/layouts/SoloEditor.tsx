@@ -37,7 +37,6 @@ export const SoloEditor = ({
 				!active.coordinator
 			)
 				throw new Error("The document editor is still preparing. Try again.");
-			// Refuse to discard unsaved edits if sharing changed in another window.
 			await active.coordinator.prepareToLeave();
 			if (usePersistenceRegistry.getState().active !== active) return;
 			onOpenCollaboration();
@@ -88,7 +87,7 @@ export const SoloEditor = ({
 		<EditorContainer>
 			{metadata.data?.shared && (
 				<div className="flex flex-col gap-2">
-					<p role="status">
+					<p>
 						This document is now shared. Open the collaborative editor to
 						continue editing.
 					</p>

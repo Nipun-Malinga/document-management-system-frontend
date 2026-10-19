@@ -199,9 +199,7 @@ const SearchUser = ({
 			)}
 
 			{email && isFetching && (
-				<p role="status" className="text-sm text-muted-foreground">
-					Looking up user…
-				</p>
+				<p className="text-sm text-muted-foreground">Looking up user…</p>
 			)}
 			{email && isError && (
 				<Alert variant="destructive">

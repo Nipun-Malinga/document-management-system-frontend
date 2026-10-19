@@ -10,7 +10,7 @@ import UserDropdown from "../common/UserDropdown";
 const titles: Record<string, string> = {
 	home: "Home",
 	quick: "Quick Access",
-	resents: "Recents",
+	resents: "Recants",
 	shared: "Shared With Me",
 	trash: "Trash",
 };

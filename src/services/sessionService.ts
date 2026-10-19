@@ -78,7 +78,7 @@ export const startSessionRuntime = (queryClient: QueryClient) => {
 				shared: false,
 			});
 			useEditorTemplate.setState({ id: 0, title: "", template: null });
-			useUserProfilePopup.setState({ userId: 0, collapsed: true });
+			useUserProfilePopup.setState({ collapsed: true });
 		}
 		if (
 			state.epoch !== previous.epoch ||

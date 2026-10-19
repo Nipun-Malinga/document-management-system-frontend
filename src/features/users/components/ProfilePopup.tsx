@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import PopupWrapper from "@/components/common/PopupWrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSessionStore } from "@/features/auth/stores/sessionStore";
-import type {
-	AccountSectionState,
-	ProfileSectionState,
-} from "@/features/users/components/AccountSectionState";
 import DiscardAlert from "@/features/users/components/DiscardAlert";
 import PasswordSection from "@/features/users/components/PasswordSection";
 import ProfileSection from "@/features/users/components/ProfileSection";
 import useUserProfilePopup from "@/features/users/stores/useUserProfilePopup";
+import type {
+	AccountSectionState,
+	ProfileSectionState,
+} from "@/features/users/types/AccountSectionState";
 
 type AccountTab = "profile" | "password";
 

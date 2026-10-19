@@ -15,16 +15,16 @@ interface Listener {
 
 class WebSocketService {
 	private static instance: WebSocketService | null = null;
-	private client: Client;
-	private epoch = getSession().epoch;
-	private listeners = new Map<number, Listener>();
+	private readonly client: Client;
+	private readonly epoch = getSession().epoch;
+	private readonly listeners = new Map<number, Listener>();
 	private nextId = 0;
 	private connection = 0;
 	private connected = false;
 	private disposed = false;
 	private transition = 0;
 	private stopping: Promise<void> = Promise.resolve();
-	private unsubscribeSession: () => void;
+	private readonly unsubscribeSession: () => void;
 
 	private constructor() {
 		this.client = new Client({
@@ -72,8 +72,7 @@ class WebSocketService {
 	}
 
 	public static getInstance() {
-		if (!WebSocketService.instance)
-			WebSocketService.instance = new WebSocketService();
+		WebSocketService.instance ??= new WebSocketService();
 		return WebSocketService.instance;
 	}
 

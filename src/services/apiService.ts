@@ -133,8 +133,8 @@ axiosInstance.interceptors.response.use(
 );
 
 class APIService<T, K = T> {
-	private endpoint: string;
-	private epoch: number;
+	private readonly endpoint: string;
+	private readonly epoch: number;
 	constructor(endpoint: string) {
 		this.endpoint = endpoint;
 		this.epoch = getSession().epoch;

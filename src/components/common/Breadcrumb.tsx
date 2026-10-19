@@ -2,7 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import { Link as RouterLink } from "react-router-dom";
 import type { Link } from "@/shared/types/Link";
 import {
-	Breadcrumb as BC,
+	Breadcrumb as Bc,
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
@@ -16,7 +16,7 @@ interface Props {
 
 const Breadcrumb = ({ links }: Props) => {
 	return (
-		<BC className="mb-6">
+		<Bc className="mb-6">
 			<BreadcrumbList className="flex items-center gap-2">
 				{links.map((link, key) => (
 					<Fragment key={link.endpoint}>
@@ -40,7 +40,7 @@ const Breadcrumb = ({ links }: Props) => {
 					</Fragment>
 				))}
 			</BreadcrumbList>
-		</BC>
+		</Bc>
 	);
 };
 

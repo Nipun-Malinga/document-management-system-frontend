@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { actionError } from "@/features/editor/persistence/actionError";
-import type { ProfileSectionState } from "@/features/users/components/AccountSectionState";
 import ProfileFeedback from "@/features/users/components/ProfileFeedback";
 import ProfileSectionActions from "@/features/users/components/ProfileSectionActions";
 import { useUpdateProfile, useUserProfile } from "@/features/users/hooks";
@@ -25,6 +24,7 @@ import {
 	profileSchema,
 	type UpdateProfileRequest,
 } from "@/features/users/schemas/UserProfile";
+import type { ProfileSectionState } from "@/features/users/types/AccountSectionState";
 import { applyFormError } from "@/shared/utils/formErrors";
 
 type ProfileSectionProps = {

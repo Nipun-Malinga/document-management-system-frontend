@@ -30,7 +30,7 @@ const CollaborativeEditorCore = (props: Props) => {
 	const documentKey = `documents/${props.documentId}/branches/${props.branchId}`;
 	const provider = useProvider(documentKey);
 
-	if (!provider) return <p role="status">Preparing collaborative editor…</p>;
+	if (!provider) return <p>Preparing collaborative editor…</p>;
 
 	return (
 		<CollaborativeEditor
@@ -131,7 +131,7 @@ const CollaborativeEditor = ({
 				</p>
 			)}
 			{!authenticationFailed && connectionStatus !== "connected" && (
-				<p role="status">
+				<p>
 					{connectionStatus === "disconnected"
 						? "Collaboration is disconnected. Keep this editor open while it reconnects; server persistence is not confirmed."
 						: "Connecting to collaboration… Server persistence is not confirmed."}

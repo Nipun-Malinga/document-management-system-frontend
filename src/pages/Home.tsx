@@ -236,6 +236,7 @@ const Home = () => {
 			<footer className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-5 py-7 text-sm sm:flex-row sm:px-8 lg:px-12">
 				<p className="font-semibold">
 					FlowDocs
+					{""}
 					<span className="ml-3 font-normal text-muted-foreground">
 						A little more flow. A lot less friction.
 					</span>

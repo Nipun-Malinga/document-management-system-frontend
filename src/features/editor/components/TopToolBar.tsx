@@ -57,7 +57,7 @@ const TopToolBar = ({
 					<InfoDrawer />
 				</div>
 				{enableAutoSaver && (
-					<div className="order-1 min-w-0 flex-1 text-muted-foreground sm:order-none sm:flex-none">
+					<div className="order-1 min-w-0 flex-1 text-muted-foreground sm:order-0 sm:flex-none">
 						<AutoSaver />
 					</div>
 				)}

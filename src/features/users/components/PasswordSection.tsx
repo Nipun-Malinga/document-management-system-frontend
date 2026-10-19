@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import PasswordField from "@/features/auth/components/PasswordField";
-import type { AccountSectionState } from "@/features/users/components/AccountSectionState";
 import ProfileFeedback from "@/features/users/components/ProfileFeedback";
 import { useChangePassword } from "@/features/users/hooks";
 import {
 	type PasswordFormValues,
 	passwordSchema,
 } from "@/features/users/schemas/UserProfile";
+import type { AccountSectionState } from "@/features/users/types/AccountSectionState";
 import { applyFormError } from "@/shared/utils/formErrors";
 
 const FORM_ID = "profile-password-form";
@@ -137,10 +137,7 @@ const PasswordSection = ({ disabled, onStateChange }: PasswordSectionProps) => {
 	return (
 		<div className="flex flex-col gap-6">
 			<form
-				id={FORM_ID}
 				onSubmit={savePassword}
-				aria-label="Change password"
-				aria-busy={changePassword.isPending}
 				className="flex flex-col gap-4"
 				noValidate
 				onChange={clearFeedback}

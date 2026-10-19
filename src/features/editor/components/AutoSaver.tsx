@@ -11,7 +11,6 @@ const AutoSaver = () => {
 	return (
 		<div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
 			<span
-				role={state.status === "error" ? "alert" : "status"}
 				className={state.status === "error" ? "text-destructive" : undefined}
 			>
 				{state.replacementPending
