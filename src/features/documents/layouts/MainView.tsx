@@ -25,7 +25,6 @@ import DocumentCard from "../components/DocumentCard";
 import DocumentGrid from "../components/DocumentGrid";
 import DocumentSearch from "../components/DocumentSearch";
 import FolderBrowser from "../components/folders/FolderBrowser";
-import Templates from "../components/Templates";
 import WorkspaceHome from "../components/WorkspaceHome";
 
 const MainView = () => {
@@ -42,7 +41,6 @@ const MainView = () => {
 
 	return (
 		<WorkspaceHome
-			templates={<Templates />}
 			folders={
 				<FolderBrowser
 					folderId={folderId}
@@ -108,7 +106,7 @@ const MainView = () => {
 								<EmptyDescription>
 									{folderId
 										? "Move documents here from All documents using their folder actions."
-										: "Choose a template above to create your first document. Your work will appear here."}
+										: "Select New document to choose a template and create your first document. Your work will appear here."}
 								</EmptyDescription>
 							</EmptyHeader>
 						</Empty>

@@ -116,13 +116,15 @@ describe.skipIf(!baseURL)(
 			vi.restoreAllMocks();
 		});
 
-		it("places folders below Templates, navigates nested documents, and preserves unfiled documents in All documents", async () => {
+		it("places folders below the workspace header, navigates nested documents, and preserves unfiled documents in All documents", async () => {
 			render(<MainView />, { wrapper });
 			const heading = await screen.findByRole("heading", { name: "Folders" });
 			expect(
-				screen.getByText("Templates").compareDocumentPosition(heading) &
-					Node.DOCUMENT_POSITION_FOLLOWING,
+				screen
+					.getByRole("heading", { name: "Your documents" })
+					.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING,
 			).toBeTruthy();
+			expect(screen.queryByText("Templates")).not.toBeInTheDocument();
 			await screen.findByRole("heading", { name: "Unfiled document" });
 			await userEvent.click(screen.getByRole("button", { name: "Projects" }));
 			await screen.findByRole("heading", { name: "Project document" });

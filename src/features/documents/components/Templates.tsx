@@ -1,6 +1,6 @@
 import type { Content } from "@tiptap/core";
 import axios from "axios";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,13 +15,17 @@ import CollectionPagination from "./collections/CollectionPagination";
 import CollectionResults from "./collections/CollectionResults";
 import TemplateTile from "./TemplateTile";
 
-const Templates = () => {
+interface Props {
+	onCreatingChange?: (creating: boolean) => void;
+}
+
+const Templates = ({ onCreatingChange }: Props) => {
 	const { params, update, setPage } = useCollectionParams<TemplateParams>();
 	const query = useGetTemplates(params);
 	const [creationError, setCreationError] = useState("");
 	const creating = useRef(false);
-	const { mutateAsync, isPending } = useCreateDocument();
-	const { setTemplate } = useEditorTemplate();
+	const { mutateAsync, isPending, variables } = useCreateDocument();
+	const setTemplate = useEditorTemplate((state) => state.setTemplate);
 	const navigate = useNavigate();
 
 	const createDocument = async (
@@ -31,6 +35,7 @@ const Templates = () => {
 	) => {
 		if (creating.current) return;
 		creating.current = true;
+		onCreatingChange?.(true);
 		setCreationError("");
 		try {
 			const doc = await mutateAsync({
@@ -51,11 +56,18 @@ const Templates = () => {
 			);
 		} finally {
 			creating.current = false;
+			onCreatingChange?.(false);
 		}
 	};
 
 	return (
-		<div className="flex min-w-0 flex-col gap-3">
+		<div
+			className="@container/templates flex min-w-0 flex-col gap-4"
+			aria-busy={isPending}
+		>
+			<p aria-live="polite" className="sr-only">
+				{isPending ? "Creating your document. Please wait." : ""}
+			</p>
 			{creationError && (
 				<Alert variant="destructive">
 					<AlertCircle aria-hidden="true" />
@@ -63,37 +75,19 @@ const Templates = () => {
 					<AlertDescription>{creationError}</AlertDescription>
 				</Alert>
 			)}
-			{isPending && (
-				<p role="status" className="text-sm text-muted-foreground">
-					Creating document…
-				</p>
-			)}
-			<CollectionResults query={query} label="templates">
-				{(templates) => (
-					<ul className="flex snap-x snap-proximity gap-3 overflow-x-auto pb-2">
-						{templates.map((template) => (
-							<li key={template.id} className="w-48 shrink-0 snap-start">
-								<TemplateTile
-									type="button"
-									title={template.title}
-									aria-label={`Create document from ${template.title}`}
-									disabled={isPending}
-									onClick={() => {
-										void createDocument(
-											template.id,
-											template.title,
-											convertToTiptapContent(template.template),
-										);
-									}}
-								/>
-							</li>
-						))}
-					</ul>
-				)}
-			</CollectionResults>
-			<details className="text-sm">
-				<summary className="w-fit cursor-pointer rounded-sm text-muted-foreground underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring">
-					Template options
+			<details className="group/options rounded-lg border bg-card px-4">
+				<summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-2 rounded-sm py-3 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+					<SlidersHorizontal aria-hidden="true" className="size-4" />
+					<span className="font-medium text-foreground">Template options</span>
+					{query.data && (
+						<span className="text-xs tabular-nums">
+							{query.data.totalElements} available
+						</span>
+					)}
+					<ChevronDown
+						aria-hidden="true"
+						className="ml-auto size-4 group-open/options:rotate-180"
+					/>
 				</summary>
 				<CollectionFilters
 					params={params}
@@ -108,6 +102,33 @@ const Templates = () => {
 					label="templates"
 				/>
 			</details>
+			<CollectionResults query={query} label="templates">
+				{(templates) => (
+					<ul
+						aria-label="Document templates"
+						className="grid grid-cols-1 gap-4 @min-[20rem]/templates:grid-cols-2 @min-[36rem]/templates:grid-cols-3"
+					>
+						{templates.map((template) => (
+							<li key={template.id} className="min-w-0">
+								<TemplateTile
+									type="button"
+									title={template.title}
+									aria-label={`Create document from ${template.title}`}
+									disabled={isPending}
+									creating={isPending && variables?.templateId === template.id}
+									onClick={() => {
+										void createDocument(
+											template.id,
+											template.title,
+											convertToTiptapContent(template.template),
+										);
+									}}
+								/>
+							</li>
+						))}
+					</ul>
+				)}
+			</CollectionResults>
 			{query.data && (query.data.totalPages > 1 || query.data.page > 0) && (
 				<CollectionPagination
 					data={query.data}

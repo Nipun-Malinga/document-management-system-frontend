@@ -4,7 +4,6 @@ import {
 	Bookmark,
 	FileText,
 	Info,
-	Plus,
 } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -227,30 +226,23 @@ const WorkspacePreview = () => {
 								preview
 								resultCount={visible.length}
 								title={collection === "home" ? "Your documents" : currentTitle}
-								createAction={
-									<Button asChild>
-										<Link to="/auth/registration">
-											<Plus aria-hidden="true" data-icon="inline-start" />
-											New document
-										</Link>
-									</Button>
-								}
 								templates={
-									collection === "home" && (
-										<ul className="flex gap-3 overflow-x-auto pb-2">
-											{["Blank document", "Project brief", "Meeting notes"].map(
-												(title) => (
-													<li key={title} className="w-56 shrink-0">
-														<TemplateTile
-															title={title}
-															aria-label={`Create document from ${title}`}
-															onClick={() => navigate("/auth/registration")}
-														/>
-													</li>
-												),
-											)}
-										</ul>
-									)
+									<ul
+										aria-label="Document templates"
+										className="grid grid-cols-1 gap-3 sm:grid-cols-3"
+									>
+										{["Blank document", "Project brief", "Meeting notes"].map(
+											(title) => (
+												<li key={title} className="min-w-0">
+													<TemplateTile
+														title={title}
+														aria-label={`Create document from ${title}`}
+														onClick={() => navigate("/auth/registration")}
+													/>
+												</li>
+											),
+										)}
+									</ul>
 								}
 							>
 								<div className="flex flex-col gap-2">

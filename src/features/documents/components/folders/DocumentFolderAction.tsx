@@ -155,7 +155,7 @@ const DocumentFolderAction = ({ document, folderId }: Props) => {
 						)}
 						{folders.isSuccess && !folderId && !folders.data.length && (
 							<p className="text-sm text-muted-foreground">
-								Create a folder below Templates first.
+								Create a folder in the Folders section first.
 							</p>
 						)}
 						{mutation.isError && (

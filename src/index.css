@@ -238,6 +238,35 @@
 	scrollbar-gutter: stable;
 }
 
+/* Template covers echo a page on the editor's desk. */
+.document-template {
+	transition-property: border-color, background-color, box-shadow;
+}
+
+.document-template:not(:disabled):is(:hover, :focus-visible),
+.document-template[data-creating] {
+	border-color: var(--primary);
+}
+
+.document-template[data-creating] {
+	opacity: 1;
+}
+
+.document-template[data-creating] .document-template-cover {
+	background-color: var(--secondary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.document-template-paper {
+		transition: transform 180ms ease-out;
+	}
+
+	.document-template:not(:disabled):is(:hover, :focus-visible)
+		.document-template-paper {
+		transform: translateY(-4px);
+	}
+}
+
 .home-container {
 	@apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
 }

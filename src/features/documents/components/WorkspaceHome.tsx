@@ -1,34 +1,36 @@
 import { Plus } from "lucide-react";
-import { type ReactNode, useId } from "react";
+import { type ReactNode, useId, useState } from "react";
+import PopupWrapper from "@/components/common/PopupWrapper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import Templates from "./Templates";
 
 interface Props {
-	templates: ReactNode;
 	folders?: ReactNode;
 	documentsTitle?: string;
 	children: ReactNode;
 	preview?: boolean;
-	createAction?: ReactNode;
+	templates?: ReactNode;
 	title?: string;
 	resultCount?: number;
 }
 
-/** The landing preview and the authenticated home use the same composition. */
+
 const WorkspaceHome = ({
-	templates,
 	folders,
 	documentsTitle = "All documents",
 	children,
 	preview = false,
-	createAction,
+	templates,
 	title = "Your documents",
 	resultCount,
 }: Props) => {
 	const id = useId();
-	const templateId = preview ? `${id}-templates` : "templates";
+	const [createOpen, setCreateOpen] = useState(false);
+	const [creating, setCreating] = useState(false);
+	const createButtonId = `${id}-new-document`;
 	const Heading = preview ? "h2" : "h1";
 	return (
 		<div
@@ -46,36 +48,27 @@ const WorkspaceHome = ({
 						Pick up where you left off, or start with a fresh page.
 					</p>
 				</div>
-				{createAction ?? (
-					<Button asChild>
-						<a href={`#${templateId}`}>
-							<Plus aria-hidden="true" data-icon="inline-start" />
-							New document
-						</a>
-					</Button>
-				)}
-			</div>
-			{templates && (
-				<section
-					id={templateId}
-					tabIndex={-1}
-					aria-labelledby={`${id}-templates-title`}
-					className="min-w-0 shrink-0 scroll-mt-6 rounded-2xl border bg-secondary/40 p-4 outline-none focus-visible:ring-2 focus-visible:ring-ring @min-[40rem]/workspace:p-5"
+				<Button
+					id={createButtonId}
+					aria-haspopup="dialog"
+					aria-expanded={createOpen}
+					onClick={() => setCreateOpen(true)}
 				>
-					<div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-						<h2
-							id={`${id}-templates-title`}
-							className="text-base font-semibold"
-						>
-							Start something new
-						</h2>
-						<p className="text-xs text-muted-foreground">
-							Make a template your own
-						</p>
-					</div>
-					{templates}
-				</section>
-			)}
+					<Plus aria-hidden="true" data-icon="inline-start" />
+					New document
+				</Button>
+			</div>
+			<PopupWrapper
+				collapsed={!createOpen}
+				onClose={() => setCreateOpen(false)}
+				title="Create a document"
+				description="Choose a template to open a new document in the editor."
+				returnFocusId={createButtonId}
+				pending={creating}
+				className="motion-reduce:animate-none"
+			>
+				{templates ?? <Templates onCreatingChange={setCreating} />}
+			</PopupWrapper>
 			{folders}
 			<section
 				aria-labelledby={`${id}-documents-title`}

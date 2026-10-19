@@ -80,8 +80,8 @@ describe("home page", () => {
 			within(preview).getByRole("heading", { name: "Your documents" }),
 		).toBeVisible();
 		expect(
-			within(preview).getByRole("heading", { name: "Start something new" }),
-		).toBeVisible();
+			within(preview).queryByRole("heading", { name: "Start something new" }),
+		).not.toBeInTheDocument();
 		expect(
 			within(preview).getByRole("heading", { name: "All documents" }),
 		).toBeVisible();
@@ -176,22 +176,23 @@ describe("home page", () => {
 		).toBeVisible();
 	});
 
-	it.each(["New document", "Create document from Blank document"])(
-		"routes sample creation via %s to registration",
-		async (name) => {
-			const user = userEvent.setup();
-			await renderHome();
-			const preview = screen.getByRole("figure");
-			await user.click(
-				within(preview).getByRole(name === "New document" ? "link" : "button", {
-					name,
-				}),
-			);
-			expect(
-				screen.getByRole("heading", { name: "Registration" }),
-			).toBeVisible();
-		},
-	);
+	it("opens the template picker and routes sample creation to registration", async () => {
+		const user = userEvent.setup();
+		await renderHome();
+		const preview = screen.getByRole("figure");
+		await user.click(
+			within(preview).getByRole("button", {
+				name: "New document",
+			}),
+		);
+		const dialog = screen.getByRole("dialog", { name: "Create a document" });
+		await user.click(
+			within(dialog).getByRole("button", {
+				name: "Create document from Blank document",
+			}),
+		);
+		expect(screen.getByRole("heading", { name: "Registration" })).toBeVisible();
+	});
 
 	it.each([
 		["Create your workspace", "Registration"],

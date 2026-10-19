@@ -24,6 +24,7 @@ import { documentSorts } from "@/features/documents/components/collections/colle
 import Templates from "@/features/documents/components/Templates";
 import TrashBranchTable from "@/features/documents/components/trash/TrashBranchTable";
 import TrashDocumentTable from "@/features/documents/components/trash/TrashDocumentTable";
+import WorkspaceHome from "@/features/documents/components/WorkspaceHome";
 import MainView from "@/features/documents/layouts/MainView";
 import Quick from "@/features/documents/layouts/Quick";
 import Shared from "@/features/documents/layouts/Shared";
@@ -216,11 +217,36 @@ const lists = [
 ] as const;
 
 describe("Stage 3 collection flows", () => {
+	it("loads templates only when New document is opened and restores focus on dismissal", async () => {
+		const user = userEvent.setup();
+		renderCollection(<MainView />);
+		await screen.findByText("Record 1");
+		expect(screen.queryByText("Start something new")).not.toBeInTheDocument();
+		expect(
+			requests.some((request) => request.url === "/documents/templates"),
+		).toBe(false);
+		const trigger = screen.getByRole("button", { name: "New document" });
+		await user.click(trigger);
+		const dialog = screen.getByRole("dialog", { name: "Create a document" });
+		await within(dialog).findByRole("button", {
+			name: "Create document from Record 1",
+		});
+		await user.keyboard("{Escape}");
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+		expect(trigger).toHaveFocus();
+		await user.click(trigger);
+		await screen.findByRole("button", {
+			name: "Create document from Record 1",
+		});
+		await user.click(screen.getByRole("button", { name: "Close" }));
+		expect(trigger).toHaveFocus();
+	});
+
 	it.each(lists)(
 		"reaches records beyond page one in %s",
 		async (label, element, endpoint) => {
 			renderCollection(element);
-			await screen.findByText("Record 1");
+			await screen.findAllByText("Record 1");
 			expect(screen.queryByText("Record 21")).not.toBeInTheDocument();
 			const nav = () =>
 				screen.getByRole("navigation", { name: `${label} pagination` });
@@ -228,7 +254,7 @@ describe("Stage 3 collection flows", () => {
 				within(nav()).getByText("21 items · Page 1 of 2"),
 			).toBeInTheDocument();
 			fireEvent.click(within(nav()).getByRole("button", { name: "Next" }));
-			await screen.findByText("Record 21");
+			await screen.findAllByText("Record 21");
 			expect(screen.queryByText("Record 1")).not.toBeInTheDocument();
 			expect(
 				within(nav()).getByRole("button", { name: "Next" }),
@@ -245,11 +271,11 @@ describe("Stage 3 collection flows", () => {
 			if (label.startsWith("trashed"))
 				expect(screen.getByText(date)).toBeInTheDocument();
 			fireEvent.click(within(nav()).getByRole("button", { name: "Previous" }));
-			await screen.findByText("Record 1");
+			await screen.findAllByText("Record 1");
 		},
 	);
 
-	it("renders Home with a page object for templates and pages owned documents independently", async () => {
+	it("pages owned documents without loading the closed template picker", async () => {
 		renderCollection(<MainView />);
 		await screen.findAllByText("Record 1");
 		const nav = await screen.findByRole("navigation", {
@@ -259,7 +285,7 @@ describe("Stage 3 collection flows", () => {
 		await screen.findByText("Record 21");
 		expect(
 			requests.filter((config) => config.url === "/documents/templates"),
-		).toHaveLength(1);
+		).toHaveLength(0);
 		expect(
 			requests.filter((config) => config.url === "/documents").at(-1)?.params
 				.page,
@@ -516,7 +542,8 @@ describe("Stage 3 collection flows", () => {
 			}
 			return servePages(config);
 		};
-		renderCollection(<Templates key="Templates" />);
+		renderCollection(<WorkspaceHome>{null}</WorkspaceHome>);
+		fireEvent.click(screen.getByRole("button", { name: "New document" }));
 		fireEvent.click(
 			await screen.findByRole("button", {
 				name: "Create document from Record 1",
@@ -526,6 +553,7 @@ describe("Stage 3 collection flows", () => {
 			"Document creation unavailable",
 		);
 		expect(useEditorTemplate.getState().template).toBeNull();
+		expect(screen.getByRole("button", { name: "Close" })).toBeEnabled();
 		expect(screen.getByLabelText("Current route")).toHaveTextContent(
 			"/dashboard/home",
 		);
@@ -549,6 +577,7 @@ describe("Stage 3 collection flows", () => {
 	});
 
 	it("disables template creation while a request is pending and sends a single mutation", async () => {
+		const user = userEvent.setup();
 		let finish!: () => void;
 		const post = vi.fn();
 		axiosInstance.defaults.adapter = async (config) => {
@@ -559,7 +588,8 @@ describe("Stage 3 collection flows", () => {
 			});
 			return success(config, document);
 		};
-		renderCollection(<Templates key="Templates" />);
+		renderCollection(<WorkspaceHome>{null}</WorkspaceHome>);
+		await user.click(screen.getByRole("button", { name: "New document" }));
 		const button = await screen.findByRole("button", {
 			name: "Create document from Record 1",
 		});
@@ -567,6 +597,11 @@ describe("Stage 3 collection flows", () => {
 		fireEvent.click(button);
 		await screen.findByText("Creating document…");
 		expect(button).toBeDisabled();
+		expect(
+			screen.queryByRole("button", { name: "Close" }),
+		).not.toBeInTheDocument();
+		await user.keyboard("{Escape}");
+		expect(screen.getByRole("dialog")).toBeInTheDocument();
 		await waitFor(() => expect(post).toHaveBeenCalledTimes(1));
 		await act(async () => finish());
 		await waitFor(() =>
