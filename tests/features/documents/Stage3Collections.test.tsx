@@ -164,6 +164,7 @@ const itemFor = (url: string, index: number) => {
 };
 const servePages: AxiosAdapter = async (config) => {
 	requests.push(config);
+	if (config.url === "/documents/folders") return success(config, []);
 	const { page, size } = config.params;
 	const all = Array.from({ length: 21 }, (_, i) =>
 		itemFor(requireValue(config.url), i),

@@ -83,6 +83,7 @@ beforeEach(() => {
 			return success(config, { ...document, title: "Renamed", favorite });
 		}
 		if (failRead) throw failure(config);
+		if (config.url === "/documents/folders") return success(config, []);
 		if (config.url?.startsWith("/users/find/"))
 			return success(config, {
 				id: 2,
