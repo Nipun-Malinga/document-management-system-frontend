@@ -23,6 +23,7 @@ export interface CollectionFiltersProps<P extends PageParams> {
 	label: string;
 	className?: string;
 	compact?: boolean;
+	layout?: "default" | "panel";
 }
 
 const allValues = "__collection_all__";
@@ -38,7 +39,9 @@ const CollectionFilters = <P extends PageParams>({
 	label,
 	className,
 	compact = false,
+	layout = "default",
 }: CollectionFiltersProps<P>) => {
+	const panel = layout === "panel";
 	const filterId = useId();
 	const [resetCount, setResetCount] = useState(0);
 	const values = params as Record<string, unknown>;
@@ -72,16 +75,60 @@ const CollectionFilters = <P extends PageParams>({
 			</Select>
 		</Field>
 	);
+	const paginationFields = (
+		<FieldGroup
+			className={cn(
+				"min-w-0 gap-3",
+				panel
+					? "grid grid-cols-1 items-end @min-[22rem]/filters:grid-cols-2"
+					: "flex-[1_1_16rem] flex-row items-end",
+			)}
+		>
+			{sortField}
+			<Field className="min-w-0 flex-1 gap-2">
+				<FieldLabel htmlFor={`${filterId}-size`} className={labelClass}>
+					Per page
+				</FieldLabel>
+				<Select
+					value={String(params.size ?? 20)}
+					onValueChange={(size) => update({ size: Number(size) } as Partial<P>)}
+				>
+					<SelectTrigger
+						id={`${filterId}-size`}
+						aria-label={`${label} page size`}
+						className={controlClass}
+					>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent align="start">
+						<SelectGroup>
+							{[10, 20, 50].map((size) => (
+								<SelectItem key={size} value={String(size)}>
+									{size}
+								</SelectItem>
+							))}
+						</SelectGroup>
+					</SelectContent>
+				</Select>
+			</Field>
+		</FieldGroup>
+	);
 	return (
 		<div
 			className={cn(
-				"my-3 flex w-full min-w-0 flex-wrap items-end gap-4",
+				"my-3 w-full min-w-0",
+				panel
+					? "@container/filters flex flex-col gap-3"
+					: "flex flex-wrap items-end gap-4",
 				className,
 			)}
 		>
 			<form
 				aria-label={`${label} filters`}
-				className="flex min-w-0 flex-[3_1_32rem] flex-wrap items-end gap-3"
+				className={cn(
+					"min-w-0 gap-3",
+					panel ? "grid w-full" : "flex flex-[3_1_32rem] flex-wrap items-end",
+				)}
 				onSubmit={(event) => {
 					event.preventDefault();
 					const data = new FormData(event.currentTarget);
@@ -100,7 +147,12 @@ const CollectionFilters = <P extends PageParams>({
 			>
 				<FieldGroup
 					key={`${filterKey}:${resetCount}`}
-					className="min-w-0 flex-1 basis-80 flex-row flex-wrap items-end gap-3"
+					className={cn(
+						"min-w-0 gap-3",
+						panel
+							? "grid grid-cols-1"
+							: "flex-1 basis-80 flex-row flex-wrap items-end",
+					)}
 				>
 					{fields.map((field) => (
 						<Field key={field.name} className="min-w-0 flex-1 basis-36 gap-2">
@@ -147,7 +199,14 @@ const CollectionFilters = <P extends PageParams>({
 					))}
 					{compact && sortField}
 				</FieldGroup>
-				<div className="ml-auto flex shrink-0 items-center gap-2">
+				{panel && !compact && paginationFields}
+				<div
+					className={cn(
+						panel
+							? "grid min-w-0 grid-cols-1 gap-2 @min-[22rem]/filters:grid-cols-2"
+							: "ml-auto flex shrink-0 items-center gap-2",
+					)}
+				>
 					<Button type="submit" className="h-10">
 						<SlidersHorizontal aria-hidden="true" data-icon="inline-start" />
 						Apply filters
@@ -172,39 +231,7 @@ const CollectionFilters = <P extends PageParams>({
 					</Button>
 				</div>
 			</form>
-			{!compact && (
-				<FieldGroup className="min-w-0 flex-[1_1_16rem] flex-row items-end gap-3">
-					{sortField}
-					<Field className="min-w-0 flex-1 gap-2">
-						<FieldLabel htmlFor={`${filterId}-size`} className={labelClass}>
-							Per page
-						</FieldLabel>
-						<Select
-							value={String(params.size ?? 20)}
-							onValueChange={(size) =>
-								update({ size: Number(size) } as Partial<P>)
-							}
-						>
-							<SelectTrigger
-								id={`${filterId}-size`}
-								aria-label={`${label} page size`}
-								className={controlClass}
-							>
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent align="start">
-								<SelectGroup>
-									{[10, 20, 50].map((size) => (
-										<SelectItem key={size} value={String(size)}>
-											{size}
-										</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
-					</Field>
-				</FieldGroup>
-			)}
+			{!compact && !panel && paginationFields}
 		</div>
 	);
 };

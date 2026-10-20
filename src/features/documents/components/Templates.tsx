@@ -76,20 +76,26 @@ const Templates = ({ onCreatingChange }: Props) => {
 				</Alert>
 			)}
 			<details className="group/options rounded-lg border bg-card px-4">
-				<summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-2 rounded-sm py-3 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+				<summary className="grid min-h-11 cursor-pointer list-none grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-sm py-3 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
 					<SlidersHorizontal aria-hidden="true" className="size-4" />
-					<span className="font-medium text-foreground">Template options</span>
-					{query.data && (
-						<span className="text-xs tabular-nums">
-							{query.data.totalElements} available
+					<span className="flex min-w-0 flex-col gap-0.5 @min-[24rem]/templates:flex-row @min-[24rem]/templates:items-baseline @min-[24rem]/templates:gap-3">
+						<span className="font-medium text-foreground">
+							Template options
 						</span>
-					)}
+						{query.data && (
+							<span className="text-xs tabular-nums">
+								{query.data.totalElements} available
+							</span>
+						)}
+					</span>
 					<ChevronDown
 						aria-hidden="true"
 						className="ml-auto size-4 group-open/options:rotate-180"
 					/>
 				</summary>
 				<CollectionFilters
+					layout="panel"
+					className="mt-0 mb-4"
 					params={params}
 					update={update}
 					fields={[
@@ -131,6 +137,7 @@ const Templates = ({ onCreatingChange }: Props) => {
 			</CollectionResults>
 			{query.data && (query.data.totalPages > 1 || query.data.page > 0) && (
 				<CollectionPagination
+					className="mt-0"
 					data={query.data}
 					pending={query.isFetching}
 					onPage={setPage}
